@@ -1,0 +1,122 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug Eureka",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/eureka",
+      "mainClass": "cl.ticketcine.eureka.TicketcineEurekaApplication",
+      "projectName": "cl-ticketcine-eureka",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-autenticacion",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-autenticacion",
+      "mainClass": "cl.ticketcine.autenticacion.TicketcineAutenticacionApplication",
+      "projectName": "cl-ticketcine-autenticacion",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-usuarios",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-usuarios",
+      "mainClass": "cl.ticketcine.usuarios.TicketcineUsuariosApplication",
+      "projectName": "cl-ticketcine-usuarios",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-busqueda",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-busqueda",
+      "mainClass": "cl.ticketcine.busqueda.TicketcineBusquedaApplication",
+      "projectName": "cl-ticketcine-busqueda",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-horarios",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-horarios",
+      "mainClass": "cl.ticketcine.horarios.TicketcineHorariosApplication",
+      "projectName": "cl-ticketcine-horarios",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-salas",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-salas",
+      "mainClass": "cl.ticketcine.salas.TicketcineSalasApplication",
+      "projectName": "cl-ticketcine-salas",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-reserva",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-reserva",
+      "mainClass": "cl.ticketcine.reserva.TicketcineReservaApplication",
+      "projectName": "cl-ticketcine-reserva",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-pagos",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-pagos",
+      "mainClass": "cl.ticketcine.pagos.TicketcinePagosApplication",
+      "projectName": "cl-ticketcine-pagos",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-notificaciones",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-notificaciones",
+      "mainClass": "cl.ticketcine.notificaciones.TicketcineNotificacionesApplication",
+      "projectName": "cl-ticketcine-notificaciones",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-validacion",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-validacion",
+      "mainClass": "cl.ticketcine.validacion.TicketcineValidacionApplication",
+      "projectName": "cl-ticketcine-validacion",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-promociones",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-promociones",
+      "mainClass": "cl.ticketcine.promociones.TicketcinePromocionesApplication",
+      "projectName": "cl-ticketcine-promociones",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug All Services",
+      "configurations": [
+        "Debug Eureka",
+        "Debug ms-autenticacion",
+        "Debug ms-usuarios",
+        "Debug ms-busqueda",
+        "Debug ms-horarios",
+        "Debug ms-salas",
+        "Debug ms-reserva",
+        "Debug ms-pagos",
+        "Debug ms-notificaciones",
+        "Debug ms-validacion",
+        "Debug ms-promociones"
+      ]
+    }
+  ]
+}
