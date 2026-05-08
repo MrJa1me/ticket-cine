@@ -1,45 +1,31 @@
--- CADA BASE DE DATOS DE CADA MICROSERVICIO DEBE TENER SU PROPIO
--- SCRIPT DE CREACIÓN DE TABLAS E INSERCIÓN DE DATOS
+\c notificaciones_db
 
--- Conectarse a la base de datos específica para este microservicio
-\c notificaciones;
-
--- 1. ELIMINACIÓN (Orden jerárquico inverso)
-DROP TABLE IF EXISTS suscripciones_push;
+DROP TABLE IF EXISTS logs_error;
+DROP TABLE IF EXISTS cola_envios;
 DROP TABLE IF EXISTS plantillas;
-DROP TABLE IF EXISTS correos_enviados;
-
--- 2. TABLAS MAESTRAS
-CREATE TABLE correos_enviados (
-    id_correo         SERIAL       PRIMARY KEY,
-    destinatario      VARCHAR(100) NOT NULL,
-    asunto            VARCHAR(150) NOT NULL,
-    cuerpo            TEXT         NOT NULL,
-    fecha_envio       TIMESTAMP    NOT NULL DEFAULT NOW()
-);
+DROP TABLE IF EXISTS usuarios_proyeccion;
 
 CREATE TABLE plantillas (
-    id_plantilla      SERIAL       PRIMARY KEY,
-    nombre_evento     VARCHAR(50)  NOT NULL,
-    contenido_html    TEXT         NOT NULL,
-    version           INT          NOT NULL,
-    lenguaje          VARCHAR(5)   NOT NULL
+    id_plantilla VARCHAR(20) PRIMARY KEY,
+    asunto VARCHAR(100),
+    contenido TEXT
 );
 
-CREATE TABLE suscripciones_push (
-    id_suscrip        SERIAL       PRIMARY KEY,
-    id_usuario        INT          NOT NULL,
-    endpoint          TEXT         NOT NULL,
-    auth_key          VARCHAR(100) NOT NULL,
-    p256dh            VARCHAR(100) NOT NULL
+CREATE TABLE cola_envios (
+    id_notif SERIAL PRIMARY KEY,
+    user_email VARCHAR(100),
+    id_plantilla VARCHAR(20) REFERENCES plantillas(id_plantilla),
+    estado_envio VARCHAR(10) -- SENT, FAIL
 );
 
--- 3. INSERCIÓN DE DATOS
-INSERT INTO correos_enviados (destinatario, asunto, cuerpo) VALUES
-('cliente@cine.cl', 'Reserva confirmada', 'Tu reserva ha sido confirmada. ¡Gracias por elegirnos!');
+CREATE TABLE logs_error (
+    id_log SERIAL PRIMARY KEY,
+    id_notif INTEGER REFERENCES cola_envios(id_notif),
+    error_msg VARCHAR(255)
+);
 
-INSERT INTO plantillas (nombre_evento, contenido_html, version, lenguaje) VALUES
-('reserva_confirmada', '<p>Tu reserva fue confirmada.</p>', 1, 'es');
+CREATE TABLE usuarios_proyeccion (email VARCHAR(100) PRIMARY KEY, nombre VARCHAR(100));
 
-INSERT INTO suscripciones_push (id_usuario, endpoint, auth_key, p256dh) VALUES
-(7, 'https://push.example.com/endpoint/123', 'authkey-example', 'p256dh-example');
+INSERT INTO plantillas VALUES ('BIENVENIDA','Hola!','Bienvenido al cine'),('CONFIRMACION','Reserva OK','Tu ticket está listo'),('PROMO','Descuento','Aprovecha este 20%'),('RECORDATORIO','No olvides','Tu función empieza pronto'),('CUMPLE','Felicidades','Regalo para ti'),('AVISO_SALA','Cambio Sala','Atención a tu correo'),('PAGO_ERROR','Error Pago','Intenta de nuevo'),('CANCELADO','Reserva Cancelada','Confirmamos tu aviso'),('REEMBOLSO','Dinero Devuelto','Proceso completado');
+INSERT INTO cola_envios (user_email, id_plantilla, estado_envio) VALUES ('u1@test.com','BIENVENIDA','SENT'),('u1@test.com','CONFIRMACION','SENT'),('u2@test.com','BIENVENIDA','SENT'),('u3@test.com','BIENVENIDA','SENT'),('u4@test.com','BIENVENIDA','SENT'),('u5@test.com','BIENVENIDA','SENT'),('u6@test.com','BIENVENIDA','SENT'),('u7@test.com','BIENVENIDA','SENT'),('u8@test.com','BIENVENIDA','SENT');
+INSERT INTO logs_error (id_notif, error_msg) SELECT id_notif, 'No error' FROM cola_envios;

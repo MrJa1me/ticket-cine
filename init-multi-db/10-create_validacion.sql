@@ -1,45 +1,31 @@
--- CADA BASE DE DATOS DE CADA MICROSERVICIO DEBE TENER SU PROPIO
--- SCRIPT DE CREACIÓN DE TABLAS E INSERCIÓN DE DATOS
+\c validacion_db
 
--- Conectarse a la base de datos específica para este microservicio
-\c validacion;
+DROP TABLE IF EXISTS historial_accesos;
+DROP TABLE IF EXISTS puntos_control;
+DROP TABLE IF EXISTS qr_codigos;
+DROP TABLE IF EXISTS reservas_proyeccion;
 
--- 1. ELIMINACIÓN (Orden jerárquico inverso)
-DROP TABLE IF EXISTS incidencias;
-DROP TABLE IF EXISTS accesos_log;
-DROP TABLE IF EXISTS tickets_activos;
-
--- 2. TABLAS MAESTRAS
-CREATE TABLE tickets_activos (
-    id_ticket         SERIAL       PRIMARY KEY,
-    id_reserva        INT          NOT NULL,
-    codigo_qr         VARCHAR(255) NOT NULL,
-    fecha_emision     TIMESTAMP    NOT NULL DEFAULT NOW(),
-    usado             BOOLEAN      DEFAULT FALSE
+CREATE TABLE qr_codigos (
+    id_qr SERIAL PRIMARY KEY,
+    reserva_id UUID,
+    hash_code TEXT,
+    activo BOOLEAN
 );
 
-CREATE TABLE accesos_log (
-    id_acceso         SERIAL       PRIMARY KEY,
-    id_ticket         INT          NOT NULL REFERENCES tickets_activos(id_ticket),
-    fecha_entrada     TIMESTAMP    NOT NULL,
-    puerta_ingreso    VARCHAR(20)  NOT NULL,
-    resultado         VARCHAR(20)  NOT NULL
+CREATE TABLE puntos_control (
+    id_punto VARCHAR(10) PRIMARY KEY,
+    ubicacion VARCHAR(50)
 );
 
-CREATE TABLE incidencias (
-    id_incidencia     SERIAL       PRIMARY KEY,
-    id_ticket         INT          NOT NULL REFERENCES tickets_activos(id_ticket),
-    descripcion       TEXT         NOT NULL,
-    nivel_gravedad    INT          NOT NULL,
-    resuelto          BOOLEAN      DEFAULT FALSE
+CREATE TABLE historial_accesos (
+    id_acc SERIAL PRIMARY KEY,
+    id_qr INTEGER REFERENCES qr_codigos(id_qr),
+    id_punto VARCHAR(10) REFERENCES puntos_control(id_punto),
+    timestamp_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. INSERCIÓN DE DATOS
-INSERT INTO tickets_activos (id_reserva, codigo_qr) VALUES
-(1, 'QR-ABCDEFG123456');
+CREATE TABLE reservas_proyeccion (id_reserva UUID PRIMARY KEY, user_email VARCHAR(100));
 
-INSERT INTO accesos_log (id_ticket, fecha_entrada, puerta_ingreso, resultado) VALUES
-(1, '2026-05-10 18:25:00', 'Puerta 1', 'Permitido');
-
-INSERT INTO incidencias (id_ticket, descripcion, nivel_gravedad, resuelto) VALUES
-(1, 'El código QR tardó en leerse.', 2, TRUE);
+INSERT INTO puntos_control VALUES ('ENT-01','Entrada Principal'),('ENT-02','Entrada VIP'),('ENT-03','Piso 2'),('ENT-04','Sala IMAX'),('ENT-05','Snack Bar'),('ENT-06','Salida Sur'),('ENT-07','Parking'),('ENT-08','Admin'),('ENT-09','Soporte');
+INSERT INTO qr_codigos (reserva_id, hash_code, activo) SELECT gen_random_uuid(), md5(random()::text), true FROM generate_series(1,9);
+INSERT INTO historial_accesos (id_qr, id_punto) SELECT id_qr, 'ENT-01' FROM qr_codigos;

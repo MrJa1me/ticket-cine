@@ -1,51 +1,44 @@
--- CADA BASE DE DATOS DE CADA MICROSERVICIO DEBE TENER SU PROPIO
--- SCRIPT DE CREACIÓN DE TABLAS E INSERCIÓN DE DATOS
+\c busqueda_db
 
--- Conectarse a la base de datos específica para este microservicio
-\c busqueda;
+DROP TABLE IF EXISTS elenco;
+DROP TABLE IF EXISTS peliculas;
+DROP TABLE IF EXISTS categorias;
+DROP TABLE IF EXISTS usuarios_proyeccion;
 
--- 1. ELIMINACIÓN (Orden jerárquico inverso)
-DROP TABLE IF EXISTS historial_busquedas;
-DROP TABLE IF EXISTS etiquetas;
-DROP TABLE IF EXISTS catalogo_peliculas;
-
--- 2. TABLAS MAESTRAS
-CREATE TABLE catalogo_peliculas (
-    id_peli_busq      SERIAL       PRIMARY KEY,
-    titulo            VARCHAR(100) NOT NULL,
-    genero            VARCHAR(50)  NOT NULL,
-    sinopsis          TEXT         NOT NULL,
-    popularidad       DECIMAL      DEFAULT 0
+CREATE TABLE categorias (
+    id_cat SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE etiquetas (
-    id_etiqueta       SERIAL       PRIMARY KEY,
-    nombre            VARCHAR(30)  NOT NULL,
-    categoria         VARCHAR(30)  NOT NULL,
-    descripcion       VARCHAR(100),
-    estado            BOOLEAN      DEFAULT TRUE
+CREATE TABLE peliculas (
+    slug VARCHAR(100) PRIMARY KEY,
+    titulo VARCHAR(150),
+    id_cat INTEGER REFERENCES categorias(id_cat),
+    duracion_min INTEGER,
+    estreno_anio INTEGER
 );
 
-CREATE TABLE historial_busquedas (
-    id_busqueda             SERIAL    PRIMARY KEY,
-    id_usuario              INT       NOT NULL,
-    termino                VARCHAR(100) NOT NULL,
-    fecha_hora             TIMESTAMP NOT NULL DEFAULT NOW(),
-    resultados_encontrados INT       NOT NULL DEFAULT 0
+CREATE TABLE elenco (
+    id_actor SERIAL PRIMARY KEY,
+    peli_slug VARCHAR(100) REFERENCES peliculas(slug),
+    nombre_actor VARCHAR(100),
+    papel VARCHAR(50)
 );
 
--- 3. INSERCIÓN DE DATOS
-INSERT INTO catalogo_peliculas (titulo, genero, sinopsis, popularidad) VALUES
-('El Origen', 'Ciencia ficción', 'Un thriller sobre sueños compartidos.', 8.7),
-('La Gran Función', 'Drama', 'Una historia de amor y reinvención en el cine.', 7.4),
-('Noche de Palomitas', 'Comedia', 'Un grupo de amigos enfrenta una noche inolvidable.', 6.9);
+-- Proyección para recomendaciones personalizadas
+CREATE TABLE usuarios_proyeccion (
+    email VARCHAR(100) PRIMARY KEY,
+    es_estudiante BOOLEAN
+);
 
-INSERT INTO etiquetas (nombre, categoria, descripcion, estado) VALUES
-('Estreno', 'Promoción', 'Películas recién estrenadas', TRUE),
-('Familiar', 'Audiencia', 'Contenido apto para toda la familia', TRUE),
-('Acción', 'Género', 'Películas de acción rápida', TRUE);
+-- Datos (9 registros por tabla)
+INSERT INTO categorias (nombre) VALUES ('Accion'),('Drama'),('Terror'),('Sci-Fi'),('Comedia'),('Doc'),('Anime'),('Musical'),('Infantil');
+INSERT INTO peliculas VALUES 
+('p1','Matrix',4,136,1999),('p2','Titanic',2,194,1997),('p3','Alien',3,117,1979),
+('p4','Inception',4,148,2010),('p5','Toy Story',9,81,1995),('p6','Gladiator',1,155,2000),
+('p7','Coco',9,105,2017),('p8','Joker',2,122,2019),('p9','The Thing',3,109,1982);
 
-INSERT INTO historial_busquedas (id_usuario, termino, resultados_encontrados) VALUES
-(7, 'cine acción', 12),
-(8, 'películas estreno', 5),
-(9, 'comedia familiar', 8);
+INSERT INTO elenco (peli_slug, nombre_actor) 
+SELECT slug, 'Actor Principal' FROM peliculas;
+
+INSERT INTO usuarios_proyeccion VALUES ('u1@test.com', true), ('u2@test.com', false);

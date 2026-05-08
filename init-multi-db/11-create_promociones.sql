@@ -1,45 +1,32 @@
--- CADA BASE DE DATOS DE CADA MICROSERVICIO DEBE TENER SU PROPIO
--- SCRIPT DE CREACIÓN DE TABLAS E INSERCIÓN DE DATOS
+\c promociones_db
 
--- Conectarse a la base de datos específica para este microservicio
-\c promociones;
-
--- 1. ELIMINACIÓN (Orden jerárquico inverso)
-DROP TABLE IF EXISTS puntos_fidelidad;
+DROP TABLE IF EXISTS aplicaciones_promo;
 DROP TABLE IF EXISTS cupones;
 DROP TABLE IF EXISTS campañas;
+DROP TABLE IF EXISTS usuarios_proyeccion;
 
--- 2. TABLAS MAESTRAS
 CREATE TABLE campañas (
-    id_campaña             SERIAL       PRIMARY KEY,
-    nombre                 VARCHAR(100) NOT NULL,
-    fecha_inicio           DATE         NOT NULL,
-    fecha_fin              DATE         NOT NULL,
-    porcentaje_descuento   INT          NOT NULL
+    id_camp SERIAL PRIMARY KEY,
+    nombre VARCHAR(50),
+    fecha_fin DATE
 );
 
 CREATE TABLE cupones (
-    id_cupon               SERIAL       PRIMARY KEY,
-    id_campaña             INT          NOT NULL REFERENCES campañas(id_campaña),
-    codigo_unico           VARCHAR(20)  NOT NULL,
-    stock_disponible       INT          NOT NULL,
-    activo                 BOOLEAN      NOT NULL DEFAULT TRUE
+    codigo VARCHAR(20) PRIMARY KEY,
+    id_camp INTEGER REFERENCES campañas(id_camp),
+    pct_desc INTEGER,
+    activo BOOLEAN
 );
 
-CREATE TABLE puntos_fidelidad (
-    id_punto               SERIAL       PRIMARY KEY,
-    id_usuario             INT          NOT NULL,
-    cantidad_puntos        INT          NOT NULL,
-    ultima_actualizacion   TIMESTAMP    NOT NULL DEFAULT NOW(),
-    puntos_por_vencer      INT          NOT NULL
+CREATE TABLE aplicaciones_promo (
+    id_app SERIAL PRIMARY KEY,
+    codigo_cupon VARCHAR(20) REFERENCES cupones(codigo),
+    user_email VARCHAR(100),
+    fecha_uso TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. INSERCIÓN DE DATOS
-INSERT INTO campañas (nombre, fecha_inicio, fecha_fin, porcentaje_descuento) VALUES
-('Promo Verano', '2026-06-01', '2026-06-30', 20);
+CREATE TABLE usuarios_proyeccion (email VARCHAR(100) PRIMARY KEY, es_estudiante BOOLEAN);
 
-INSERT INTO cupones (id_campaña, codigo_unico, stock_disponible, activo) VALUES
-(1, 'VERANO2026', 100, TRUE);
-
-INSERT INTO puntos_fidelidad (id_usuario, cantidad_puntos, puntos_por_vencer) VALUES
-(7, 200, 50);
+INSERT INTO campañas (nombre, fecha_fin) VALUES ('Verano 26','2026-08-01'),('Navidad','2026-12-31'),('Estudiantes','2026-12-31'),('CyberDay','2026-06-01'),('Black Friday','2026-11-30'),('Aniversario','2026-04-15'),('Halloween','2026-10-31'),('Apertura','2026-03-01'),('Fidelidad','2026-12-31');
+INSERT INTO cupones (codigo, id_camp, pct_desc, activo) SELECT 'CUPON-'||id_camp, id_camp, 10, true FROM campañas;
+INSERT INTO aplicaciones_promo (codigo_cupon, user_email) SELECT codigo, 'u1@test.com' FROM cupones;

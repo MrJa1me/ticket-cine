@@ -1,46 +1,29 @@
--- CADA BASE DE DATOS DE CADA MICROSERVICIO DEBE TENER SU PROPIO
--- SCRIPT DE CREACIÓN DE TABLAS E INSERCIÓN DE DATOS
+\c auth_db
 
--- Conectarse a la base de datos específica para este microservicio
-\c autenticacion;
+DROP TABLE IF EXISTS bitacora_sesiones;
+DROP TABLE IF EXISTS tokens;
+DROP TABLE IF EXISTS credenciales;
 
--- 1. ELIMINACIÓN (Orden jerárquico inverso)
-DROP TABLE IF EXISTS roles_cuenta;
-DROP TABLE IF EXISTS sesiones;
-DROP TABLE IF EXISTS cuentas;
-
--- 2. TABLAS MAESTRAS
-CREATE TABLE cuentas (
-    id_cuenta         SERIAL       PRIMARY KEY,
-    email             VARCHAR(100) UNIQUE NOT NULL,
-    password_hash     VARCHAR(255) NOT NULL,
-    fecha_creacion    TIMESTAMP    NOT NULL DEFAULT NOW(),
-    estado            BOOLEAN      DEFAULT TRUE
+CREATE TABLE credenciales (
+    user_email VARCHAR(100) PRIMARY KEY,
+    pass_hash VARCHAR(255),
+    mfa_habilitado BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE sesiones (
-    id_sesion         SERIAL       PRIMARY KEY,
-    id_cuenta         INT          NOT NULL REFERENCES cuentas(id_cuenta),
-    token_jwt         TEXT         NOT NULL,
-    fecha_expiracion  TIMESTAMP    NOT NULL,
-    ip_origen         VARCHAR(45)  NOT NULL
+CREATE TABLE tokens (
+    id_token SERIAL PRIMARY KEY,
+    user_email VARCHAR(100) REFERENCES credenciales(user_email),
+    jwt_secret TEXT,
+    expira_at TIMESTAMP
 );
 
-CREATE TABLE roles_cuenta (
-    id_rol_cta        SERIAL       PRIMARY KEY,
-    id_cuenta         INT          NOT NULL REFERENCES cuentas(id_cuenta),
-    nombre_rol        VARCHAR(20)  NOT NULL CHECK (nombre_rol IN ('ADMIN', 'CLIENTE', 'OPERADOR')),
-    fecha_asignacion  DATE         NOT NULL,
-    asignado_por      VARCHAR(50)  NOT NULL
+CREATE TABLE bitacora_sesiones (
+    id_sesion SERIAL PRIMARY KEY,
+    id_token INTEGER REFERENCES tokens(id_token),
+    ip_origen VARCHAR(45),
+    dispositivo VARCHAR(50)
 );
 
--- 3. INSERCIÓN DE DATOS
-INSERT INTO cuentas (email, password_hash, fecha_creacion, estado) VALUES
-('admin@cine.cl',  '$2a$12$EXAMPLEADMINHASH1234567890abcdefghijklmnopqrstuv', NOW(), TRUE),
-('cliente@cine.cl', '$2a$12$EXAMPLECLIENTHASH1234567890abcdefghijklmnopqr', NOW(), TRUE),
-('operador@cine.cl','$2a$12$EXAMPLEOPERADORHASH1234567890abcdefghijklmnop', NOW(), TRUE);
-
-INSERT INTO roles_cuenta (id_cuenta, nombre_rol, fecha_asignacion, asignado_por) VALUES
-(1, 'ADMIN',   CURRENT_DATE, 'sistema'),
-(2, 'CLIENTE', CURRENT_DATE, 'sistema'),
-(3, 'OPERADOR',CURRENT_DATE, 'sistema');
+INSERT INTO credenciales VALUES ('u1@test.com','hash1',false),('u2@test.com','hash2',false),('u3@test.com','hash3',false),('u4@test.com','hash4',false),('u5@test.com','hash5',false),('u6@test.com','hash6',false),('u7@test.com','hash7',false),('u8@test.com','hash8',false),('u9@test.com','hash9',false);
+INSERT INTO tokens (user_email, jwt_secret, expira_at) SELECT user_email, 'secret', '2026-12-31' FROM credenciales;
+INSERT INTO bitacora_sesiones (id_token, ip_origen, dispositivo) SELECT id_token, '127.0.0.1', 'Mobile' FROM tokens;

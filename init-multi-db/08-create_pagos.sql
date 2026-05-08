@@ -1,45 +1,32 @@
--- CADA BASE DE DATOS DE CADA MICROSERVICIO DEBE TENER SU PROPIO
--- SCRIPT DE CREACIÓN DE TABLAS E INSERCIÓN DE DATOS
+\c pagos_db
 
--- Conectarse a la base de datos específica para este microservicio
-\c pagos;
-
--- 1. ELIMINACIÓN (Orden jerárquico inverso)
-DROP TABLE IF EXISTS logs_pasarela;
-DROP TABLE IF EXISTS comprobantes;
+DROP TABLE IF EXISTS reembolsos;
 DROP TABLE IF EXISTS transacciones;
+DROP TABLE IF EXISTS metodos_pago;
+DROP TABLE IF EXISTS reservas_proyeccion;
 
--- 2. TABLAS MAESTRAS
+CREATE TABLE metodos_pago (
+    id_metodo VARCHAR(10) PRIMARY KEY,
+    nombre VARCHAR(50)
+);
+
 CREATE TABLE transacciones (
-    id_pago           SERIAL       PRIMARY KEY,
-    id_reserva        INT          NOT NULL,
-    monto             DECIMAL      NOT NULL,
-    metodo            VARCHAR(30)  NOT NULL,
-    fecha_pago        TIMESTAMP    NOT NULL DEFAULT NOW()
+    id_tx SERIAL PRIMARY KEY,
+    reserva_id UUID,
+    metodo_id VARCHAR(10) REFERENCES metodos_pago(id_metodo),
+    monto DECIMAL(10,2),
+    fecha_tx TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE comprobantes (
-    id_comprobante    SERIAL       PRIMARY KEY,
-    id_pago           INT          NOT NULL REFERENCES transacciones(id_pago),
-    serie             VARCHAR(10)  NOT NULL,
-    numero            VARCHAR(20)  NOT NULL,
-    ruc_dni           VARCHAR(15)  NOT NULL
+CREATE TABLE reembolsos (
+    id_reem SERIAL PRIMARY KEY,
+    id_tx INTEGER REFERENCES transacciones(id_tx),
+    motivo VARCHAR(100),
+    monto_devuelto DECIMAL(10,2)
 );
 
-CREATE TABLE logs_pasarela (
-    id_log            SERIAL       PRIMARY KEY,
-    id_pago           INT          NOT NULL REFERENCES transacciones(id_pago),
-    codigo_api        VARCHAR(50)  NOT NULL,
-    mensaje_respuesta TEXT         NOT NULL,
-    estado_api        VARCHAR(20)  NOT NULL
-);
+CREATE TABLE reservas_proyeccion (id_reserva UUID PRIMARY KEY, monto_total DECIMAL(10,2));
 
--- 3. INSERCIÓN DE DATOS
-INSERT INTO transacciones (id_reserva, monto, metodo, fecha_pago) VALUES
-(1, 8.50, 'Tarjeta', '2026-05-01 10:35:00');
-
-INSERT INTO comprobantes (id_pago, serie, numero, ruc_dni) VALUES
-(1, 'F001', '00012345', '12345678-9');
-
-INSERT INTO logs_pasarela (id_pago, codigo_api, mensaje_respuesta, estado_api) VALUES
-(1, 'PAY-2026', 'Pago aprobado', 'OK');
+INSERT INTO metodos_pago VALUES ('VISA','Visa'),('MSTC','Mastercard'),('AMEX','Amex'),('CASH','Efectivo'),('PAYP','PayPal'),('APPL','Apple Pay'),('GOOG','Google Pay'),('TRANS','Transferencia'),('BITC','Bitcoin');
+INSERT INTO transacciones (reserva_id, metodo_id, monto) VALUES (gen_random_uuid(), 'VISA', 5000.00), (gen_random_uuid(), 'MSTC', 5000.00), (gen_random_uuid(), 'VISA', 5000.00), (gen_random_uuid(), 'VISA', 5000.00), (gen_random_uuid(), 'PAYP', 5000.00), (gen_random_uuid(), 'VISA', 5000.00), (gen_random_uuid(), 'CASH', 5000.00), (gen_random_uuid(), 'AMEX', 5000.00), (gen_random_uuid(), 'VISA', 5000.00);
+INSERT INTO reembolsos (id_tx, motivo, monto_devuelto) SELECT id_tx, 'Cliente cancela', 5000.00 FROM transacciones LIMIT 9;
