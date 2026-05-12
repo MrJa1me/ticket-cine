@@ -1,4 +1,4 @@
-package com.microservicio.usuarios.entities;
+package cl.ticketcine.usuarios.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,11 +6,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "perfiles")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public class Perfil {
 
     @Id

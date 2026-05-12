@@ -1,4 +1,4 @@
-package com.microservicio.usuarios.entities;
+package cl.ticketcine.usuarios.model;
 
 import jakarta.persistence.*;
 import lombok.*;
