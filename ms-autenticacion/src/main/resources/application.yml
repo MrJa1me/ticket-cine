@@ -17,6 +17,10 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+jwt:
+  secret: VGhpcyBpcyBhIHZlcnkgc2VjdXJlIHNlY3JldCBmb3IganN3dCB0b2tlbg==
+  expiration: 3600000
+
 eureka:
   client:
     register-with-eureka: true
