@@ -1,6 +1,7 @@
 package cl.ticketcine.usuarios.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,9 @@ public class MembresiaService {
     }
 
     public MembresiaResponse findById(Integer id) {
-        Membresia membresia = membresiaRepository.findById(id)
-                .orElseThrow(() -> new MembresiaNotFoundException(id));
+        int idToFind = Objects.requireNonNull(id, "El ID de la membresía es obligatorio");
+        Membresia membresia = membresiaRepository.findById(idToFind)
+                .orElseThrow(() -> new MembresiaNotFoundException(idToFind));
         return membresiaMapper.toResponse(membresia);
     }
 
@@ -46,7 +48,8 @@ public class MembresiaService {
     }
 
     public MembresiaResponse create(MembresiaRequest request) {
-        Usuario usuario = usuarioRepository.findById(request.getUsuarioEmail())
+        String email = Objects.requireNonNull(request.getUsuarioEmail(), "El email del usuario es obligatorio");
+        Usuario usuario = usuarioRepository.findById(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUsuarioEmail()));
 
         Membresia membresia = membresiaMapper.toEntity(request);
@@ -56,10 +59,12 @@ public class MembresiaService {
     }
 
     public MembresiaResponse update(Integer id, MembresiaRequest request) {
-        Membresia membresia = membresiaRepository.findById(id)
-                .orElseThrow(() -> new MembresiaNotFoundException(id));
+        int idToUpdate = Objects.requireNonNull(id, "El ID de la membresía es obligatorio");
+        Membresia membresia = membresiaRepository.findById(idToUpdate)
+                .orElseThrow(() -> new MembresiaNotFoundException(idToUpdate));
 
-        Usuario usuario = usuarioRepository.findById(request.getUsuarioEmail())
+        String email = Objects.requireNonNull(request.getUsuarioEmail(), "El email del usuario es obligatorio");
+        Usuario usuario = usuarioRepository.findById(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUsuarioEmail()));
 
         membresiaMapper.updateEntity(request, membresia);
@@ -69,8 +74,9 @@ public class MembresiaService {
     }
 
     public void delete(Integer id) {
-        if (!membresiaRepository.existsById(id)) {
-            throw new MembresiaNotFoundException(id);
+        Integer idToDelete = Objects.requireNonNull(id, "El ID de la membresía es obligatorio");
+        if (!membresiaRepository.existsById(idToDelete)) {
+            throw new MembresiaNotFoundException(idToDelete);
         }
         membresiaRepository.deleteById(id);
     }
