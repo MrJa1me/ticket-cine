@@ -1,6 +1,7 @@
 package cl.ticketcine.usuarios.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,8 @@ public class PerfilService {
     }
 
     public PerfilResponse create(PerfilRequest request) {
-        Usuario usuario = usuarioRepository.findById(request.getUsuarioEmail())
+        String email = Objects.requireNonNull(request.getUsuarioEmail(), "El email del usuario es obligatorio");
+        Usuario usuario = usuarioRepository.findById(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUsuarioEmail()));
 
         if (perfilRepository.existsByUsuarioEmail(request.getUsuarioEmail())) {
