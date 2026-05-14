@@ -1,2 +1,17 @@
 # Ignorar el archivo de instrucciones del agente AI
 AGENTS.md
+
+# Scripts y configuraciones locales del usuario
+launch.sh
+launch.bat
+ticketcine.code-workspace
+SETUP_LINUX.md
+VSCODE_SETUP.md
+README_PROJECT.md
+SERVICIOS_MODIFICADOS.md
+TERMINAL_SETUP_LINUX.md
+
+# Scripts de Docker locales
+init-multi-db/docker_*.sh
+init-multi-db/terminal_detector.sh
+postgres_data/
