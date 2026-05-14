@@ -1,4 +1,4 @@
-package com.example.salas.model.entity;
+package cl.ticketcine.reserva.model;
 
 import jakarta.persistence.*;
 import lombok.*;

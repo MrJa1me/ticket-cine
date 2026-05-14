@@ -1,4 +1,4 @@
-package com.example.salas.model.entity;
+package cl.ticketcine.reserva.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,39 +8,39 @@ import java.util.Objects;
 
 
 @Entity
-@Table(name = "mantenimiento")
+@Table(name = "asientos")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Mantenimiento {
+public class Asiento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_maint", nullable = false)
-    private Integer idMaint;
+    @Column(name = "id_asiento", nullable = false)
+    private Integer idAsiento;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sala", nullable = false)
     private Sala sala;
 
-    @Column(name = "ultima_fecha")
-    private LocalDate ultimaFecha;
+    @Column(name = "fila", length = 1)
+    private String fila;
 
-    @Column(name = "tecnico_nombre", length = 100)
-    private String tecnicoNombre;
+    @Column(name = "numero")
+    private Integer numero;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Mantenimiento that = (Mantenimiento) o;
-        return Objects.equals(idMaint, that.idMaint);
+        Asiento asiento = (Asiento) o;
+        return Objects.equals(idAsiento, asiento.idAsiento);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idMaint);
+        return Objects.hash(idAsiento);
     }
 }
