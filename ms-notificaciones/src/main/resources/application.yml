@@ -8,7 +8,7 @@ spring:
     name: ms-notificaciones
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/notificaciones
+    url: jdbc:postgresql://localhost:5433/notificaciones_db
     username: postgres
     password: 123
   jpa:

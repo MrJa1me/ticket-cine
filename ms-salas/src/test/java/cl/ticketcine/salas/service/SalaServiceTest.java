@@ -2,6 +2,7 @@ package cl.ticketcine.salas.service;
 
 import cl.ticketcine.salas.dto.SalaRequest;
 import cl.ticketcine.salas.dto.SalaResponse;
+import cl.ticketcine.salas.event.SalaEventProducer;
 import cl.ticketcine.salas.exception.SalaNotFoundException;
 import cl.ticketcine.salas.mapper.SalaMapper;
 import cl.ticketcine.salas.model.entity.Sala;
@@ -27,6 +28,9 @@ class SalaServiceTest {
 
     @Mock
     private SalaMapper salaMapper;
+
+    @Mock
+    private SalaEventProducer salaEventProducer;
 
     @InjectMocks
     private SalaService salaService;

@@ -9,8 +9,8 @@ import cl.ticketcine.usuarios.dto.PerfilRequest;
 import cl.ticketcine.usuarios.dto.PerfilResponse;
 import cl.ticketcine.usuarios.exception.PerfilNotFoundException;
 import cl.ticketcine.usuarios.mapper.PerfilMapper;
-import cl.ticketcine.usuarios.model.Perfil;
-import cl.ticketcine.usuarios.model.Usuario;
+import cl.ticketcine.usuarios.model.entity.Perfil;
+import cl.ticketcine.usuarios.model.entity.Usuario;
 import cl.ticketcine.usuarios.repository.PerfilRepository;
 import cl.ticketcine.usuarios.repository.UsuarioRepository;
 
@@ -39,12 +39,14 @@ public class PerfilService {
     }
 
     public PerfilResponse findByUsuarioEmail(String usuarioEmail) {
-        Perfil perfil = perfilRepository.findByUsuarioEmail(usuarioEmail)
-                .orElseThrow(() -> new PerfilNotFoundException(usuarioEmail));
+        String emailNotNull = Objects.requireNonNull(usuarioEmail, "El email del usuario es obligatorio");
+        Perfil perfil = perfilRepository.findByUsuarioEmail(emailNotNull)
+                .orElseThrow(() -> new PerfilNotFoundException(emailNotNull));
         return perfilMapper.toResponse(perfil);
     }
 
     public PerfilResponse create(PerfilRequest request) {
+        Objects.requireNonNull(request, "La solicitud de perfil es obligatoria");
         String email = Objects.requireNonNull(request.getUsuarioEmail(), "El email del usuario es obligatorio");
         Usuario usuario = usuarioRepository.findById(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUsuarioEmail()));
@@ -59,12 +61,18 @@ public class PerfilService {
         return perfilMapper.toResponse(saved);
     }
 
-    public PerfilResponse update(Integer id, PerfilRequest request) {
-        Perfil perfil = perfilRepository.findById(id)
-                .orElseThrow(() -> new PerfilNotFoundException(id));
+    public PerfilResponse update(String usuarioEmail, PerfilRequest request) {
+        Objects.requireNonNull(request, "La solicitud de perfil es obligatoria");
+        String emailToUpdate = Objects.requireNonNull(usuarioEmail, "El email del usuario es obligatorio");
+        if (!emailToUpdate.equals(request.getUsuarioEmail())) {
+            throw new IllegalArgumentException("El email de la ruta y el body deben coincidir");
+        }
 
-        Usuario usuario = usuarioRepository.findById(request.getUsuarioEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUsuarioEmail()));
+        Perfil perfil = perfilRepository.findByUsuarioEmail(emailToUpdate)
+                .orElseThrow(() -> new PerfilNotFoundException(emailToUpdate));
+
+        Usuario usuario = usuarioRepository.findById(emailToUpdate)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + emailToUpdate));
 
         perfilMapper.updateEntity(request, perfil);
         perfil.setUsuario(usuario);
@@ -72,10 +80,10 @@ public class PerfilService {
         return perfilMapper.toResponse(updated);
     }
 
-    public void delete(Integer id) {
-        if (!perfilRepository.existsById(id)) {
-            throw new PerfilNotFoundException(id);
-        }
-        perfilRepository.deleteById(id);
+    public void deleteByUsuarioEmail(String usuarioEmail) {
+        String emailNotNull = Objects.requireNonNull(usuarioEmail, "El email del usuario es obligatorio");
+        Perfil perfil = perfilRepository.findByUsuarioEmail(emailNotNull)
+                .orElseThrow(() -> new PerfilNotFoundException(emailNotNull));
+        perfilRepository.delete(perfil);
     }
 }

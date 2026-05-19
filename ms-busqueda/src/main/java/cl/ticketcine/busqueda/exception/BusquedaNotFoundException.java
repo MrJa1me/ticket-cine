@@ -1,8 +1,10 @@
 package cl.ticketcine.busqueda.exception;
 
-public class BusquedaNotFoundException extends RuntimeException {
+import cl.ticketcine.common.exception.EntityNotFoundException;
+
+public class BusquedaNotFoundException extends EntityNotFoundException {
 
     public BusquedaNotFoundException(String message) {
-        super(message);
+        super("Recurso", "busqueda", message);
     }
 }

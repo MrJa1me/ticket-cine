@@ -22,7 +22,7 @@ Se exige independencia total a nivel de datos [9].
 *   **Sincronización:** Uso de proyecciones sincronizadas mediante Kafka para replicación de datos necesaria entre servicios [9].
 *   **Estructura:** Las bases de datos deben estar normalizadas y validadas mediante diagramas relacionales [9].
 
-## 4. Seguridad y Roles de Usuario
+## 4. Seguridad y Roles de Usuario // no necesario por el momento 
 Implementación de una capa de seguridad sólida mediante **Spring Security** [10, 11].
 *   **Cifrado:** Uso obligatorio de **BCrypt** para contraseñas [10, 11].
 *   **Sesiones:** Manejo de autenticación mediante **JSON Web Tokens (JWT)** sin estado [10, 11].

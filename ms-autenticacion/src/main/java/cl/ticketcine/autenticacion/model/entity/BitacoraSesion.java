@@ -3,6 +3,10 @@ package cl.ticketcine.autenticacion.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * Entidad que mapea la tabla "bitacora_sesiones" en auth_db.
+ * Registra metadata de cada inicio de sesion (IP, dispositivo).
+ */
 @Entity
 @Table(name = "bitacora_sesiones")
 @Getter

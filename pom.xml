@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
+﻿<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -16,19 +16,20 @@
     Cada uno es un subproyecto independiente (microservicio o libreria comun).
     -->
     <modules>
-        <module>eureka</module>      <!-- Servidor Eureka -->
-        <module>ms-autenticacion</module>      <!-- Microservicio autenticacion -->
-        <module>ms-usuarios</module>      <!-- Microservicio usuarios -->
-        <module>ms-busqueda</module>      <!-- Microservicio busqueda -->
-        <module>ms-horarios</module>      <!-- Microservicio horarios -->
-        <module>ms-salas</module>      <!-- Microservicio salas -->
-        <module>ms-reserva</module>      <!-- Microservicio reserva -->
-        <module>ms-pagos</module>      <!-- Microservicio pagos -->
-        <module>ms-notificaciones</module>      <!-- Microservicio notificaciones -->
-        <module>ms-validacion</module>      <!-- Microservicio validacion -->
-        <module>ms-promociones</module>      <!-- Microservicio promociones -->
-        <!-- CGV: Agrega aqui mas modulos segun sea necesario -->
-    </modules>
+            <module>common</module>           <!-- Libreria comun compartida por todos los microservicios -->
+            <module>eureka</module>           <!-- Servidor Eureka -->
+            <module>ms-autenticacion</module> <!-- Microservicio autenticacion -->
+            <module>ms-usuarios</module>      <!-- Microservicio usuarios -->
+            <module>ms-busqueda</module>      <!-- Microservicio busqueda -->
+            <module>ms-horarios</module>      <!-- Microservicio horarios -->
+            <module>ms-salas</module>         <!-- Microservicio salas -->
+            <module>ms-reserva</module>       <!-- Microservicio reserva -->
+            <module>ms-pagos</module>         <!-- Microservicio pagos -->
+            <module>ms-notificaciones</module><!-- Microservicio notificaciones -->
+            <module>ms-validacion</module>    <!-- Microservicio validacion -->
+            <module>ms-promociones</module>   <!-- Microservicio promociones -->
+            <!-- CGV: Agrega aqui mas modulos segun sea necesario -->
+        </modules>
 
     <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de mi proyecto padre -->
     <groupId>cl.ticketcine</groupId>

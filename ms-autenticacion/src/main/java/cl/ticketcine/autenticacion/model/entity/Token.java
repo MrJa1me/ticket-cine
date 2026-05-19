@@ -5,8 +5,11 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+/**
+ * Entidad que mapea la tabla "tokens" en auth_db.
+ * Almacena tokens de sesion generados durante la autenticacion.
+ */
 @Entity
 @Table(name = "tokens")
 @Getter
@@ -27,8 +30,7 @@ public class Token {
     @JoinColumn(name = "user_email", referencedColumnName = "user_email")
     private Credencial credencial;
 
-    @Lob
-    @Column(name = "jwt_secret")
+    @Column(name = "jwt_secret", columnDefinition = "TEXT")
     private String jwtSecret;
 
     @Column(name = "expira_at")

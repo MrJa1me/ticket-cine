@@ -15,3 +15,6 @@ TERMINAL_SETUP_LINUX.md
 init-multi-db/docker_*.sh
 init-multi-db/terminal_detector.sh
 postgres_data/
+target/
+.mvn/
+*.class

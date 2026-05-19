@@ -8,7 +8,7 @@ spring:
     name: ms-pagos
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/pagos
+    url: jdbc:postgresql://localhost:5433/pagos_db
     username: postgres
     password: 123
   jpa:
