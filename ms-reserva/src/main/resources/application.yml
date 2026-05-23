@@ -8,7 +8,7 @@ spring:
     name: ms-reserva
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/reserva
+    url: jdbc:postgresql://localhost:5433/reserva_db
     username: postgres
     password: 123
   jpa:

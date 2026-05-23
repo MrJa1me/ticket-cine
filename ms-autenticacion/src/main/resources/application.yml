@@ -8,7 +8,7 @@ spring:
     name: ms-autenticacion
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/autenticacion
+    url: jdbc:postgresql://localhost:5433/auth_db
     username: postgres
     password: 123
   jpa:
@@ -16,10 +16,16 @@ spring:
       ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-jwt:
-  secret: VGhpcyBpcyBhIHZlcnkgc2VjdXJlIHNlY3JldCBmb3IganN3dCB0b2tlbg==
-  expiration: 3600000
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 eureka:
   client:

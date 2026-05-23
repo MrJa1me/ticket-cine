@@ -1,4 +1,4 @@
-\c auth_db
+﻿\c auth_db
 
 DROP TABLE IF EXISTS bitacora_sesiones;
 DROP TABLE IF EXISTS tokens;
@@ -7,7 +7,8 @@ DROP TABLE IF EXISTS credenciales;
 CREATE TABLE credenciales (
     user_email VARCHAR(100) PRIMARY KEY,
     pass_hash VARCHAR(255),
-    mfa_habilitado BOOLEAN DEFAULT FALSE
+    mfa_habilitado BOOLEAN DEFAULT FALSE,
+    roles VARCHAR(255) NOT NULL DEFAULT 'ROLE_CLIENTE'
 );
 
 CREATE TABLE tokens (
@@ -24,6 +25,16 @@ CREATE TABLE bitacora_sesiones (
     dispositivo VARCHAR(50)
 );
 
-INSERT INTO credenciales VALUES ('u1@test.com','hash1',false),('u2@test.com','hash2',false),('u3@test.com','hash3',false),('u4@test.com','hash4',false),('u5@test.com','hash5',false),('u6@test.com','hash6',false),('u7@test.com','hash7',false),('u8@test.com','hash8',false),('u9@test.com','hash9',false);
+INSERT INTO credenciales (user_email, pass_hash, mfa_habilitado, roles) VALUES
+('u1@test.com','hash1',false,'ROLE_CLIENTE'),
+('u2@test.com','hash2',false,'ROLE_CLIENTE'),
+('u3@test.com','hash3',false,'ROLE_ADMIN'),
+('u4@test.com','hash4',false,'ROLE_CLIENTE'),
+('u5@test.com','hash5',false,'ROLE_OPERADOR'),
+('u6@test.com','hash6',false,'ROLE_CLIENTE'),
+('u7@test.com','hash7',false,'ROLE_CLIENTE'),
+('u8@test.com','hash8',false,'ROLE_CLIENTE'),
+('u9@test.com','hash9',false,'ROLE_CLIENTE');
+
 INSERT INTO tokens (user_email, jwt_secret, expira_at) SELECT user_email, 'secret', '2026-12-31' FROM credenciales;
 INSERT INTO bitacora_sesiones (id_token, ip_origen, dispositivo) SELECT id_token, '127.0.0.1', 'Mobile' FROM tokens;

@@ -10,11 +10,11 @@ public class PerfilRequest {
     @NotBlank(message = "El email del usuario es obligatorio")
     private String usuarioEmail;
 
-    @Size(min = 2, max = 10, message = "El idioma debe tener entre 2 y 10 caracteres")
+    @Size(max = 10, message = "La preferencia de idioma no puede superar los 10 caracteres")
     private String preferenciaIdioma;
 
     private Boolean esEstudiante;
 
-    @Size(max = 255, message = "La biografía no puede superar los 255 caracteres")
+    @Size(max = 255, message = "La biografia no puede superar los 255 caracteres")
     private String biografia;
 }

@@ -42,6 +42,18 @@
     <!-- Dependencias necesarias para este microservicio -->
     <dependencies>
 
+        <!-- Libreria comun compartida -->
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Actuator: endpoints de monitoreo y salud -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- Spring Web: Controladores REST -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -107,12 +119,18 @@
         </dependency>
 
         <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-openfeign</artifactId>
+                </dependency>
 
-        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+                <!-- Spring Kafka para mensajería asincrónica -->
+                <dependency>
+                    <groupId>org.springframework.kafka</groupId>
+                    <artifactId>spring-kafka</artifactId>
+                </dependency>
+
+                <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>

@@ -13,13 +13,18 @@ import cl.ticketcine.busqueda.model.entity.UsuarioProyeccion;
 import cl.ticketcine.busqueda.repository.CategoriaRepository;
 import cl.ticketcine.busqueda.repository.PeliculaRepository;
 import cl.ticketcine.busqueda.repository.UsuarioProyeccionRepository;
+import cl.ticketcine.busqueda.event.BusquedaEventProducer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BusquedaService {
 
@@ -27,23 +32,27 @@ public class BusquedaService {
     private final PeliculaRepository peliculaRepository;
     private final UsuarioProyeccionRepository usuarioRepository;
     private final BusquedaMapper mapper;
+    private final BusquedaEventProducer eventProducer;
 
     public List<CategoriaResponse> findAllCategorias() {
         return mapper.toCategoriaResponseList(categoriaRepository.findAll());
     }
 
     public CategoriaResponse findCategoriaById(Integer idCat) {
-        Categoria categoria = categoriaRepository.findById(idCat)
-                .orElseThrow(() -> new BusquedaNotFoundException("Categoría no encontrada con id: " + idCat));
+        Integer idCatNotNull = Objects.requireNonNull(idCat, "El ID de categoría es obligatorio");
+        Categoria categoria = categoriaRepository.findById(idCatNotNull)
+                .orElseThrow(() -> new BusquedaNotFoundException("Categoría no encontrada con id: " + idCatNotNull));
         return mapper.toCategoriaResponse(categoria);
     }
 
     public List<CategoriaResponse> searchCategorias(String nombre) {
-        return mapper.toCategoriaResponseList(categoriaRepository.findByNombreContainingIgnoreCase(nombre));
+        String nombreNotNull = Objects.requireNonNull(nombre, "El nombre es obligatorio");
+        return mapper.toCategoriaResponseList(categoriaRepository.findByNombreContainingIgnoreCase(nombreNotNull));
     }
 
     @Transactional
     public CategoriaResponse createCategoria(CategoriaRequest request) {
+        Objects.requireNonNull(request, "La solicitud de categoría es obligatoria");
         if (categoriaRepository.existsByNombreIgnoreCase(request.getNombre())) {
             throw new IllegalArgumentException("Ya existe una categoría con nombre: " + request.getNombre());
         }
@@ -56,25 +65,30 @@ public class BusquedaService {
     }
 
     public PeliculaResponse findPeliculaBySlug(String slug) {
-        Pelicula pelicula = peliculaRepository.findById(slug)
-                .orElseThrow(() -> new BusquedaNotFoundException("Película no encontrada con slug: " + slug));
+        String slugNotNull = Objects.requireNonNull(slug, "El slug de la película es obligatorio");
+        Pelicula pelicula = peliculaRepository.findById(slugNotNull)
+                .orElseThrow(() -> new BusquedaNotFoundException("Película no encontrada con slug: " + slugNotNull));
         return mapper.toPeliculaResponse(pelicula);
     }
 
     public List<PeliculaResponse> searchPeliculasByTitulo(String titulo) {
-        return mapper.toPeliculaResponseList(peliculaRepository.findByTituloContainingIgnoreCase(titulo));
+        String tituloNotNull = Objects.requireNonNull(titulo, "El título es obligatorio");
+        return mapper.toPeliculaResponseList(peliculaRepository.findByTituloContainingIgnoreCase(tituloNotNull));
     }
 
     public List<PeliculaResponse> findPeliculasByCategoria(Integer idCat) {
-        return mapper.toPeliculaResponseList(peliculaRepository.findByCategoria_IdCat(idCat));
+        Integer idCatNotNull = Objects.requireNonNull(idCat, "El ID de categoría es obligatorio");
+        return mapper.toPeliculaResponseList(peliculaRepository.findByCategoria_IdCat(idCatNotNull));
     }
 
     public List<PeliculaResponse> findPeliculasByEstrenoAnio(Integer estrenoAnio) {
-        return mapper.toPeliculaResponseList(peliculaRepository.findByEstrenoAnio(estrenoAnio));
+        Integer estrenoAnioNotNull = Objects.requireNonNull(estrenoAnio, "El año de estreno es obligatorio");
+        return mapper.toPeliculaResponseList(peliculaRepository.findByEstrenoAnio(estrenoAnioNotNull));
     }
 
     @Transactional
     public PeliculaResponse createPelicula(PeliculaRequest request) {
+        Objects.requireNonNull(request, "La solicitud de película es obligatoria");
         if (peliculaRepository.existsById(request.getSlug())) {
             throw new IllegalArgumentException("Ya existe una película con slug: " + request.getSlug());
         }
@@ -90,15 +104,20 @@ public class BusquedaService {
                 .estrenoAnio(request.getEstrenoAnio())
                 .build();
 
-        return mapper.toPeliculaResponse(peliculaRepository.save(pelicula));
+        pelicula = peliculaRepository.save(pelicula);
+        log.info("Pelicula creada: {}", pelicula.getSlug());
+        eventProducer.publishPeliculaCreated(pelicula.getSlug(), pelicula.getTitulo(), categoria.getIdCat(), pelicula.getDuracionMin(), pelicula.getEstrenoAnio());
+        return mapper.toPeliculaResponse(pelicula);
     }
 
     @Transactional
     public PeliculaResponse updatePelicula(String slug, PeliculaRequest request) {
-        Pelicula existing = peliculaRepository.findById(slug)
-                .orElseThrow(() -> new BusquedaNotFoundException("Película no encontrada con slug: " + slug));
+        String slugNotNull = Objects.requireNonNull(slug, "El slug de la película es obligatorio");
+        Objects.requireNonNull(request, "La solicitud de película es obligatoria");
+        Pelicula existing = peliculaRepository.findById(slugNotNull)
+                .orElseThrow(() -> new BusquedaNotFoundException("Película no encontrada con slug: " + slugNotNull));
 
-        if (!slug.equals(request.getSlug())) {
+        if (!slugNotNull.equals(request.getSlug())) {
             throw new IllegalArgumentException("El slug de la ruta y el cuerpo deben coincidir");
         }
 
@@ -110,20 +129,27 @@ public class BusquedaService {
         existing.setDuracionMin(request.getDuracionMin());
         existing.setEstrenoAnio(request.getEstrenoAnio());
 
-        return mapper.toPeliculaResponse(peliculaRepository.save(existing));
+        Pelicula updated = peliculaRepository.save(existing);
+        log.info("Pelicula actualizada: {}", updated.getSlug());
+        eventProducer.publishPeliculaUpdated(updated.getSlug(), updated.getTitulo(), categoria.getIdCat(), updated.getDuracionMin(), updated.getEstrenoAnio());
+        return mapper.toPeliculaResponse(updated);
     }
 
     @Transactional
     public void deletePelicula(String slug) {
-        if (!peliculaRepository.existsById(slug)) {
-            throw new BusquedaNotFoundException("Película no encontrada con slug: " + slug);
+        String slugNotNull = Objects.requireNonNull(slug, "El slug de la película es obligatorio");
+        if (!peliculaRepository.existsById(slugNotNull)) {
+            throw new BusquedaNotFoundException("Película no encontrada con slug: " + slugNotNull);
         }
-        peliculaRepository.deleteById(slug);
+        peliculaRepository.deleteById(slugNotNull);
+        log.info("Pelicula eliminada: {}", slugNotNull);
+        eventProducer.publishPeliculaDeleted(slugNotNull);
     }
 
     public UsuarioProyeccionResponse findUsuarioByEmail(String email) {
-        UsuarioProyeccion usuario = usuarioRepository.findById(email)
-                .orElseThrow(() -> new BusquedaNotFoundException("Usuario de proyección no encontrado con email: " + email));
+        String emailNotNull = Objects.requireNonNull(email, "El email es obligatorio");
+        UsuarioProyeccion usuario = usuarioRepository.findById(emailNotNull)
+                .orElseThrow(() -> new BusquedaNotFoundException("Usuario de proyección no encontrado con email: " + emailNotNull));
         return mapper.toUsuarioProyeccionResponse(usuario);
     }
 }

@@ -1,8 +1,10 @@
 package cl.ticketcine.validacion.exception;
 
-public class ValidacionNotFoundException extends RuntimeException {
+import cl.ticketcine.common.exception.EntityNotFoundException;
+
+public class ValidacionNotFoundException extends EntityNotFoundException {
 
     public ValidacionNotFoundException(String message) {
-        super(message);
+        super("Recurso", "validacion", message);
     }
 }

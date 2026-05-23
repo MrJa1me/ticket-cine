@@ -1,8 +1,10 @@
 package cl.ticketcine.salas.exception;
 
-public class SalaNotFoundException extends RuntimeException {
+import cl.ticketcine.common.exception.EntityNotFoundException;
+
+public class SalaNotFoundException extends EntityNotFoundException {
 
     public SalaNotFoundException(String idSala) {
-        super("Sala no encontrada con id: " + idSala);
+        super("Sala", "id", idSala);
     }
 }

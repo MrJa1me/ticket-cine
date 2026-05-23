@@ -1,6 +1,7 @@
 package cl.ticketcine.usuarios.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
@@ -8,8 +9,8 @@ import cl.ticketcine.usuarios.dto.MembresiaRequest;
 import cl.ticketcine.usuarios.dto.MembresiaResponse;
 import cl.ticketcine.usuarios.exception.MembresiaNotFoundException;
 import cl.ticketcine.usuarios.mapper.MembresiaMapper;
-import cl.ticketcine.usuarios.model.Membresia;
-import cl.ticketcine.usuarios.model.Usuario;
+import cl.ticketcine.usuarios.model.entity.Membresia;
+import cl.ticketcine.usuarios.model.entity.Usuario;
 import cl.ticketcine.usuarios.repository.MembresiaRepository;
 import cl.ticketcine.usuarios.repository.UsuarioRepository;
 
@@ -32,21 +33,23 @@ public class MembresiaService {
     }
 
     public MembresiaResponse findById(Integer id) {
-        Membresia membresia = membresiaRepository.findById(id)
-                .orElseThrow(() -> new MembresiaNotFoundException(id));
+        int idToFind = Objects.requireNonNull(id, "El ID de la membresía es obligatorio");
+        Membresia membresia = membresiaRepository.findById(idToFind)
+                .orElseThrow(() -> new MembresiaNotFoundException(idToFind));
         return membresiaMapper.toResponse(membresia);
     }
 
-    public List<MembresiaResponse> findByUsuarioEmail(String usuarioEmail) {
-        List<Membresia> membresias = membresiaRepository.findByUsuarioEmail(usuarioEmail);
-        if (membresias.isEmpty()) {
-            throw new MembresiaNotFoundException(usuarioEmail, "cualquier nivel");
-        }
-        return membresiaMapper.toResponseList(membresias);
+    public MembresiaResponse findByUsuarioEmail(String usuarioEmail) {
+        String emailNotNull = Objects.requireNonNull(usuarioEmail, "El email del usuario es obligatorio");
+        Membresia membresia = membresiaRepository.findByUsuarioEmail(emailNotNull)
+                .orElseThrow(() -> new MembresiaNotFoundException(emailNotNull, "usuario"));
+        return membresiaMapper.toResponse(membresia);
     }
 
     public MembresiaResponse create(MembresiaRequest request) {
-        Usuario usuario = usuarioRepository.findById(request.getUsuarioEmail())
+        Objects.requireNonNull(request, "La solicitud de membresía es obligatoria");
+        String email = Objects.requireNonNull(request.getUsuarioEmail(), "El email del usuario es obligatorio");
+        Usuario usuario = usuarioRepository.findById(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUsuarioEmail()));
 
         Membresia membresia = membresiaMapper.toEntity(request);
@@ -55,12 +58,18 @@ public class MembresiaService {
         return membresiaMapper.toResponse(saved);
     }
 
-    public MembresiaResponse update(Integer id, MembresiaRequest request) {
-        Membresia membresia = membresiaRepository.findById(id)
-                .orElseThrow(() -> new MembresiaNotFoundException(id));
+    public MembresiaResponse update(String usuarioEmail, MembresiaRequest request) {
+        Objects.requireNonNull(request, "La solicitud de membresía es obligatoria");
+        String emailToUpdate = Objects.requireNonNull(usuarioEmail, "El email del usuario es obligatorio");
+        if (!emailToUpdate.equals(request.getUsuarioEmail())) {
+            throw new IllegalArgumentException("El email de la ruta y el body deben coincidir");
+        }
 
-        Usuario usuario = usuarioRepository.findById(request.getUsuarioEmail())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + request.getUsuarioEmail()));
+        Membresia membresia = membresiaRepository.findByUsuarioEmail(emailToUpdate)
+                .orElseThrow(() -> new MembresiaNotFoundException(emailToUpdate, "usuario"));
+
+        Usuario usuario = usuarioRepository.findById(emailToUpdate)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + emailToUpdate));
 
         membresiaMapper.updateEntity(request, membresia);
         membresia.setUsuario(usuario);
@@ -68,10 +77,10 @@ public class MembresiaService {
         return membresiaMapper.toResponse(updated);
     }
 
-    public void delete(Integer id) {
-        if (!membresiaRepository.existsById(id)) {
-            throw new MembresiaNotFoundException(id);
-        }
-        membresiaRepository.deleteById(id);
+    public void deleteByUsuarioEmail(String usuarioEmail) {
+        String emailNotNull = Objects.requireNonNull(usuarioEmail, "El email del usuario es obligatorio");
+        Membresia membresia = membresiaRepository.findByUsuarioEmail(emailNotNull)
+                .orElseThrow(() -> new MembresiaNotFoundException(emailNotNull, "usuario"));
+        membresiaRepository.delete(membresia);
     }
 }

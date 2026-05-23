@@ -8,7 +8,7 @@ spring:
     name: ms-validacion
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/validacion
+    url: jdbc:postgresql://localhost:5433/validacion_db
     username: postgres
     password: 123
   jpa:
@@ -16,6 +16,22 @@ spring:
       ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: validacion-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "cl.ticketcine.common.event"
 
 eureka:
   client:

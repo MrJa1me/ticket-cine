@@ -9,12 +9,23 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controlador REST de autenticacion.
+ *
+ * Arquitectura limpia de capas tradicional (Controller -> Service -> Repository -> DB).
+ * Sin dependencias de Spring Security. La autenticacion se valida directamente
+ * contra la base de datos mediante consultas JPA.
+ *
+ * Endpoints:
+ * - POST /api/v1/auth/register -> Registro de nueva credencial
+ * - POST /api/v1/auth/login    -> Inicio de sesion
+ * - GET  /api/v1/auth/me       -> Usuario actual (requiere email en header)
+ * - GET  /api/v1/auth/admin/users -> Listado de usuarios (administrativo)
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -34,12 +45,17 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> currentUser(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(authService.currentUser(userDetails.getUsername()));
+    public ResponseEntity<UserResponse> currentUser(@RequestHeader("X-User-Email") String email) {
+        return ResponseEntity.ok(authService.currentUser(email));
     }
 
     @GetMapping("/admin/users")
     public ResponseEntity<List<UserResponse>> listUsers() {
         return ResponseEntity.ok(authService.findAllUsers());
+    }
+
+    @GetMapping("/existe/{email}")
+    public ResponseEntity<Boolean> existsByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(authService.existsByEmail(email));
     }
 }

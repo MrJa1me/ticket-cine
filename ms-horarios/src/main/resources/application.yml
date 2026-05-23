@@ -8,7 +8,7 @@ spring:
     name: ms-horarios
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/horarios
+    url: jdbc:postgresql://localhost:5433/horarios_db
     username: postgres
     password: 123
   jpa:

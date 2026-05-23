@@ -28,7 +28,7 @@
 
     <!-- Nombre y descripcion del modulo -->
     <name>Modulo de Autenticacion</name>
-    <description>Servicio de Autenticacion.</description>
+    <description>Servicio de Autenticacion - TicketCine.</description>
 
     <!--
         *******************************************
@@ -39,8 +39,30 @@
     <!-- Forma de empaquetado es .jar -->
     <packaging>jar</packaging>
 
-    <!-- Dependencias necesarias para este microservicio -->
+    <!--
+        Dependencias necesarias para este microservicio.
+        NOTA: No se incluye Spring Security / JWT. La autenticacion se maneja
+        de forma simple validando credenciales via JPA (Controller -> Service -> Repository -> DB).
+    -->
     <dependencies>
+
+        <!-- Libreria comun compartida (contiene GlobalExceptionHandler, ApiError, excepciones, eventos) -->
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+        </dependency>
+
+        <!-- Spring Kafka: comunicacion asincronica entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Actuator: endpoints de monitoreo y salud -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
         <!-- Spring Web: Controladores REST -->
         <dependency>
@@ -106,7 +128,7 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
-        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion sincronica entre microservicios -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -119,30 +141,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Spring Security para autenticacion y autorizacion -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <!-- JWT para tokens de autenticacion sin estado -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.11.5</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.11.5</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.5</version>
-            <scope>runtime</scope>
-        </dependency>
     </dependencies>
 
     <!-- Empaquetado ejecutable con Spring Boot -->

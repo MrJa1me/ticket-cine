@@ -8,7 +8,7 @@ spring:
     name: ms-promociones
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/promociones
+    url: jdbc:postgresql://localhost:5433/promociones_db
     username: postgres
     password: 123
   jpa:
