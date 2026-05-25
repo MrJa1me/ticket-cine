@@ -1,4 +1,4 @@
-package cl.ticketcine.promociones;
+package cl.ticketcine;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

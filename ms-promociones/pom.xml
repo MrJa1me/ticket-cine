@@ -135,7 +135,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>cl.ticketcine.promociones.TicketcinePromocionesApplication</mainClass>
+                    <mainClass>cl.ticketcine.TicketcinePromocionesApplication</mainClass>
                 </configuration>
             </plugin>
 
