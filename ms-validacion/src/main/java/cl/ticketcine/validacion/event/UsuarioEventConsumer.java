@@ -3,9 +3,6 @@ package cl.ticketcine.validacion.event;
 import cl.ticketcine.common.event.UsuarioCreatedEvent;
 import cl.ticketcine.common.event.UsuarioDeletedEvent;
 import cl.ticketcine.common.event.UsuarioUpdatedEvent;
-import cl.ticketcine.validacion.model.entity.ReservasProyeccion;
-import cl.ticketcine.validacion.repository.ReservasProyeccionRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -16,11 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
  * Mantiene la proyeccion de reservas actualizada en ms-validacion.
  */
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class UsuarioEventConsumer {
-
-    private final ReservasProyeccionRepository reservasProyeccionRepository;
 
     @KafkaListener(topics = "usuarios.usuario.created", groupId = "validacion-group")
     @Transactional

@@ -65,7 +65,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new UsuarioNotFoundException(emailNotNull));
 
         usuarioMapper.updateEntity(request, usuario);
-        Usuario updated = usuarioRepository.save(usuario);
+        Usuario updated = Objects.requireNonNull(usuarioRepository.save(usuario));
         usuarioEventProducer.publishUsuarioUpdated(updated.getEmail(), updated.getNombre());
         return usuarioMapper.toResponse(updated);
     }

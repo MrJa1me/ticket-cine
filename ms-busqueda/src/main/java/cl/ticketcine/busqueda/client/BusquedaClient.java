@@ -1,4 +1,4 @@
-package cl.ticketcine.salas.client;
+package cl.ticketcine.busqueda.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "ms-busqueda", url = "http://localhost:9003/api/v1/busqueda")
 public interface BusquedaClient {
 
-    @GetMapping("/peliculas/{slug}")
-    Object findPeliculaBySlug(@PathVariable String slug);
+    @GetMapping("/{id}")
+    Object findSalaById(@PathVariable String id);
 }

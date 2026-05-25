@@ -49,13 +49,15 @@ public class SalaService {
     @Transactional
     public SalaResponse create(SalaRequest request) {
         Objects.requireNonNull(request, "La solicitud de sala es obligatoria");
-        if (salaRepository.existsById(request.getIdSala())) {
-            throw new IllegalArgumentException("Ya existe una sala con id: " + request.getIdSala());
+        String idSala = Objects.requireNonNull(request.getIdSala(), "El ID de la sala es obligatorio");
+        if (salaRepository.existsById(idSala)) {
+            throw new IllegalArgumentException("Ya existe una sala con id: " + idSala);
         }
-        Sala sala = salaMapper.toEntity(request);
+        Sala sala = Objects.requireNonNull(salaMapper.toEntity(request), "La entidad Sala no puede ser nula");
         sala = salaRepository.save(sala);
-        log.info("Sala creada: {}", sala.getIdSala());
-        salaEventProducer.publishSalaCreated(sala.getIdSala(), sala.getFormato(), sala.getCapacidad());
+        String idSalaNotNull = Objects.requireNonNull(sala.getIdSala(), "El ID de la sala no puede ser nulo después de guardar");
+        log.info("Sala creada: {}", idSalaNotNull);
+        salaEventProducer.publishSalaCreated(idSalaNotNull, sala.getFormato(), sala.getCapacidad());
         return salaMapper.toResponse(sala);
     }
 
@@ -73,8 +75,9 @@ public class SalaService {
         existente.setFormato(request.getFormato());
         existente.setCapacidad(request.getCapacidad());
         Sala actualizado = salaRepository.save(existente);
-        log.info("Sala actualizada: {}", actualizado.getIdSala());
-        salaEventProducer.publishSalaUpdated(actualizado.getIdSala(), actualizado.getFormato(), actualizado.getCapacidad());
+        String idSalaActualizada = Objects.requireNonNull(actualizado.getIdSala(), "El ID de la sala no puede ser nulo después de actualizar");
+        log.info("Sala actualizada: {}", idSalaActualizada);
+        salaEventProducer.publishSalaUpdated(idSalaActualizada, actualizado.getFormato(), actualizado.getCapacidad());
         return salaMapper.toResponse(actualizado);
     }
 
