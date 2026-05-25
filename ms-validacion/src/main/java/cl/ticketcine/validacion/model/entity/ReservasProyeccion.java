@@ -3,7 +3,6 @@ package cl.ticketcine.validacion.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity
