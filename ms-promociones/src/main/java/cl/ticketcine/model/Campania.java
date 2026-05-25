@@ -1,10 +1,10 @@
-package com.microservicio.promociones.entities;
+package cl.ticketcine.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "campanias")
@@ -26,19 +26,6 @@ public class Campania {
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
-    @OneToMany(mappedBy = "campania", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "campania", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cupon> cupones;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Campania campania = (Campania) o;
-        return Objects.equals(idCamp, campania.idCamp);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idCamp);
-    }
 }

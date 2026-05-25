@@ -10,7 +10,7 @@ echo.
 cd /d C:\Trabajo-Duoc\ticket-cine
 
 echo [1/1] Compilando common + eureka + mis 5 MS
-call mvn compile -pl common,eureka,ms-autenticacion,ms-usuarios,ms-busqueda,ms-salas,ms-validacion -am
+call mvn compile -pl common,eureka,ms-promociones -am
 
 if %ERRORLEVEL% EQU 0 (
     echo.

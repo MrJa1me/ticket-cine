@@ -1,7 +1,15 @@
-package com.microservicio.promociones.entities;
+package cl.ticketcine.notificaciones.model;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Objects;
 
 @Entity
@@ -17,8 +25,8 @@ public class UsuariosProyeccion {
     @Column(name = "email", length = 100, nullable = false)
     private String email;
 
-    @Column(name = "es_estudiante")
-    private Boolean esEstudiante;
+    @Column(name = "nombre", length = 100)
+    private String nombre;
 
     @Override
     public boolean equals(Object o) {
