@@ -89,7 +89,7 @@ class SalaServiceTest {
     void create_whenSalaMissing_savesSala() {
         when(salaRepository.existsById("SALA1")).thenReturn(false);
         when(salaMapper.toEntity(request)).thenReturn(sala);
-        when(salaRepository.save(any(Sala.class))).thenReturn(sala);
+        when(salaRepository.save(any())).thenReturn(sala);
         when(salaMapper.toResponse(sala)).thenReturn(response);
 
         SalaResponse result = salaService.create(request);

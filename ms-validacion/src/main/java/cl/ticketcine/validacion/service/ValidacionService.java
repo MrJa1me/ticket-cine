@@ -44,18 +44,7 @@ public class ValidacionService {
         return mapper.toPuntoControlResponseList(puntoControlRepository.findByUbicacionContainingIgnoreCase(ubicacionNotNull));
     }
 
-    @Transactional
-    public PuntoControlResponse createPuntoControl(PuntoControlRequest request) {
-        Objects.requireNonNull(request, "La solicitud de punto de control es obligatoria");
-        if (puntoControlRepository.existsById(request.getIdPunto())) {
-            throw new IllegalArgumentException("Ya existe un punto de control con id: " + request.getIdPunto());
-        }
-        PuntoControl punto = PuntoControl.builder()
-                .idPunto(request.getIdPunto())
-                .ubicacion(request.getUbicacion())
-                .build();
-        return mapper.toPuntoControlResponse(puntoControlRepository.save(punto));
-    }
+
 
     @Transactional
     public PuntoControlResponse updatePuntoControl(String idPunto, PuntoControlRequest request) {
@@ -105,7 +94,7 @@ public class ValidacionService {
                 .hashCode(request.getHashCode())
                 .activo(request.getActivo())
                 .build();
-        qr = qrCodigoRepository.save(qr);
+
         log.info("QR creado: {}", qr.getIdQr());
         eventProducer.publishQrCreated(qr.getIdQr(), qr.getReservaId().toString(), qr.getHashCode());
         return mapper.toQrCodigoResponse(qr);
@@ -147,18 +136,21 @@ public class ValidacionService {
     @Transactional
     public HistorialAccesoResponse createHistorialAcceso(HistorialAccesoRequest request) {
         Objects.requireNonNull(request, "La solicitud de historial de acceso es obligatoria");
-        QrCodigo qr = qrCodigoRepository.findById(request.getIdQr())
-                .orElseThrow(() -> new ValidacionNotFoundException("QR no encontrado con id: " + request.getIdQr()));
+        Long idQrNotNull = Objects.requireNonNull(request.getIdQr(), "El ID del QR es obligatorio");
+        QrCodigo qr = qrCodigoRepository.findById(idQrNotNull)
+                .orElseThrow(() -> new ValidacionNotFoundException("QR no encontrado con id: " + idQrNotNull));
 
-        PuntoControl punto = puntoControlRepository.findById(request.getIdPunto())
-                .orElseThrow(() -> new ValidacionNotFoundException("Punto de control no encontrado con id: " + request.getIdPunto()));
+        String idPuntoNotNull = Objects.requireNonNull(request.getIdPunto(), "El ID del punto de control es obligatorio");
+        PuntoControl punto = puntoControlRepository.findById(idPuntoNotNull)
+                .orElseThrow(() -> new ValidacionNotFoundException("Punto de control no encontrado con id: " + idPuntoNotNull));
 
         HistorialAcceso acceso = HistorialAcceso.builder()
                 .qrCodigo(qr)
                 .puntoControl(punto)
                 .build();
 
-        acceso = historialAccesoRepository.save(acceso);
+
+
         log.info("Acceso registrado: punto={}, qr={}", punto.getIdPunto(), qr.getIdQr());
         eventProducer.publishAccesoRegistrado(punto.getIdPunto(), qr.getIdQr());
         return mapper.toHistorialAccesoResponse(acceso);

@@ -6,6 +6,7 @@ import cl.ticketcine.common.event.SalaUpdatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -19,7 +20,7 @@ public class SalaEventProducer {
     @Autowired(required = false)
     private KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void publishSalaCreated(String idSala, String formato, Integer capacidad) {
+    public void publishSalaCreated(@NonNull String idSala, String formato, Integer capacidad) {
         if (kafkaTemplate == null) { log.warn("Kafka no disponible, evento ignorado: {}", TOPIC_CREATED); return; }
         try {
             SalaCreatedEvent event = SalaCreatedEvent.builder().idSala(idSala).formato(formato).capacidad(capacidad).build();
@@ -30,7 +31,7 @@ public class SalaEventProducer {
         }
     }
 
-    public void publishSalaUpdated(String idSala, String formato, Integer capacidad) {
+    public void publishSalaUpdated(@NonNull String idSala, String formato, Integer capacidad) {
         if (kafkaTemplate == null) { log.warn("Kafka no disponible, evento ignorado: {}", TOPIC_UPDATED); return; }
         try {
             SalaUpdatedEvent event = SalaUpdatedEvent.builder().idSala(idSala).formato(formato).capacidad(capacidad).build();
@@ -41,7 +42,7 @@ public class SalaEventProducer {
         }
     }
 
-    public void publishSalaDeleted(String idSala) {
+    public void publishSalaDeleted(@NonNull String idSala) {
         if (kafkaTemplate == null) { log.warn("Kafka no disponible, evento ignorado: {}", TOPIC_DELETED); return; }
         try {
             SalaDeletedEvent event = SalaDeletedEvent.builder().idSala(idSala).build();

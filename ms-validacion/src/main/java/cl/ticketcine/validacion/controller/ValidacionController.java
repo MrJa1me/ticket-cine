@@ -33,11 +33,7 @@ public class ValidacionController {
         return ResponseEntity.ok(service.searchPuntosControl(ubicacion));
     }
 
-    @PostMapping("/puntos-control")
-    public ResponseEntity<PuntoControlResponse> createPuntoControl(@Valid @RequestBody PuntoControlRequest request) {
-        PuntoControlResponse created = service.createPuntoControl(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
+    
 
     @PutMapping("/puntos-control/{id}")
     public ResponseEntity<PuntoControlResponse> updatePuntoControl(
