@@ -8,7 +8,8 @@
       "cwd": "${workspaceFolder}/eureka",
       "mainClass": "cl.ticketcine.eureka.TicketcineEurekaApplication",
       "projectName": "cl-ticketcine-eureka",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false" //permite limpieza de puertos al detener la aplicación
     },
     {
       "type": "java",
@@ -17,7 +18,8 @@
       "cwd": "${workspaceFolder}/ms-autenticacion",
       "mainClass": "cl.ticketcine.autenticacion.TicketcineAutenticacionApplication",
       "projectName": "cl-ticketcine-autenticacion",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -26,7 +28,8 @@
       "cwd": "${workspaceFolder}/ms-usuarios",
       "mainClass": "cl.ticketcine.usuarios.TicketcineUsuariosApplication",
       "projectName": "cl-ticketcine-usuarios",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -35,7 +38,8 @@
       "cwd": "${workspaceFolder}/ms-busqueda",
       "mainClass": "cl.ticketcine.busqueda.TicketcineBusquedaApplication",
       "projectName": "cl-ticketcine-busqueda",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -44,7 +48,8 @@
       "cwd": "${workspaceFolder}/ms-horarios",
       "mainClass": "cl.ticketcine.horarios.TicketcineHorariosApplication",
       "projectName": "cl-ticketcine-horarios",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -53,7 +58,8 @@
       "cwd": "${workspaceFolder}/ms-salas",
       "mainClass": "cl.ticketcine.salas.TicketcineSalasApplication",
       "projectName": "cl-ticketcine-salas",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -62,7 +68,8 @@
       "cwd": "${workspaceFolder}/ms-reserva",
       "mainClass": "cl.ticketcine.reserva.TicketcineReservaApplication",
       "projectName": "cl-ticketcine-reserva",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -71,7 +78,8 @@
       "cwd": "${workspaceFolder}/ms-pagos",
       "mainClass": "cl.ticketcine.pagos.TicketcinePagosApplication",
       "projectName": "cl-ticketcine-pagos",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -80,7 +88,8 @@
       "cwd": "${workspaceFolder}/ms-notificaciones",
       "mainClass": "cl.ticketcine.notificaciones.TicketcineNotificacionesApplication",
       "projectName": "cl-ticketcine-notificaciones",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -89,7 +98,8 @@
       "cwd": "${workspaceFolder}/ms-validacion",
       "mainClass": "cl.ticketcine.validacion.TicketcineValidacionApplication",
       "projectName": "cl-ticketcine-validacion",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -98,7 +108,8 @@
       "cwd": "${workspaceFolder}/ms-promociones",
       "mainClass": "cl.ticketcine.promociones.TicketcinePromocionesApplication",
       "projectName": "cl-ticketcine-promociones",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     }
   ],
   "compounds": [
