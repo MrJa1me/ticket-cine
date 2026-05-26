@@ -1,0 +1,49 @@
+package cl.ticketcine.reserva.controller;
+
+import cl.ticketcine.reserva.dto.salaRequest;
+import cl.ticketcine.reserva.dto.salaResponse;
+import cl.ticketcine.reserva.service.SalaService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/salas")
+public class salaController {
+
+    private final SalaService salaService;
+
+    @GetMapping
+    public ResponseEntity<List<salaResponse>> findAll() {
+        return ResponseEntity.ok(salaService.findAll());
+    }
+
+    @GetMapping("/{idSala}")
+    public ResponseEntity<salaResponse> findById(@PathVariable String idSala) {
+        return ResponseEntity.ok(salaService.findById(idSala));
+    }
+
+    @PostMapping
+    public ResponseEntity<salaResponse> create(@Valid @RequestBody salaRequest request) {
+        salaResponse creado = salaService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    }
+
+    @PutMapping("/{idSala}")
+    public ResponseEntity<salaResponse> update(
+            @PathVariable String idSala,
+            @Valid @RequestBody salaRequest request) {
+        return ResponseEntity.ok(salaService.update(idSala, request));
+    }
+
+    @DeleteMapping("/{idSala}")
+    public ResponseEntity<Void> deleteById(@PathVariable String idSala) {
+        salaService.deleteById(idSala);
+        return ResponseEntity.noContent().build();
+    }
+}
