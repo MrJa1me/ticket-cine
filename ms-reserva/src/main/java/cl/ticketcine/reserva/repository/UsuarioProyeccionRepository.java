@@ -1,9 +1,9 @@
 package cl.ticketcine.reserva.repository;
 
-import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import cl.ticketcine.reserva.model.UsuarioProyeccion;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
 @Repository

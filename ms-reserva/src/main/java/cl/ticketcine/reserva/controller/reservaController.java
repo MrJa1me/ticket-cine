@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.ticketcine.reserva.dto.ReservaResponse;
-import cl.ticketcine.reserva.dto.reservaRequest;
 import cl.ticketcine.reserva.dto.ReservaRequest;
 import cl.ticketcine.reserva.service.ReservaService;
 
@@ -45,7 +44,7 @@ public class ReservaController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservaResponse> create(@Valid @RequestBody reservaRequest request) {
+    public ResponseEntity<ReservaResponse> create(@Valid @RequestBody ReservaRequest request) {
         ReservaResponse creado = reservaService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
@@ -53,7 +52,7 @@ public class ReservaController {
     @PutMapping("/{idAsiento}")
     public ResponseEntity<ReservaResponse> update(
             @PathVariable @NonNull Integer idAsiento,
-            @Valid @RequestBody reservaRequest request) {
+            @Valid @RequestBody ReservaRequest request) {
         return ResponseEntity.ok(reservaService.update(idAsiento, request));
     }
 

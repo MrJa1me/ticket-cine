@@ -1,8 +1,6 @@
 package cl.ticketcine.reserva.controller;
 
-import cl.ticketcine.reserva.dto.mantenimientoRequest;
-import cl.ticketcine.reserva.dto.mantenimientoResponse;
-import cl.ticketcine.reserva.service.MantenimientoService;
+import cl.ticketcine.reserva.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,30 +17,30 @@ public class MantenimientoController {
     private final MantenimientoService mantenimientoService;
 
     @GetMapping
-    public ResponseEntity<List<mantenimientoResponse>> findAll() {
+    public ResponseEntity<List<MantenimientoResponse>> findAll() {
         return ResponseEntity.ok(mantenimientoService.findAll());
     }
 
     @GetMapping("/{idMaint}")
-    public ResponseEntity<mantenimientoResponse> findById(@PathVariable Integer idMaint) {
+    public ResponseEntity<MantenimientoResponse> findById(@PathVariable Integer idMaint) {
         return ResponseEntity.ok(mantenimientoService.findById(idMaint));
     }
 
     @GetMapping("/sala/{idSala}")
-    public ResponseEntity<List<mantenimientoResponse>> findBySalaId(@PathVariable String idSala) {
+    public ResponseEntity<List<MantenimientoResponse>> findBySalaId(@PathVariable String idSala) {
         return ResponseEntity.ok(mantenimientoService.findBySalaId(idSala));
     }
 
     @PostMapping
-    public ResponseEntity<mantenimientoResponse> create(@Valid @RequestBody mantenimientoRequest request) {
-        mantenimientoResponse creado = mantenimientoService.create(request);
+    public ResponseEntity<MantenimientoResponse> create(@Valid @RequestBody MantenimientoRequest request) {
+        MantenimientoResponse creado = mantenimientoService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{idMaint}")
-    public ResponseEntity<mantenimientoResponse> update(
+    public ResponseEntity<MantenimientoResponse> update(
             @PathVariable Integer idMaint,
-            @Valid @RequestBody mantenimientoRequest request) {
+            @Valid @RequestBody MantenimientoRequest request) {
         return ResponseEntity.ok(mantenimientoService.update(idMaint, request));
     }
 

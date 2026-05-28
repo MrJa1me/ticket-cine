@@ -1,8 +1,6 @@
 package cl.ticketcine.reserva.controller;
 
-import cl.ticketcine.reserva.dto.ReservaRequest;
-import cl.ticketcine.reserva.dto.ReservaResponse;
-import cl.ticketcine.reserva.dto.reservaRequest;
+import cl.ticketcine.reserva.dto.*;
 import cl.ticketcine.reserva.service.ReservaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +33,7 @@ public class AsientoController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservaResponse> create(@Valid @RequestBody reservaRequest request) {
+    public ResponseEntity<ReservaResponse> create(@Valid @RequestBody ReservaRequest request) {
         ReservaResponse creado = reservaService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
@@ -43,7 +41,7 @@ public class AsientoController {
     @PutMapping("/{idAsiento}")
     public ResponseEntity<ReservaResponse> update(
             @PathVariable Integer idAsiento,
-            @Valid @RequestBody reservaRequest request) {
+            @Valid @RequestBody ReservaRequest request) {
         return ResponseEntity.ok(reservaService.update(idAsiento, request));
     }
 

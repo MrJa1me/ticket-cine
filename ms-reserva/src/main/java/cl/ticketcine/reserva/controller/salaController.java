@@ -1,7 +1,6 @@
 package cl.ticketcine.reserva.controller;
 
-import cl.ticketcine.reserva.dto.SalaRequest;
-import cl.ticketcine.reserva.dto.SalaResponse;
+import cl.ticketcine.reserva.dto.*;
 import cl.ticketcine.reserva.service.SalaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class SalaController {
     }
 
     @PostMapping
-    public ResponseEntity<SalaResponse> create(@Valid @RequestBody salaRequest request) {
+    public ResponseEntity<SalaResponse> create(@Valid @RequestBody SalaRequest request) {
         SalaResponse creado = salaService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
@@ -37,7 +36,7 @@ public class SalaController {
     @PutMapping("/{idSala}")
     public ResponseEntity<SalaResponse> update(
             @PathVariable String idSala,
-            @Valid @RequestBody salaRequest request) {
+            @Valid @RequestBody SalaRequest request) {
         return ResponseEntity.ok(salaService.update(idSala, request));
     }
 
