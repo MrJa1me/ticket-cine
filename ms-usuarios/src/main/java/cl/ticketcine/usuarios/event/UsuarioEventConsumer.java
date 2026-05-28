@@ -18,54 +18,42 @@ public class UsuarioEventConsumer {
 
     private final UsuarioRepository usuarioRepository;
 
-    @KafkaListener(topics = "autenticacion.usuario.created", groupId = "usuarios-group")
+    @KafkaListener(
+        topics = "autenticacion.usuario.created",
+        groupId = "ms-usuarios",
+        properties = {"spring.json.value.default.type=cl.ticketcine.common.event.UsuarioCreatedEvent"}
+    )
     @Transactional
-    public void handleUsuarioCreated(UsuarioCreatedEvent event) {
-        log.info("Evento recibido: Usuario creado - email: {}, nombre: {}", event.getEmail(), event.getNombre());
-
-        if (usuarioRepository.existsByEmail(event.getEmail())) {
-            log.warn("El usuario con email {} ya existe en la base de datos de usuarios. Ignorando evento.", event.getEmail());
-            return;
-        }
-
-        Usuario usuario = Usuario.builder()
-                .email(event.getEmail())
-                .nombre(event.getNombre() != null ? event.getNombre() : event.getEmail())
-                .fechaRegistro(java.time.LocalDate.now())
-                .build();
-
+    public void onUsuarioCreated(UsuarioCreatedEvent event) {
+        log.debug("Evento recibido → created, email: {}", event.getEmail());
+        Usuario usuario = new Usuario();
+        usuario.setEmail(event.getEmail());
+        usuario.setNombre(event.getNombre());
         usuarioRepository.save(usuario);
-        log.info("Usuario sincronizado exitosamente en ms-usuarios: {}", event.getEmail());
     }
 
-    @KafkaListener(topics = "autenticacion.usuario.updated", groupId = "usuarios-group")
+    @KafkaListener(
+        topics = "autenticacion.usuario.updated",
+        groupId = "ms-usuarios",
+        properties = {"spring.json.value.default.type=cl.ticketcine.common.event.UsuarioUpdatedEvent"}
+    )
     @Transactional
-    public void handleUsuarioUpdated(UsuarioUpdatedEvent event) {
-        log.info("Evento recibido: Usuario actualizado - email: {}, nombre: {}", event.getEmail(), event.getNombre());
-
-        usuarioRepository.findByEmail(event.getEmail()).ifPresentOrElse(
-                usuario -> {
-                    if (event.getNombre() != null) {
-                        usuario.setNombre(event.getNombre());
-                    }
-                    usuarioRepository.save(usuario);
-                    log.info("Usuario actualizado exitosamente en ms-usuarios: {}", event.getEmail());
-                },
-                () -> log.warn("Usuario con email {} no encontrado en ms-usuarios para actualizar. Ignorando evento.", event.getEmail())
-        );
+    public void onUsuarioUpdated(UsuarioUpdatedEvent event) {
+        log.debug("Evento recibido → updated, email: {}", event.getEmail());
+        usuarioRepository.findByEmail(event.getEmail()).ifPresent(usuario -> {
+            usuario.setNombre(event.getNombre());
+            usuarioRepository.save(usuario);
+        });
     }
 
-    @KafkaListener(topics = "autenticacion.usuario.deleted", groupId = "usuarios-group")
+    @KafkaListener(
+        topics = "autenticacion.usuario.deleted",
+        groupId = "ms-usuarios",
+        properties = {"spring.json.value.default.type=cl.ticketcine.common.event.UsuarioDeletedEvent"}
+    )
     @Transactional
-    public void handleUsuarioDeleted(UsuarioDeletedEvent event) {
-        log.info("Evento recibido: Usuario eliminado - email: {}", event.getEmail());
-
-        usuarioRepository.findByEmail(event.getEmail()).ifPresentOrElse(
-                usuario -> {
-                    usuarioRepository.delete(usuario);
-                    log.info("Usuario eliminado exitosamente en ms-usuarios: {}", event.getEmail());
-                },
-                () -> log.warn("Usuario con email {} no encontrado en ms-usuarios para eliminar. Ignorando evento.", event.getEmail())
-        );
+    public void onUsuarioDeleted(UsuarioDeletedEvent event) {
+        log.debug("Evento recibido → deleted, email: {}", event.getEmail());
+        usuarioRepository.deleteById(event.getEmail());
     }
 }

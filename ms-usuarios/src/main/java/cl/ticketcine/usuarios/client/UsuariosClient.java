@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * Cliente Feign para comunicacion sincronica con ms-usuarios.
  */
-@FeignClient(name = "ms-usuarios", url = "http://localhost:9002/api/v1/usuarios")
+@FeignClient(name = "ms-usuarios")
 public interface UsuariosClient {
 
-    @GetMapping("/existe/{email}")
+    @GetMapping("/api/v1/existe/{email}")
     Boolean existsByEmail(@PathVariable String email);
 }

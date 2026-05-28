@@ -13,9 +13,15 @@ public class KafkaTopicConfig {
     // Topics que CONSUME (vienen de ms-autenticacion)
     @Bean
     public NewTopic topicAuthUsuarioCreated() {
-        log.debug("Creando topico Kafka: autenticacion.usuario.created");
-        return TopicBuilder.name("autenticacion.usuario.created")
-                .partitions(1)
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("Publicado topic Kafka → topic: {}", "autenticacion.usuario.created");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("********************");
+        return TopicBuilder.name("catalogo.libro.created")
+                .partitions(1) // En desarrollo con 1 está bien
                 .replicas(1)
                 .build();
     }
@@ -50,16 +56,27 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic topicUsuarioUpdated() {
-        log.debug("Creando topico Kafka: usuarios.usuario.updated");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("Publicado topic Kafka → topic: {}", "usuarios.usuario.updated");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("********************");
         return TopicBuilder.name("usuarios.usuario.updated")
                 .partitions(1)
-                .replicas(1)
                 .build();
     }
 
     @Bean
     public NewTopic topicUsuarioDeleted() {
-        log.debug("Creando topico Kafka: usuarios.usuario.deleted");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("Publicado topic Kafka → topic: {}", "catalogo.libro.deleted");
+        log.debug("********************");
+        log.debug("********************");
+        log.debug("********************");
         return TopicBuilder.name("usuarios.usuario.deleted")
                 .partitions(1)
                 .replicas(1)
