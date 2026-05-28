@@ -1,8 +1,9 @@
 package cl.ticketcine.reserva.controller;
 
+import cl.ticketcine.reserva.dto.ReservaRequest;
+import cl.ticketcine.reserva.dto.ReservaResponse;
 import cl.ticketcine.reserva.dto.reservaRequest;
-import cl.ticketcine.reserva.dto.reservaResponse;
-import cl.ticketcine.reserva.service.reservaService;
+import cl.ticketcine.reserva.service.ReservaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,33 +15,33 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/asientos")
-public class asientoController {
+public class AsientoController {
 
-    private final reservaService reservaService;
+    private final ReservaService reservaService;
 
     @GetMapping
-    public ResponseEntity<List<reservaResponse>> findAll() {
+    public ResponseEntity<List<ReservaResponse>> findAll() {
         return ResponseEntity.ok(reservaService.findAll());
     }
 
     @GetMapping("/{idAsiento}")
-    public ResponseEntity<reservaResponse> findById(@PathVariable Integer idAsiento) {
+    public ResponseEntity<ReservaResponse> findById(@PathVariable Integer idAsiento) {
         return ResponseEntity.ok(reservaService.findById(idAsiento));
     }
 
     @GetMapping("/sala/{idSala}")
-    public ResponseEntity<List<reservaResponse>> findBySalaId(@PathVariable String idSala) {
+    public ResponseEntity<List<ReservaResponse>> findBySalaId(@PathVariable String idSala) {
         return ResponseEntity.ok(reservaService.findBySalaId(idSala));
     }
 
     @PostMapping
-    public ResponseEntity<reservaResponse> create(@Valid @RequestBody reservaRequest request) {
-        reservaResponse creado = reservaService.create(request);
+    public ResponseEntity<ReservaResponse> create(@Valid @RequestBody reservaRequest request) {
+        ReservaResponse creado = reservaService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{idAsiento}")
-    public ResponseEntity<reservaResponse> update(
+    public ResponseEntity<ReservaResponse> update(
             @PathVariable Integer idAsiento,
             @Valid @RequestBody reservaRequest request) {
         return ResponseEntity.ok(reservaService.update(idAsiento, request));

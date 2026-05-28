@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import cl.ticketcine.reserva.dto.reservaRequest;
-import cl.ticketcine.reserva.dto.reservaResponse;
+import cl.ticketcine.reserva.dto.ReservaRequest;
+import cl.ticketcine.reserva.dto.ReservaResponse;
 import cl.ticketcine.reserva.exception.asientoNotFoundException;
 import cl.ticketcine.reserva.exception.salaNotFoundException;
-import cl.ticketcine.reserva.mapper.reservaMapper;
+import cl.ticketcine.reserva.mapper.ReservaMapper;
 import cl.ticketcine.reserva.model.Asiento;
 import cl.ticketcine.reserva.model.Sala;
-import cl.ticketcine.reserva.repository.reservaRepository;
+import cl.ticketcine.reserva.repository.ReservaRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,22 +22,22 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class reservaService {
+public class ReservaService {
 
-    private final reservaRepository reservaRepository;
-    private final reservaMapper reservaMapper;
+    private final ReservaRepository reservaRepository;
+    private final ReservaMapper reservaMapper;
 
-    public List<reservaResponse> findAll() {
+    public List<ReservaResponse> findAll() {
         return reservaMapper.toResponseList(reservaRepository.findAll());
     }
 
-    public reservaResponse findById(Integer idAsiento) {
+    public ReservaResponse findById(Integer idAsiento) {
         Asiento asiento = reservaRepository.findByIdAsiento(idAsiento)
                 .orElseThrow(() -> new asientoNotFoundException(idAsiento));
         return reservaMapper.toResponse(asiento);
     }
 
-    public List<reservaResponse> findBySalaId(String idSala) {
+    public List<ReservaResponse> findBySalaId(String idSala) {
         List<Asiento> asientos = reservaRepository.findBySalaIdSala(idSala);
         if (asientos.isEmpty()) {
             throw new salaNotFoundException(idSala);
@@ -45,7 +45,7 @@ public class reservaService {
         return reservaMapper.toResponseList(asientos);
     }
 
-    public reservaResponse create(reservaRequest request) {
+    public ReservaResponse create(ReservaRequest request) {
 
         if (reservaRepository.existsByIdAsiento(request.getIdAsiento())) {
             throw new asientoNotFoundException(
@@ -70,7 +70,7 @@ public class reservaService {
         return reservaMapper.toResponse(guardado);
     }
 
-    public reservaResponse update(Integer idAsiento, reservaRequest request) {
+    public ReservaResponse update(Integer idAsiento, ReservaRequest request) {
 
         Asiento existente = reservaRepository.findByIdAsiento(idAsiento)
                 .orElseThrow(() -> new asientoNotFoundException(idAsiento));

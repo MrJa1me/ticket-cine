@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class reservaRequest {
+public class ReservaRequest {
 
     @NotNull(message = "El ID de la sala es obligatorio")
     @Size(min = 1, max = 10, message = "El ID de la sala debe tener entre 1 y 10 caracteres")

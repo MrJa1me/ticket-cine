@@ -42,6 +42,12 @@
     <!-- Dependencias necesarias para este microservicio -->
     <dependencies>
 
+        <!-- Libreria comun compartida -->
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+        </dependency>
+
         <!-- Spring Web: Controladores REST -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -99,6 +105,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
 
         <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
         <dependency>

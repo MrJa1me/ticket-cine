@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-
+  //publica los datos que vienen del maestro, manda los datos a kafka
 @Slf4j
 @Component
 public class UsuarioEventProducer {
@@ -40,7 +40,7 @@ public class UsuarioEventProducer {
 
         kafkaTemplate.send(topic, email, event);
     }
-
+      //3 topicos en kafka
     public void sendCreated(UsuarioCreatedEvent event) {
         send(event, "created");
     }

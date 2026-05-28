@@ -3,7 +3,7 @@ package cl.ticketcine.reserva.dto;
 import lombok.Data;
 
 @Data
-public class reservaResponse {
+public class ReservaResponse {
 
     private Integer idAsiento;
     private String idSala;

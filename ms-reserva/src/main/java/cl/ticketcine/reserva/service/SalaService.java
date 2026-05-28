@@ -1,11 +1,11 @@
 package cl.ticketcine.reserva.service;
 
-import cl.ticketcine.reserva.dto.salaRequest;
-import cl.ticketcine.reserva.dto.salaResponse;
+import cl.ticketcine.reserva.dto.SalaRequest;
+import cl.ticketcine.reserva.dto.SalaResponse;
 import cl.ticketcine.reserva.exception.salaNotFoundException;
 import cl.ticketcine.reserva.mapper.SalaMapper;
 import cl.ticketcine.reserva.model.Sala;
-import cl.ticketcine.reserva.repository.salaRepository;
+import cl.ticketcine.reserva.repository.SalaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,7 @@ public class SalaService {
         return salaMapper.toResponse(sala);
     }
 
-    public salaResponse create(salaRequest request) {
+    public salaResponse create(SalaRequest request) {
         Objects.requireNonNull(request, "La solicitud de sala es obligatoria");
         if (salaRepository.existsByIdSala(request.getIdSala())) {
             throw new IllegalArgumentException("La sala con ID " + request.getIdSala() + " ya existe");
@@ -41,7 +41,7 @@ public class SalaService {
         return salaMapper.toResponse(saved);
     }
 
-    public salaResponse update(String idSala, salaRequest request) {
+    public salaResponse update(String idSala, SalaRequest request) {
         String idNotNull = Objects.requireNonNull(idSala, "El id de la sala es obligatorio");
         Objects.requireNonNull(request, "La solicitud de sala es obligatoria");
 

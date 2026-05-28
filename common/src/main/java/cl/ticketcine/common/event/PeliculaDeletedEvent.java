@@ -16,3 +16,5 @@ public class PeliculaDeletedEvent implements PeliculaEvent {
     private String slug;
 
 }
+
+// son la transferencia de datos (los eventos)

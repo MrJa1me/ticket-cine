@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface reservaRepository extends JpaRepository<Asiento, Integer> {
+public interface ReservaRepository extends JpaRepository<Asiento, Integer> {
 
     Optional<Asiento> findByIdAsiento(Integer idAsiento);
 

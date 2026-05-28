@@ -1,7 +1,7 @@
 package cl.ticketcine.reserva.mapper;
 
-import cl.ticketcine.reserva.dto.reservaRequest;
-import cl.ticketcine.reserva.dto.reservaResponse;
+import cl.ticketcine.reserva.dto.ReservaRequest;
+import cl.ticketcine.reserva.dto.ReservaResponse;
 import cl.ticketcine.reserva.model.Asiento;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,22 +11,22 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface reservaMapper {
+public interface ReservaMapper {
 
     @Mapping(target = "idAsiento", ignore = true)
     @Mapping(target = "sala", ignore = true)
-    @NonNull Asiento toEntity(reservaRequest request);
+    @NonNull Asiento toEntity(ReservaRequest request);
 
     @Mapping(source = "sala.idSala", target = "idSala")
-    reservaResponse toResponse(Asiento asiento);
+    ReservaResponse toResponse(Asiento asiento);
 
     @Mapping(target = "idAsiento", ignore = true)
     @Mapping(target = "sala", ignore = true)
-    Asiento toModel(reservaRequest request);
+    Asiento toModel(ReservaRequest request);
 
-    List<reservaResponse> toResponseList(List<Asiento> asientos);
+    List<ReservaResponse> toResponseList(List<Asiento> asientos);
 
     @Mapping(target = "idAsiento", ignore = true)
     @Mapping(target = "sala", ignore = true)
-    void updateEntity(reservaRequest request, @MappingTarget Asiento asiento);
+    void updateEntity(ReservaRequest request, @MappingTarget Asiento asiento);
 }
