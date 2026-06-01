@@ -2,7 +2,7 @@ package cl.ticketcine.reserva.service;
 
 import cl.ticketcine.reserva.dto.SalaRequest;
 import cl.ticketcine.reserva.dto.SalaResponse;
-import cl.ticketcine.reserva.exception.salaNotFoundException;
+import cl.ticketcine.reserva.exception.SalaNotFoundException;
 import cl.ticketcine.reserva.mapper.SalaMapper;
 import cl.ticketcine.reserva.model.Sala;
 import cl.ticketcine.reserva.repository.SalaRepository;
@@ -16,21 +16,21 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SalaService {
 
-    private final salaRepository salaRepository;
+    private final SalaRepository salaRepository;
     private final SalaMapper salaMapper;
 
-    public List<salaResponse> findAll() {
+    public List<SalaResponse> findAll() {
         return salaMapper.toResponseList(salaRepository.findAll());
     }
 
-    public salaResponse findById(String idSala) {
+    public SalaResponse findById(String idSala) {
         String idNotNull = Objects.requireNonNull(idSala, "El id de la sala es obligatorio");
         Sala sala = salaRepository.findByIdSala(idNotNull)
-                .orElseThrow(() -> new salaNotFoundException(idNotNull));
+                .orElseThrow(() -> new SalaNotFoundException(idNotNull));
         return salaMapper.toResponse(sala);
     }
 
-    public salaResponse create(SalaRequest request) {
+    public SalaResponse create(SalaRequest request) {
         Objects.requireNonNull(request, "La solicitud de sala es obligatoria");
         if (salaRepository.existsByIdSala(request.getIdSala())) {
             throw new IllegalArgumentException("La sala con ID " + request.getIdSala() + " ya existe");
@@ -41,12 +41,12 @@ public class SalaService {
         return salaMapper.toResponse(saved);
     }
 
-    public salaResponse update(String idSala, SalaRequest request) {
+    public SalaResponse update(String idSala, SalaRequest request) {
         String idNotNull = Objects.requireNonNull(idSala, "El id de la sala es obligatorio");
         Objects.requireNonNull(request, "La solicitud de sala es obligatoria");
 
         Sala sala = salaRepository.findByIdSala(idNotNull)
-                .orElseThrow(() -> new salaNotFoundException(idNotNull));
+                .orElseThrow(() -> new SalaNotFoundException(idNotNull));
 
         salaMapper.updateEntity(request, sala);
         Sala updated = salaRepository.save(sala);
@@ -56,7 +56,7 @@ public class SalaService {
     public void deleteById(String idSala) {
         String idNotNull = Objects.requireNonNull(idSala, "El id de la sala es obligatorio");
         if (!salaRepository.existsByIdSala(idNotNull)) {
-            throw new salaNotFoundException(idNotNull);
+            throw new SalaNotFoundException(idNotNull);
         }
         salaRepository.deleteById(idNotNull);
     }

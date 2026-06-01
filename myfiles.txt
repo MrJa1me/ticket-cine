@@ -355,43 +355,43 @@ goto MENU
 cls
 echo.
 echo ===== Compilando microservicios =====
-cd /d C:\ticket-cine\ms-autenticacion
+cd /d C:\ticket-cine1\ms-autenticacion
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-usuarios
+cd /d C:\ticket-cine1\ms-usuarios
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-busqueda
+cd /d C:\ticket-cine1\ms-busqueda
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-horarios
+cd /d C:\ticket-cine1\ms-horarios
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-salas
+cd /d C:\ticket-cine1\ms-salas
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-reserva
+cd /d C:\ticket-cine1\ms-reserva
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-pagos
+cd /d C:\ticket-cine1\ms-pagos
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-notificaciones
+cd /d C:\ticket-cine1\ms-notificaciones
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-validacion
+cd /d C:\ticket-cine1\ms-validacion
 
 call mvn clean install -U
 
-cd /d C:\ticket-cine\ms-promociones
+cd /d C:\ticket-cine1\ms-promociones
 
 call mvn clean install -U
 echo Compilacion completada.
@@ -406,27 +406,27 @@ echo.
 echo Eliminando carpeta .m2 ...
 rmdir /s /q %USERPROFILE%\.m2
 echo Eliminando carpetas target ...
-rmdir /s /q C:\ticket-cine\eureka\target
+rmdir /s /q C:\ticket-cine1\eureka\target
 
-rmdir /s /q C:\ticket-cine\ms-autenticacion\target
+rmdir /s /q C:\ticket-cine1\ms-autenticacion\target
 
-rmdir /s /q C:\ticket-cine\ms-usuarios\target
+rmdir /s /q C:\ticket-cine1\ms-usuarios\target
 
-rmdir /s /q C:\ticket-cine\ms-busqueda\target
+rmdir /s /q C:\ticket-cine1\ms-busqueda\target
 
-rmdir /s /q C:\ticket-cine\ms-horarios\target
+rmdir /s /q C:\ticket-cine1\ms-horarios\target
 
-rmdir /s /q C:\ticket-cine\ms-salas\target
+rmdir /s /q C:\ticket-cine1\ms-salas\target
 
-rmdir /s /q C:\ticket-cine\ms-reserva\target
+rmdir /s /q C:\ticket-cine1\ms-reserva\target
 
-rmdir /s /q C:\ticket-cine\ms-pagos\target
+rmdir /s /q C:\ticket-cine1\ms-pagos\target
 
-rmdir /s /q C:\ticket-cine\ms-notificaciones\target
+rmdir /s /q C:\ticket-cine1\ms-notificaciones\target
 
-rmdir /s /q C:\ticket-cine\ms-validacion\target
+rmdir /s /q C:\ticket-cine1\ms-validacion\target
 
-rmdir /s /q C:\ticket-cine\ms-promociones\target
+rmdir /s /q C:\ticket-cine1\ms-promociones\target
 echo Descargando dependencias nuevamente con Maven ...
 mvn clean install -U -DskipTests
 echo.
@@ -2908,6 +2908,83 @@ public class ReservasProyeccion {
 
 
 /* ============================================================ */
+/* ARCHIVO: .\common\bin\pom.xml */
+/* ============================================================ */
+
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Modulo Common</name>
+    <description>Libreria compartida con clases comunes a todos los microservicios (excepciones, utilidades, etc.).</description>
+
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\common\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-common
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
 /* ARCHIVO: .\common\src\main\java\cl\ticketcine\common\CommonAutoConfiguration.java */
 /* ============================================================ */
 
@@ -3666,6 +3743,368 @@ version=0.0.1-SNAPSHOT
 wrapperVersion=3.3.4
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\eureka\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-eureka</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo Eureka Server -->
+    <name>Ticketcine - Eureka Module</name>
+    <description>Netflix Eureka: Dynamic microservice discovery, registration, and lookup.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Eureka server -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+
+        <!-- Testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.eureka.TicketcineEurekaApplication</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\eureka\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\eureka\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+# ============================================================
+# EUREKA SERVER - Configuración principal
+# ============================================================
+# Eureka es el "directorio telefónico" de tus microservicios.
+# Cada microservicio se registra aquí, y los demás lo buscan
+# aquí para saber a qué IP/puerto llamar.
+# ============================================================
+
+# ── Configuración Base (aplica a TODOS los entornos) ────────
+spring:
+  application:
+    name: eureka-server       # Nombre con el que este servidor se identifica
+  profiles:
+    active: dev               # Entorno por defecto al arrancar en local
+
+server:
+  port: 8761                  # Puerto estándar de Eureka (convención del ecosistema Spring)
+
+eureka:
+  client:
+    register-with-eureka: false # Este ES el servidor → no necesita registrarse en sí mismo
+    fetch-registry: false       # Modo standalone: no busca otros nodos Eureka en la red
+  server:
+    enable-self-preservation: false # Valor base; cada perfil lo sobreescribe abajo
+
+# ── Actuator: monitoreo y salud del servidor Eureka ─────────
+# Actuator expone endpoints HTTP para saber si el servidor está
+# vivo, qué métricas tiene, etc. Eureka mismo usa /health
+# internamente para marcar servicios como UP o DOWN.
+management:
+  endpoints:
+    web:
+      base-path: /actuator    # Todos los endpoints viven bajo /actuator/*
+      exposure:
+        include: health,info  # En producción solo exponemos lo imprescindible
+  endpoint:
+    health:
+      show-details: always    # Muestra qué componente interno falló si hay problemas
+      show-components: always # Desglosa cada "pieza" del health (disco, eureka, ping…)
+      probes:
+        enabled: true         # Activa /actuator/health/liveness y /health/readiness
+                              # (útil si en el futuro despliegas en Kubernetes)
+
+# Datos que aparecen en /actuator/info → útil para saber qué
+# versión exacta está corriendo en cada entorno sin entrar al servidor
+info:
+  app:
+    name: ${spring.application.name}  # Reutiliza el nombre definido arriba
+    version: "@project.version@"        # Spring Boot lo lee automáticamente de tu pom.xml
+    description: "Servidor de descubrimiento de microservicios"
+
+# ── Perfil: Desarrollo (tu PC local) ────────────────────────
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+eureka:
+  server:
+    enable-self-preservation: false
+    # ↑ En local los microservicios se detienen/reinician constantemente
+    #   mientras programas. Sin esto, Eureka entraría en "modo pánico"
+    #   creyendo que la red falló y no limpiaría los servicios caídos.
+
+    eviction-interval-timer-in-ms: 2000
+    # ↑ Cada 2 segundos Eureka revisa y elimina servicios que no
+    #   mandaron heartbeat. Así el dashboard se actualiza rápido en local.
+    #   (En prod esto sería demasiado agresivo.)
+
+management:
+  endpoint:
+    health:
+      show-details: always    # En local queremos ver TODO el detalle sin restricciones
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,loggers
+        # health  → estado general del servidor
+        # info    → versión y descripción de la app
+        # metrics → memoria JVM, tiempos de respuesta, contadores
+        # env     → qué propiedades y variables de entorno están activas
+        # loggers → cambiar nivel de log EN CALIENTE sin reiniciar (muy útil en dev)
+
+# ── Perfil: Producción (servidor real) ──────────────────────
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+eureka:
+  server:
+    enable-self-preservation: true
+    # ↑ Si de repente muchos microservicios dejan de enviar heartbeat,
+    #   Eureka asume que ES LA RED la que falló (no los servicios).
+    #   Con esto activado, NO los borra del registro → los clientes
+    #   siguen pudiendo llamarlos si en realidad siguen vivos.
+
+    renewal-percent-threshold: 0.85
+    # ↑ Si menos del 85 % de los microservicios registrados envían
+    #   su heartbeat en el último minuto, Eureka activa la protección
+    #   automáticamente. Ajusta este número según cuántos MS tengas.
+
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+      # ↑ En producción no queremos exponer internos a cualquiera.
+      #   Solo usuarios autenticados (ej. con Spring Security) verán el detalle.
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+        # En prod exponemos el mínimo necesario.
+        # health → Eureka y el orquestador (K8s, ECS…) lo necesitan para saber si está vivo.
+        # info   → permite saber qué versión está desplegada sin acceder al servidor.
+
+/* ============================================================ */
+/* ARCHIVO: .\eureka\bin\target\classes\application.yml */
+/* ============================================================ */
+
+# ============================================================
+# EUREKA SERVER - Configuración principal
+# ============================================================
+# Eureka es el "directorio telefónico" de tus microservicios.
+# Cada microservicio se registra aquí, y los demás lo buscan
+# aquí para saber a qué IP/puerto llamar.
+# ============================================================
+
+# ── Configuración Base (aplica a TODOS los entornos) ────────
+spring:
+  application:
+    name: eureka-server       # Nombre con el que este servidor se identifica
+  profiles:
+    active: dev               # Entorno por defecto al arrancar en local
+
+server:
+  port: 8761                  # Puerto estándar de Eureka (convención del ecosistema Spring)
+
+eureka:
+  client:
+    register-with-eureka: false # Este ES el servidor → no necesita registrarse en sí mismo
+    fetch-registry: false       # Modo standalone: no busca otros nodos Eureka en la red
+  server:
+    enable-self-preservation: false # Valor base; cada perfil lo sobreescribe abajo
+
+# ── Actuator: monitoreo y salud del servidor Eureka ─────────
+# Actuator expone endpoints HTTP para saber si el servidor está
+# vivo, qué métricas tiene, etc. Eureka mismo usa /health
+# internamente para marcar servicios como UP o DOWN.
+management:
+  endpoints:
+    web:
+      base-path: /actuator    # Todos los endpoints viven bajo /actuator/*
+      exposure:
+        include: health,info  # En producción solo exponemos lo imprescindible
+  endpoint:
+    health:
+      show-details: always    # Muestra qué componente interno falló si hay problemas
+      show-components: always # Desglosa cada "pieza" del health (disco, eureka, ping…)
+      probes:
+        enabled: true         # Activa /actuator/health/liveness y /health/readiness
+                              # (útil si en el futuro despliegas en Kubernetes)
+
+# Datos que aparecen en /actuator/info → útil para saber qué
+# versión exacta está corriendo en cada entorno sin entrar al servidor
+info:
+  app:
+    name: ${spring.application.name}  # Reutiliza el nombre definido arriba
+    version: "1.0-SNAPSHOT"        # Spring Boot lo lee automáticamente de tu pom.xml
+    description: "Servidor de descubrimiento de microservicios"
+
+# ── Perfil: Desarrollo (tu PC local) ────────────────────────
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+eureka:
+  server:
+    enable-self-preservation: false
+    # ↑ En local los microservicios se detienen/reinician constantemente
+    #   mientras programas. Sin esto, Eureka entraría en "modo pánico"
+    #   creyendo que la red falló y no limpiaría los servicios caídos.
+
+    eviction-interval-timer-in-ms: 2000
+    # ↑ Cada 2 segundos Eureka revisa y elimina servicios que no
+    #   mandaron heartbeat. Así el dashboard se actualiza rápido en local.
+    #   (En prod esto sería demasiado agresivo.)
+
+management:
+  endpoint:
+    health:
+      show-details: always    # En local queremos ver TODO el detalle sin restricciones
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,loggers
+        # health  → estado general del servidor
+        # info    → versión y descripción de la app
+        # metrics → memoria JVM, tiempos de respuesta, contadores
+        # env     → qué propiedades y variables de entorno están activas
+        # loggers → cambiar nivel de log EN CALIENTE sin reiniciar (muy útil en dev)
+
+# ── Perfil: Producción (servidor real) ──────────────────────
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+eureka:
+  server:
+    enable-self-preservation: true
+    # ↑ Si de repente muchos microservicios dejan de enviar heartbeat,
+    #   Eureka asume que ES LA RED la que falló (no los servicios).
+    #   Con esto activado, NO los borra del registro → los clientes
+    #   siguen pudiendo llamarlos si en realidad siguen vivos.
+
+    renewal-percent-threshold: 0.85
+    # ↑ Si menos del 85 % de los microservicios registrados envían
+    #   su heartbeat en el último minuto, Eureka activa la protección
+    #   automáticamente. Ajusta este número según cuántos MS tengas.
+
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+      # ↑ En producción no queremos exponer internos a cualquiera.
+      #   Solo usuarios autenticados (ej. con Spring Security) verán el detalle.
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+        # En prod exponemos el mínimo necesario.
+        # health → Eureka y el orquestador (K8s, ECS…) lo necesitan para saber si está vivo.
+        # info   → permite saber qué versión está desplegada sin acceder al servidor.
+
+/* ============================================================ */
+/* ARCHIVO: .\eureka\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-eureka
+groupId=cl.ticketcine
+version=1.0-SNAPSHOT
 
 
 /* ============================================================ */
@@ -4651,6 +5090,365 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-autenticacion\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-autenticacion</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Autenticacion</name>
+    <description>Servicio de Autenticacion - TicketCine.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!--
+        Dependencias necesarias para este microservicio.
+        NOTA: No se incluye Spring Security / JWT. La autenticacion se maneja
+        de forma simple validando credenciales via JPA (Controller -> Service -> Repository -> DB).
+    -->
+    <dependencies>
+
+        <!-- Libreria comun compartida (contiene GlobalExceptionHandler, ApiError, excepciones, eventos) -->
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+        </dependency>
+
+        <!-- Spring Kafka: comunicacion asincronica entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Actuator: endpoints de monitoreo y salud -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion sincronica entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.autenticacion.TicketcineAutenticacionApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-autenticacion\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-autenticacion\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9001
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-autenticacion
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/auth_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-autenticacion\bin\src\test\resources\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:autenticacion;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+# Evitar registro en Eureka durante tests (si aplica)
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+# Propiedades necesarias para JwtService durante los tests
+jwt:
+  secret: VGhpcyBpcyBhIHZlcnkgc2VjdXJlIHNlY3JldCBmb3IganN3dCB0b2tlbg==
+  expiration: 3600000
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-autenticacion\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9001
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-autenticacion
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/auth_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-autenticacion\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-autenticacion
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-autenticacion\bin\target\test-classes\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:autenticacion;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+# Evitar registro en Eureka durante tests (si aplica)
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+# Propiedades necesarias para JwtService durante los tests
+jwt:
+  secret: VGhpcyBpcyBhIHZlcnkgc2VjdXJlIHNlY3JldCBmb3IganN3dCB0b2tlbg==
+  expiration: 3600000
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-autenticacion\src\main\java\cl\ticketcine\autenticacion\TicketcineAutenticacionApplication.java */
 /* ============================================================ */
 
@@ -5537,7 +6335,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:07-0400",
+    date = "2026-05-29T12:03:48-0400",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -5834,6 +6632,361 @@ jwt:
 wrapperVersion=3.3.4
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-busqueda\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-busqueda</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Busqueda</name>
+    <description>Servicio de Busqueda.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Libreria comun compartida -->
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Actuator: endpoints de monitoreo y salud -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+                <dependency>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-openfeign</artifactId>
+                </dependency>
+
+                <!-- Spring Kafka para mensajería asincrónica -->
+                <dependency>
+                    <groupId>org.springframework.kafka</groupId>
+                    <artifactId>spring-kafka</artifactId>
+                </dependency>
+
+                <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.busqueda.TicketcineBusquedaApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-busqueda\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-busqueda\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9003
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-busqueda
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/busqueda_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: busqueda-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "cl.ticketcine.common.event"
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-busqueda\bin\src\test\resources\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:busqueda;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-busqueda\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9003
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-busqueda
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/busqueda_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: busqueda-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "cl.ticketcine.common.event"
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-busqueda\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-busqueda
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-busqueda\bin\target\test-classes\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:busqueda;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
 
 
 /* ============================================================ */
@@ -6869,8 +8022,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:21-0400",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-05-29T12:03:40-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class BusquedaMapperImpl implements BusquedaMapper {
@@ -6901,10 +8054,10 @@ public class BusquedaMapperImpl implements BusquedaMapper {
 
         peliculaResponse.setIdCat( peliculaCategoriaIdCat( pelicula ) );
         peliculaResponse.setCategoriaNombre( peliculaCategoriaNombre( pelicula ) );
-        peliculaResponse.setSlug( pelicula.getSlug() );
-        peliculaResponse.setTitulo( pelicula.getTitulo() );
         peliculaResponse.setDuracionMin( pelicula.getDuracionMin() );
         peliculaResponse.setEstrenoAnio( pelicula.getEstrenoAnio() );
+        peliculaResponse.setSlug( pelicula.getSlug() );
+        peliculaResponse.setTitulo( pelicula.getTitulo() );
 
         peliculaResponse.setCantidadActores( pelicula.getElenco() == null ? 0L : pelicula.getElenco().size() );
 
@@ -7195,6 +8348,311 @@ eureka:
 wrapperVersion=3.3.4
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-horarios\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-horarios</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Horarios</name>
+    <description>Servicio de Horarios.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.horarios.TicketcineHorariosApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-horarios\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-horarios\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9004
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-horarios
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/horarios_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-horarios\bin\src\test\resources\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:horarios;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-horarios\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9004
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-horarios
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/horarios_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-horarios\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-horarios
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-horarios\bin\target\test-classes\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:horarios;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
 
 
 /* ============================================================ */
@@ -8132,8 +9590,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:27-0400",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-05-29T12:03:52-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class HorarioMapperImpl implements HorarioMapper {
@@ -8146,11 +9604,11 @@ public class HorarioMapperImpl implements HorarioMapper {
 
         Horario.HorarioBuilder horario = Horario.builder();
 
-        horario.pelicula( request.getPelicula() );
-        horario.sala( request.getSala() );
         horario.fecha( request.getFecha() );
         horario.hora( request.getHora() );
+        horario.pelicula( request.getPelicula() );
         horario.precio( request.getPrecio() );
+        horario.sala( request.getSala() );
 
         return horario.build();
     }
@@ -8163,13 +9621,13 @@ public class HorarioMapperImpl implements HorarioMapper {
 
         HorarioResponse horarioResponse = new HorarioResponse();
 
+        horarioResponse.setFecha( horario.getFecha() );
+        horarioResponse.setHabilitado( horario.getHabilitado() );
+        horarioResponse.setHora( horario.getHora() );
         horarioResponse.setId( horario.getId() );
         horarioResponse.setPelicula( horario.getPelicula() );
-        horarioResponse.setSala( horario.getSala() );
-        horarioResponse.setFecha( horario.getFecha() );
-        horarioResponse.setHora( horario.getHora() );
         horarioResponse.setPrecio( horario.getPrecio() );
-        horarioResponse.setHabilitado( horario.getHabilitado() );
+        horarioResponse.setSala( horario.getSala() );
 
         return horarioResponse;
     }
@@ -8194,11 +9652,11 @@ public class HorarioMapperImpl implements HorarioMapper {
             return;
         }
 
-        horario.setPelicula( request.getPelicula() );
-        horario.setSala( request.getSala() );
         horario.setFecha( request.getFecha() );
         horario.setHora( request.getHora() );
+        horario.setPelicula( request.getPelicula() );
         horario.setPrecio( request.getPrecio() );
+        horario.setSala( request.getSala() );
     }
 }
 
@@ -8413,6 +9871,311 @@ eureka:
 wrapperVersion=3.3.4
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-notificaciones</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Notificaciones</name>
+    <description>Servicio de Notificaciones.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.notificaciones.TicketcineNotificacionesApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9008
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-notificaciones
+  datasource:
+    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.h2.Driver}
+    url: ${DB_URL:jdbc:h2:mem:notificaciones;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\bin\src\test\resources\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:notificaciones;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+# Evitar registro en Eureka durante tests
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9008
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-notificaciones
+  datasource:
+    driver-class-name: ${DB_DRIVER_CLASS_NAME:org.h2.Driver}
+    url: ${DB_URL:jdbc:h2:mem:notificaciones;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:}
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO:update}
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-notificaciones
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\bin\target\test-classes\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:notificaciones;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+# Evitar registro en Eureka durante tests
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
 
 
 /* ============================================================ */
@@ -9747,7 +11510,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:10-0400",
+    date = "2026-05-29T12:03:28-0400",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -9998,6 +11761,15 @@ public class notificacionesMapperImpl implements notificacionesMapper {
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-notificaciones\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-notificaciones
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-notificaciones\target\test-classes\application.yml */
 /* ============================================================ */
 
@@ -10199,6 +11971,269 @@ eureka:
 wrapperVersion=3.3.4
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-pagos\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-pagos</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Pagos</name>
+    <description>Servicio de Pagos.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.pagos.TicketcinePagosApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-pagos\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-pagos\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9007
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-pagos
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/pagos_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-pagos\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9007
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-pagos
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/pagos_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-pagos\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-pagos
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
 
 
 /* ============================================================ */
@@ -11007,7 +13042,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:11-0400",
+    date = "2026-05-29T12:03:29-0400",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -11085,6 +13120,15 @@ public class PagosMapperImpl implements PagosMapper {
         return idMetodo;
     }
 }
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-pagos\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-pagos
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
 
 
 /* ============================================================ */
@@ -11228,7 +13272,7 @@ public class PagosMapperImpl implements PagosMapper {
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>cl.ticketcine.TicketcinePromocionesApplication</mainClass>
+                    <mainClass>cl.ticketcine.promociones.TicketcinePromocionesApplication</mainClass>
                 </configuration>
             </plugin>
 
@@ -11270,6 +13314,315 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-promociones\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-promociones</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Promociones</name>
+    <description>Servicio de Promociones.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.promociones.TicketcinePromocionesApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-promociones\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-promociones\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9010
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-promociones
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/promociones_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-promociones\bin\src\test\resources\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:promociones-test;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-promociones\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9010
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-promociones
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/promociones_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-promociones\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-promociones
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-promociones\bin\target\test-classes\application.yml */
+/* ============================================================ */
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:promociones-test;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-promociones\src\main\java\cl\ticketcine\TicketcinePromocionesApplication.java */
 /* ============================================================ */
 
@@ -11277,6 +13630,8 @@ package cl.ticketcine;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
 
 @SpringBootApplication
 public class TicketcinePromocionesApplication {
@@ -11559,24 +13914,73 @@ public class CuponResponse {
 }
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-promociones\src\main\java\cl\ticketcine\dto\promocionesRequest.java */
+/* ARCHIVO: .\ms-promociones\src\main\java\cl\ticketcine\dto\PromocionesRequest.java */
 /* ============================================================ */
 
 package cl.ticketcine.dto;
 
-public class promocionesRequest {
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+import java.time.LocalDate;
+
+@Data
+public class PromocionesRequest {
+
+    @NotBlank(message = "El nombre de la promoción es obligatorio")
+    @Size(max = 100, message = "El nombre de la promoción no puede superar los 100 caracteres")
+    private String nombre;
+
+    @NotBlank(message = "La descripción de la promoción es obligatoria")
+    @Size(max = 255, message = "La descripción no puede superar los 255 caracteres")
+    private String descripcion;
+
+    @NotNull(message = "La fecha de inicio es obligatoria")
+    private LocalDate fechaInicio;
+
+    @NotNull(message = "La fecha de fin es obligatoria")
+    private LocalDate fechaFin;
+
+    @NotNull(message = "El porcentaje de descuento es obligatorio")
+    @Min(value = 0, message = "El porcentaje de descuento no puede ser menor a 0")
+    @Max(value = 100, message = "El porcentaje de descuento no puede ser mayor a 100")
+    private Integer pctDesc;
+
+    @NotNull(message = "El estado de la promoción es obligatorio")
+    private Boolean activo;
 }
 
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-promociones\src\main\java\cl\ticketcine\dto\promocionesResponse.java */
+/* ARCHIVO: .\ms-promociones\src\main\java\cl\ticketcine\dto\PromocionesResponse.java */
 /* ============================================================ */
 
 package cl.ticketcine.dto;
 
-public class promocionesResponse {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PromocionesResponse {
+
+    private Integer idPromocion;
+    private String nombre;
+    private String descripcion;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private Integer pctDesc;
+    private Boolean activo;
 }
 
 
@@ -11811,7 +14215,7 @@ public class UsuariosProyeccionNotFoundException extends RuntimeException {
 
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-promociones\src\main\java\cl\ticketcine\mapper\promocionesMapper.java */
+/* ARCHIVO: .\ms-promociones\src\main\java\cl\ticketcine\mapper\PromocionesMapper.java */
 /* ============================================================ */
 
 package cl.ticketcine.mapper;
@@ -11835,7 +14239,7 @@ import org.mapstruct.MappingTarget;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface promocionesMapper {
+public interface PromocionesMapper {
 
     Campania toCampaniaEntity(CampaniaRequest request);
 
@@ -12097,7 +14501,7 @@ import cl.ticketcine.exception.CampaniaNotFoundException;
 import cl.ticketcine.exception.CuponNotFoundException;
 import cl.ticketcine.exception.DuplicateResourceException;
 import cl.ticketcine.exception.UsuariosProyeccionNotFoundException;
-import cl.ticketcine.mapper.promocionesMapper;
+import cl.ticketcine.mapper.PromocionesMapper;
 import cl.ticketcine.model.AplicacionPromo;
 import cl.ticketcine.model.Campania;
 import cl.ticketcine.model.Cupon;
@@ -12121,7 +14525,7 @@ public class promocionesService {
     private final CuponRepository cuponRepository;
     private final AplicacionPromoRepository aplicacionPromoRepository;
     private final UsuariosProyeccionRepository usuariosProyeccionRepository;
-    private final promocionesMapper promocionesMapper;
+    private final PromocionesMapper promocionesMapper;
 
     public List<CampaniaResponse> findAllCampanias() {
         return promocionesMapper.toCampaniaResponseList(campaniaRepository.findAll());
@@ -12403,7 +14807,7 @@ eureka:
 
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-promociones\target\generated-sources\annotations\cl\ticketcine\mapper\promocionesMapperImpl.java */
+/* ARCHIVO: .\ms-promociones\target\generated-sources\annotations\cl\ticketcine\mapper\PromocionesMapperImpl.java */
 /* ============================================================ */
 
 package cl.ticketcine.mapper;
@@ -12427,11 +14831,11 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:12-0400",
+    date = "2026-05-29T12:03:31-0400",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
-public class promocionesMapperImpl implements promocionesMapper {
+public class PromocionesMapperImpl implements PromocionesMapper {
 
     @Override
     public Campania toCampaniaEntity(CampaniaRequest request) {
@@ -12679,6 +15083,15 @@ public class promocionesMapperImpl implements promocionesMapper {
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-promociones\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-promociones
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-promociones\target\test-classes\application.yml */
 /* ============================================================ */
 
@@ -12891,6 +15304,276 @@ distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-mav
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-reserva\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-reserva</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Reserva</name>
+    <description>Servicio de Reserva.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Libreria comun compartida -->
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+        </dependency>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.reserva.TicketcineReservaApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9006
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-reserva
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/reserva_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9006
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-reserva
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/reserva_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-reserva
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\TicketcineReservaApplication.java */
 /* ============================================================ */
 
@@ -12912,12 +15595,12 @@ public class TicketcineReservaApplication {
 
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\client\reservaClient.java */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\client\ReservaClient.java */
 /* ============================================================ */
 
 package cl.ticketcine.reserva.client;
 
-import cl.ticketcine.reserva.dto.reservaResponse;
+import cl.ticketcine.reserva.dto.ReservaResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12925,13 +15608,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @FeignClient(name = "ms-reserva", url = "http://localhost:9006/api/v1/reservas")
-public interface reservaClient {
+public interface ReservaClient {
 
     @GetMapping("/{idAsiento}")
-    reservaResponse findById(@PathVariable Integer idAsiento);
+    ReservaResponse findById(@PathVariable Integer idAsiento);
 
     @GetMapping("/sala/{idSala}")
-    List<reservaResponse> findBySalaId(@PathVariable String idSala);
+    List<ReservaResponse> findBySalaId(@PathVariable String idSala);
 }
 
 
@@ -12952,9 +15635,8 @@ public class KafkaTopicConfig {
 
 package cl.ticketcine.reserva.controller;
 
-import cl.ticketcine.reserva.dto.ReservaRequest;
-import cl.ticketcine.reserva.dto.reservaResponse;
-import cl.ticketcine.reserva.service.reservaService;
+import cl.ticketcine.reserva.dto.*;
+import cl.ticketcine.reserva.service.ReservaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12968,33 +15650,33 @@ import java.util.List;
 @RequestMapping("/api/v1/asientos")
 public class AsientoController {
 
-    private final reservaService reservaService;
+    private final ReservaService reservaService;
 
     @GetMapping
-    public ResponseEntity<List<reservaResponse>> findAll() {
+    public ResponseEntity<List<ReservaResponse>> findAll() {
         return ResponseEntity.ok(reservaService.findAll());
     }
 
     @GetMapping("/{idAsiento}")
-    public ResponseEntity<reservaResponse> findById(@PathVariable Integer idAsiento) {
+    public ResponseEntity<ReservaResponse> findById(@PathVariable Integer idAsiento) {
         return ResponseEntity.ok(reservaService.findById(idAsiento));
     }
 
     @GetMapping("/sala/{idSala}")
-    public ResponseEntity<List<reservaResponse>> findBySalaId(@PathVariable String idSala) {
+    public ResponseEntity<List<ReservaResponse>> findBySalaId(@PathVariable String idSala) {
         return ResponseEntity.ok(reservaService.findBySalaId(idSala));
     }
 
     @PostMapping
-    public ResponseEntity<reservaResponse> create(@Valid @RequestBody reservaRequest request) {
-        reservaResponse creado = reservaService.create(request);
+    public ResponseEntity<ReservaResponse> create(@Valid @RequestBody ReservaRequest request) {
+        ReservaResponse creado = reservaService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{idAsiento}")
-    public ResponseEntity<reservaResponse> update(
+    public ResponseEntity<ReservaResponse> update(
             @PathVariable Integer idAsiento,
-            @Valid @RequestBody reservaRequest request) {
+            @Valid @RequestBody ReservaRequest request) {
         return ResponseEntity.ok(reservaService.update(idAsiento, request));
     }
 
@@ -13012,8 +15694,7 @@ public class AsientoController {
 
 package cl.ticketcine.reserva.controller;
 
-import cl.ticketcine.reserva.dto.mantenimientoRequest;
-import cl.ticketcine.reserva.dto.mantenimientoResponse;
+import cl.ticketcine.reserva.dto.*;
 import cl.ticketcine.reserva.service.MantenimientoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13031,30 +15712,30 @@ public class MantenimientoController {
     private final MantenimientoService mantenimientoService;
 
     @GetMapping
-    public ResponseEntity<List<mantenimientoResponse>> findAll() {
+    public ResponseEntity<List<MantenimientoResponse>> findAll() {
         return ResponseEntity.ok(mantenimientoService.findAll());
     }
 
     @GetMapping("/{idMaint}")
-    public ResponseEntity<mantenimientoResponse> findById(@PathVariable Integer idMaint) {
+    public ResponseEntity<MantenimientoResponse> findById(@PathVariable Integer idMaint) {
         return ResponseEntity.ok(mantenimientoService.findById(idMaint));
     }
 
     @GetMapping("/sala/{idSala}")
-    public ResponseEntity<List<mantenimientoResponse>> findBySalaId(@PathVariable String idSala) {
+    public ResponseEntity<List<MantenimientoResponse>> findBySalaId(@PathVariable String idSala) {
         return ResponseEntity.ok(mantenimientoService.findBySalaId(idSala));
     }
 
     @PostMapping
-    public ResponseEntity<mantenimientoResponse> create(@Valid @RequestBody mantenimientoRequest request) {
-        mantenimientoResponse creado = mantenimientoService.create(request);
+    public ResponseEntity<MantenimientoResponse> create(@Valid @RequestBody MantenimientoRequest request) {
+        MantenimientoResponse creado = mantenimientoService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{idMaint}")
-    public ResponseEntity<mantenimientoResponse> update(
+    public ResponseEntity<MantenimientoResponse> update(
             @PathVariable Integer idMaint,
-            @Valid @RequestBody mantenimientoRequest request) {
+            @Valid @RequestBody MantenimientoRequest request) {
         return ResponseEntity.ok(mantenimientoService.update(idMaint, request));
     }
 
@@ -13086,9 +15767,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.ticketcine.reserva.dto.ReservaResponse;
 import cl.ticketcine.reserva.dto.ReservaRequest;
-import cl.ticketcine.reserva.dto.reservaResponse;
-import cl.ticketcine.reserva.service.reservaService;
+import cl.ticketcine.reserva.service.ReservaService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13098,33 +15779,33 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v1/reservas")
 public class ReservaController {
 
-    private final reservaService reservaService;
+    private final ReservaService reservaService;
 
     @GetMapping
-    public ResponseEntity<List<reservaResponse>> findAll() {
+    public ResponseEntity<List<ReservaResponse>> findAll() {
         return ResponseEntity.ok(reservaService.findAll());
     }
 
     @GetMapping("/{idAsiento}")
-    public ResponseEntity<reservaResponse> findById(@PathVariable @NonNull Integer idAsiento) {
+    public ResponseEntity<ReservaResponse> findById(@PathVariable @NonNull Integer idAsiento) {
         return ResponseEntity.ok(reservaService.findById(idAsiento));
     }
 
     @GetMapping("/sala/{idSala}")
-    public ResponseEntity<List<reservaResponse>> findBySalaId(@PathVariable String idSala) {
+    public ResponseEntity<List<ReservaResponse>> findBySalaId(@PathVariable String idSala) {
         return ResponseEntity.ok(reservaService.findBySalaId(idSala));
     }
 
     @PostMapping
-    public ResponseEntity<reservaResponse> create(@Valid @RequestBody reservaRequest request) {
-        reservaResponse creado = reservaService.create(request);
+    public ResponseEntity<ReservaResponse> create(@Valid @RequestBody ReservaRequest request) {
+        ReservaResponse creado = reservaService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{idAsiento}")
-    public ResponseEntity<reservaResponse> update(
+    public ResponseEntity<ReservaResponse> update(
             @PathVariable @NonNull Integer idAsiento,
-            @Valid @RequestBody reservaRequest request) {
+            @Valid @RequestBody ReservaRequest request) {
         return ResponseEntity.ok(reservaService.update(idAsiento, request));
     }
 
@@ -13142,8 +15823,7 @@ public class ReservaController {
 
 package cl.ticketcine.reserva.controller;
 
-import cl.ticketcine.reserva.dto.salaRequest;
-import cl.ticketcine.reserva.dto.salaResponse;
+import cl.ticketcine.reserva.dto.*;
 import cl.ticketcine.reserva.service.SalaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13161,25 +15841,25 @@ public class SalaController {
     private final SalaService salaService;
 
     @GetMapping
-    public ResponseEntity<List<salaResponse>> findAll() {
+    public ResponseEntity<List<SalaResponse>> findAll() {
         return ResponseEntity.ok(salaService.findAll());
     }
 
     @GetMapping("/{idSala}")
-    public ResponseEntity<salaResponse> findById(@PathVariable String idSala) {
+    public ResponseEntity<SalaResponse> findById(@PathVariable String idSala) {
         return ResponseEntity.ok(salaService.findById(idSala));
     }
 
     @PostMapping
-    public ResponseEntity<salaResponse> create(@Valid @RequestBody salaRequest request) {
-        salaResponse creado = salaService.create(request);
+    public ResponseEntity<SalaResponse> create(@Valid @RequestBody SalaRequest request) {
+        SalaResponse creado = salaService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{idSala}")
-    public ResponseEntity<salaResponse> update(
+    public ResponseEntity<SalaResponse> update(
             @PathVariable String idSala,
-            @Valid @RequestBody salaRequest request) {
+            @Valid @RequestBody SalaRequest request) {
         return ResponseEntity.ok(salaService.update(idSala, request));
     }
 
@@ -13188,6 +15868,51 @@ public class SalaController {
         salaService.deleteById(idSala);
         return ResponseEntity.noContent().build();
     }
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\dto\MantenimientoRequest.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.dto;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
+import lombok.Data;
+
+@Data
+public class MantenimientoRequest {
+
+    @NotNull(message = "El ID de la sala es obligatorio")
+    @Size(min = 1, max = 10, message = "El ID de la sala debe tener entre 1 y 10 caracteres")
+    private String idSala;
+
+    @NotNull(message = "La fecha de mantenimiento es obligatoria")
+    private LocalDate ultimaFecha;
+
+    @NotNull(message = "El nombre del técnico es obligatorio")
+    @Size(min = 1, max = 100, message = "El nombre del técnico debe tener entre 1 y 100 caracteres")
+    private String tecnicoNombre;
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\dto\MantenimientoResponse.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.dto;
+
+import lombok.Data;
+import java.time.LocalDate;
+
+@Data
+public class MantenimientoResponse {
+
+    private String idSala;
+    private LocalDate ultimaFecha;
+    private String tecnicoNombre;
 }
 
 
@@ -13242,12 +15967,52 @@ public class ReservaResponse {
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\dto\SalaRequest.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.dto;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+@Data
+public class SalaRequest {
+
+    @NotNull(message = "El ID de la sala es obligatorio")
+    @Size(min = 1, max = 10, message = "El ID de la sala debe tener entre 1 y 10 caracteres")
+    private String idSala;
+
+    private String formato;
+    private Integer capacidad;
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\dto\SalaResponse.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.dto;
+
+import lombok.Data;
+
+@Data
+public class SalaResponse {
+
+    private String idSala;
+    private String formato;
+    private Integer capacidad;
+}
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\dto\UsuarioProyeccionRequest.java */
 /* ============================================================ */
 
 package cl.ticketcine.reserva.dto;
 
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
@@ -13290,6 +16055,7 @@ import lombok.Data;
 @Data
 public class UsuarioProyeccionResponse {
 
+    private String idSala;
     private String email;
     private String nombre;
 }
@@ -13314,10 +16080,15 @@ public class ReservaEventProducer {
 package cl.ticketcine.reserva.event;
 
 import org.springframework.stereotype.Component;
+import org.springframework.kafka.annotation.KafkaListener;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import cl.ticketcine.common.event.UsuarioCreatedEvent;
+import cl.ticketcine.common.event.UsuarioUpdatedEvent;
+import cl.ticketcine.common.event.UsuarioDeletedEvent;
+import cl.ticketcine.reserva.service.UsuarioProyeccionService;
 
 @Slf4j
 @Component
@@ -13397,7 +16168,7 @@ public class ApiError {
 
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\exception\asientoNotFoundException.java */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\exception\AsientoNotFoundException.java */
 /* ============================================================ */
 
 package cl.ticketcine.reserva.exception;
@@ -13408,236 +16179,26 @@ package cl.ticketcine.reserva.exception;
  * Extiende RuntimeException (unchecked) para no contaminar las firmas de los
  * métodos de servicio con throws, siguiendo la convención de Spring Framework.
  */
-public class asientoNotFoundException extends RuntimeException {
+public class AsientoNotFoundException extends RuntimeException {
 
     /**
      * @param id identificador del asiento por el que se buscó
      */
-    public asientoNotFoundException(Integer id) {
+    public AsientoNotFoundException(Integer id) {
         super("No se encontró ningún asiento con ID: " + id);
     }
 
     /**
      * @param message mensaje personalizado
      */
-    public asientoNotFoundException(String message) {
+    public AsientoNotFoundException(String message) {
         super(message);
     }
 }
 
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\exception\GlobalExceptionHandler.java */
-/* ============================================================ */
-
-package cl.ticketcine.reserva.exception;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import jakarta.servlet.http.HttpServletRequest;
-
-/**
- * Manejador global de excepciones para toda la API REST.
- *
- * @RestControllerAdvice intercepta todas las excepciones no capturadas en los
- * controladores y las transforma en respuestas HTTP coherentes con el envelope
- * ApiError. Esto desacopla la lógica de manejo de errores de los controladores,
- * centralizando la responsabilidad en un único punto (principio DRY + SRP).
- *
- * Orden de prioridad de los handlers: Spring usa el más específico primero.
- */
-@RestControllerAdvice
-public class GlobalExceptionHandler {
-
-    // ─── 404 NOT FOUND ────────────────────────────────────────────────────────
-
-    /**
-     * Captura búsquedas de asientos inexistentes por ID.
-     * Devuelve 404 NOT FOUND con el mensaje de la excepción de dominio.
-     */
-    @ExceptionHandler(asientoNotFoundException.class)
-    public ResponseEntity<ApiError> handleAsientoNotFound(
-            asientoNotFoundException ex,
-            HttpServletRequest request) {
-
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message(ex.getMessage())
-                .path(request.getRequestURI())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
-
-    /**
-     * Captura búsquedas de salas inexistentes por ID.
-     * Devuelve 404 NOT FOUND con el mensaje de la excepción de dominio.
-     */
-    @ExceptionHandler(salaNotFoundException.class)
-    public ResponseEntity<ApiError> handleSalaNotFound(
-            salaNotFoundException ex,
-            HttpServletRequest request) {
-
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message(ex.getMessage())
-                .path(request.getRequestURI())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
-
-    /**
-     * Captura búsquedas de mantenimientos inexistentes por ID.
-     * Devuelve 404 NOT FOUND con el mensaje de la excepción de dominio.
-     */
-    @ExceptionHandler(mantenimientoNotFoundException.class)
-    public ResponseEntity<ApiError> handleMantenimientoNotFound(
-            mantenimientoNotFoundException ex,
-            HttpServletRequest request) {
-
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message(ex.getMessage())
-                .path(request.getRequestURI())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
-
-    /**
-     * Captura requests hacia endpoints inexistentes.
-     */
-    @ExceptionHandler({
-        org.springframework.web.servlet.NoHandlerFoundException.class,
-        org.springframework.web.servlet.resource.NoResourceFoundException.class
-    })
-    public ResponseEntity<ApiError> handleEndpointNotFound(
-            Exception ex,
-            HttpServletRequest request) {
-
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message("El endpoint solicitado no existe")
-                .path(request.getRequestURI())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
-
-    // ─── 400 BAD REQUEST (Validación de campos) ───────────────────────────────
-
-    /**
-     * Captura errores de validación de Bean Validation disparados por @Valid.
-     * Recopila todos los mensajes de error de campo en una lista para mayor
-     * claridad hacia el cliente.
-     */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationErrors(
-            MethodArgumentNotValidException ex,
-            HttpServletRequest request) {
-
-        // Recopila todos los mensajes de error de los campos inválidos
-        List<String> fieldErrors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(fe -> "'" + fe.getField() + "': " + fe.getDefaultMessage())
-                .collect(Collectors.toList());
-
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message("La solicitud contiene datos inválidos. Revise el campo 'errors'.")
-                .errors(fieldErrors)
-                .path(request.getRequestURI())
-                .build();
-
-        return ResponseEntity.badRequest().body(error);
-    }
-
-    // ─── 400 BAD REQUEST (JSON Mal formado) ──────────────────────────────────
-
-    /**
-     * Captura errores cuando el JSON enviado por el cliente es inválido 
-     * (faltan comas, llaves, comillas, etc.).
-     */
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiError> handleJsonMalformed(
-            HttpMessageNotReadableException ex,
-            HttpServletRequest request) {
-
-        ApiError error = ApiError.builder()
-            .timestamp(LocalDateTime.now())
-            .status(HttpStatus.BAD_REQUEST.value())
-            .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-            .message("El cuerpo de la solicitud (JSON) no es legible o tiene un formato inválido.")
-            .path(request.getRequestURI())
-            .build();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
-
-    // ─── 500 INTERNAL SERVER ERROR ────────────────────────────────────────────
-
-    /**
-     * Captura cualquier excepción no controlada como red de seguridad.
-     * Devuelve un mensaje genérico al cliente (nunca exponemos detalles internos
-     * por seguridad) y el detalle real queda registrado en los logs del servidor.
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGenericException(
-            Exception ex,
-            HttpServletRequest request) {
-
-        // Manejo manual de endpoint inexistente (fallback seguro)
-        if (ex instanceof org.springframework.web.servlet.NoHandlerFoundException ||
-            ex instanceof org.springframework.web.servlet.resource.NoResourceFoundException) {
-
-            ApiError error = ApiError.builder()
-                    .timestamp(LocalDateTime.now())
-                    .status(HttpStatus.NOT_FOUND.value())
-                    .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                    .message("El endpoint solicitado no existe")
-                    .path(request.getRequestURI())
-                    .build();
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
-
-        // Error genérico real del servidor
-        ApiError error = ApiError.builder()
-                .timestamp(LocalDateTime.now())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .message("Ocurrió un error interno inesperado. Por favor, intente más tarde.")
-                .path(request.getRequestURI())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }
-}
-
-
-/* ============================================================ */
-/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\exception\mantenimientoNotFoundException.java */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\exception\MantenimientoNotFoundException.java */
 /* ============================================================ */
 
 package cl.ticketcine.reserva.exception;
@@ -13648,26 +16209,26 @@ package cl.ticketcine.reserva.exception;
  * Extiende RuntimeException (unchecked) para no contaminar las firmas de los
  * métodos de servicio con throws, siguiendo la convención de Spring Framework.
  */
-public class mantenimientoNotFoundException extends RuntimeException {
+public class MantenimientoNotFoundException extends RuntimeException {
 
     /**
      * @param idMaint identificador del mantenimiento por el que se buscó
      */
-    public mantenimientoNotFoundException(Integer idMaint) {
+    public MantenimientoNotFoundException(Integer idMaint) {
         super("No se encontró ningún mantenimiento con ID: " + idMaint);
     }
 
     /**
      * @param message mensaje personalizado
      */
-    public mantenimientoNotFoundException(String message) {
+    public MantenimientoNotFoundException(String message) {
         super(message);
     }
 }
 
 
 /* ============================================================ */
-/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\exception\salaNotFoundException.java */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\exception\SalaNotFoundException.java */
 /* ============================================================ */
 
 package cl.ticketcine.reserva.exception;
@@ -13678,14 +16239,47 @@ package cl.ticketcine.reserva.exception;
  * Extiende RuntimeException (unchecked) para no contaminar las firmas de los
  * métodos de servicio con throws, siguiendo la convención de Spring Framework.
  */
-public class salaNotFoundException extends RuntimeException {
+public class SalaNotFoundException extends RuntimeException {
 
     /**
      * @param idSala identificador de la sala por la que se buscó
      */
-    public salaNotFoundException(String idSala) {
+    public SalaNotFoundException(String idSala) {
         super("No se encontró ninguna sala con ID: " + idSala);
     }
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\mapper\MantenimientoMapper.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.mapper;
+
+import cl.ticketcine.reserva.dto.MantenimientoRequest;
+import cl.ticketcine.reserva.dto.MantenimientoResponse;
+import cl.ticketcine.reserva.model.Mantenimiento;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+import java.util.List;
+
+@Mapper(componentModel = "spring")
+public interface MantenimientoMapper {
+
+    @Mapping(target = "idMaint", ignore = true)
+    @Mapping(target = "sala", ignore = true)
+    Mantenimiento toEntity(MantenimientoRequest request);
+
+    @Mapping(source = "sala.idSala", target = "idSala")
+    MantenimientoResponse toResponse(Mantenimiento mantenimiento);
+
+    List<MantenimientoResponse> toResponseList(List<Mantenimiento> mantenimientos);
+
+    @Mapping(target = "idMaint", ignore = true)
+    @Mapping(target = "sala", ignore = true)
+    void updateEntity(MantenimientoRequest request, @MappingTarget Mantenimiento mantenimiento);
 }
 
 
@@ -13696,7 +16290,7 @@ public class salaNotFoundException extends RuntimeException {
 package cl.ticketcine.reserva.mapper;
 
 import cl.ticketcine.reserva.dto.ReservaRequest;
-import cl.ticketcine.reserva.dto.reservaResponse;
+import cl.ticketcine.reserva.dto.ReservaResponse;
 import cl.ticketcine.reserva.model.Asiento;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13713,13 +16307,13 @@ public interface ReservaMapper {
     @NonNull Asiento toEntity(ReservaRequest request);
 
     @Mapping(source = "sala.idSala", target = "idSala")
-    reservaResponse toResponse(Asiento asiento);
+    ReservaResponse toResponse(Asiento asiento);
 
     @Mapping(target = "idAsiento", ignore = true)
     @Mapping(target = "sala", ignore = true)
     Asiento toModel(ReservaRequest request);
 
-    List<reservaResponse> toResponseList(List<Asiento> asientos);
+    List<ReservaResponse> toResponseList(List<Asiento> asientos);
 
     @Mapping(target = "idAsiento", ignore = true)
     @Mapping(target = "sala", ignore = true)
@@ -13728,10 +16322,45 @@ public interface ReservaMapper {
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\mapper\SalaMapper.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.mapper;
+
+import cl.ticketcine.reserva.dto.SalaRequest;
+import cl.ticketcine.reserva.dto.SalaResponse;
+import cl.ticketcine.reserva.model.Sala;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+
+import java.util.List;
+
+@Mapper(componentModel = "spring")
+public interface SalaMapper {
+
+    Sala toEntity(SalaRequest request);
+
+    SalaResponse toResponse(Sala sala);
+
+    List<SalaResponse> toResponseList(List<Sala> salas);
+
+    void updateEntity(SalaRequest request, @MappingTarget Sala sala);
+}
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\mapper\UsuarioProyeccionMapper.java */
 /* ============================================================ */
 
 package cl.ticketcine.reserva.mapper;
+
+import java.util.List;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import cl.ticketcine.reserva.dto.UsuarioProyeccionResponse;
+import cl.ticketcine.reserva.model.UsuarioProyeccion;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioProyeccionMapper {
@@ -13925,6 +16554,30 @@ public class UsuarioProyeccion {
 }
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\repository\MantenimientoRepository.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.repository;
+
+import cl.ticketcine.reserva.model.Mantenimiento;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface MantenimientoRepository extends JpaRepository<Mantenimiento, Integer> {
+
+    Optional<Mantenimiento> findByIdMaint(Integer idMaint);
+
+    List<Mantenimiento> findBySalaIdSala(String idSala);
+
+    boolean existsByIdMaint(Integer idMaint);
+}
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\repository\ReservaRepository.java */
 /* ============================================================ */
 
@@ -13949,10 +16602,37 @@ public interface ReservaRepository extends JpaRepository<Asiento, Integer> {
 
 
 /* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\repository\SalaRepository.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.repository;
+
+import cl.ticketcine.reserva.model.Sala;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface SalaRepository extends JpaRepository<Sala, String> {
+
+    Optional<Sala> findByIdSala(String idSala);
+
+    boolean existsByIdSala(String idSala);
+}
+
+
+/* ============================================================ */
 /* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\repository\UsuarioProyeccionRepository.java */
 /* ============================================================ */
 
 package cl.ticketcine.reserva.repository;
+
+import java.util.Optional;
+import org.springframework.stereotype.Repository;
+import cl.ticketcine.reserva.model.UsuarioProyeccion;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 
 @Repository
 public interface UsuarioProyeccionRepository extends JpaRepository<UsuarioProyeccion, String> {
@@ -13961,6 +16641,85 @@ public interface UsuarioProyeccionRepository extends JpaRepository<UsuarioProyec
     void deleteByEmail(String email);
 
 }
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\service\MantenimientoService.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.service;
+
+import cl.ticketcine.reserva.dto.MantenimientoRequest;
+import cl.ticketcine.reserva.dto.MantenimientoResponse;
+import cl.ticketcine.reserva.exception.MantenimientoNotFoundException;
+import cl.ticketcine.reserva.exception.SalaNotFoundException;
+import cl.ticketcine.reserva.mapper.MantenimientoMapper;
+import cl.ticketcine.reserva.model.Mantenimiento;
+import cl.ticketcine.reserva.model.Sala;
+import cl.ticketcine.reserva.repository.MantenimientoRepository;
+import cl.ticketcine.reserva.repository.SalaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class MantenimientoService {
+
+    private final MantenimientoRepository mantenimientoRepository;
+    private final SalaRepository salaRepository;
+    private final MantenimientoMapper mantenimientoMapper;
+
+    public List<MantenimientoResponse> findAll() {
+        return mantenimientoMapper.toResponseList(mantenimientoRepository.findAll());
+    }
+
+    public MantenimientoResponse findById(Integer idMaint) {
+        Mantenimiento mantenimiento = mantenimientoRepository.findByIdMaint(idMaint)
+                .orElseThrow(() -> new MantenimientoNotFoundException(idMaint));
+        return mantenimientoMapper.toResponse(mantenimiento);
+    }
+
+    public List<MantenimientoResponse> findBySalaId(String idSala) {
+        List<Mantenimiento> mantenimientos = mantenimientoRepository.findBySalaIdSala(idSala);
+        if (mantenimientos.isEmpty()) {
+            throw new SalaNotFoundException(idSala);
+        }
+        return mantenimientoMapper.toResponseList(mantenimientos);
+    }
+
+    public MantenimientoResponse create(MantenimientoRequest request) {
+        Sala sala = salaRepository.findById(request.getIdSala())
+                .orElseThrow(() -> new SalaNotFoundException(request.getIdSala()));
+
+        Mantenimiento mantenimiento = mantenimientoMapper.toEntity(request);
+        mantenimiento.setSala(sala);
+
+        Mantenimiento saved = mantenimientoRepository.save(mantenimiento);
+        return mantenimientoMapper.toResponse(saved);
+    }
+
+    public MantenimientoResponse update(Integer idMaint, MantenimientoRequest request) {
+        Mantenimiento existing = mantenimientoRepository.findByIdMaint(idMaint)
+                .orElseThrow(() -> new MantenimientoNotFoundException(idMaint));
+
+        Sala sala = salaRepository.findById(request.getIdSala())
+                .orElseThrow(() -> new SalaNotFoundException(request.getIdSala()));
+
+        mantenimientoMapper.updateEntity(request, existing);
+        existing.setSala(sala);
+
+        Mantenimiento updated = mantenimientoRepository.save(existing);
+        return mantenimientoMapper.toResponse(updated);
+    }
+
+    public void deleteById(Integer idMaint) {
+        mantenimientoRepository.findByIdMaint(idMaint)
+                .orElseThrow(() -> new MantenimientoNotFoundException(idMaint));
+        mantenimientoRepository.deleteById(idMaint);
+    }
+}
+
 
 /* ============================================================ */
 /* ARCHIVO: .\ms-reserva\src\main\java\cl\ticketcine\reserva\service\ReservaService.java */
@@ -13973,14 +16732,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import cl.ticketcine.reserva.dto.reservaRequest;
-import cl.ticketcine.reserva.dto.reservaResponse;
-import cl.ticketcine.reserva.exception.asientoNotFoundException;
-import cl.ticketcine.reserva.exception.salaNotFoundException;
-import cl.ticketcine.reserva.mapper.reservaMapper;
+import cl.ticketcine.reserva.dto.ReservaRequest;
+import cl.ticketcine.reserva.dto.ReservaResponse;
+import cl.ticketcine.reserva.exception.AsientoNotFoundException;
+import cl.ticketcine.reserva.exception.SalaNotFoundException;
+import cl.ticketcine.reserva.mapper.ReservaMapper;
 import cl.ticketcine.reserva.model.Asiento;
 import cl.ticketcine.reserva.model.Sala;
-import cl.ticketcine.reserva.repository.reservaRepository;
+import cl.ticketcine.reserva.repository.ReservaRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13992,31 +16751,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReservaService {
 
-    private final reservaRepository reservaRepository;
-    private final reservaMapper reservaMapper;
+    private final ReservaRepository reservaRepository;
+    private final ReservaMapper reservaMapper;
 
-    public List<reservaResponse> findAll() {
+    public List<ReservaResponse> findAll() {
         return reservaMapper.toResponseList(reservaRepository.findAll());
     }
 
-    public reservaResponse findById(Integer idAsiento) {
+    public ReservaResponse findById(Integer idAsiento) {
         Asiento asiento = reservaRepository.findByIdAsiento(idAsiento)
-                .orElseThrow(() -> new asientoNotFoundException(idAsiento));
+                .orElseThrow(() -> new AsientoNotFoundException(idAsiento));
         return reservaMapper.toResponse(asiento);
     }
 
-    public List<reservaResponse> findBySalaId(String idSala) {
+    public List<ReservaResponse> findBySalaId(String idSala) {
         List<Asiento> asientos = reservaRepository.findBySalaIdSala(idSala);
         if (asientos.isEmpty()) {
-            throw new salaNotFoundException(idSala);
+            throw new SalaNotFoundException(idSala);
         }
         return reservaMapper.toResponseList(asientos);
     }
 
-    public reservaResponse create(reservaRequest request) {
+    public ReservaResponse create(ReservaRequest request) {
 
         if (reservaRepository.existsByIdAsiento(request.getIdAsiento())) {
-            throw new asientoNotFoundException(
+            throw new AsientoNotFoundException(
                     "El asiento con ID " + request.getIdAsiento() + " ya existe");
         }
 
@@ -14038,10 +16797,10 @@ public class ReservaService {
         return reservaMapper.toResponse(guardado);
     }
 
-    public reservaResponse update(Integer idAsiento, reservaRequest request) {
+    public ReservaResponse update(Integer idAsiento, ReservaRequest request) {
 
         Asiento existente = reservaRepository.findByIdAsiento(idAsiento)
-                .orElseThrow(() -> new asientoNotFoundException(idAsiento));
+                .orElseThrow(() -> new AsientoNotFoundException(idAsiento));
 
         existente.setFila(request.getFila());
         existente.setNumero(request.getNumero());
@@ -14053,7 +16812,7 @@ public class ReservaService {
     public void deleteById(Integer idAsiento) {
 
         reservaRepository.findByIdAsiento(idAsiento)
-                .orElseThrow(() -> new asientoNotFoundException(idAsiento));
+                .orElseThrow(() -> new AsientoNotFoundException(idAsiento));
 
         reservaRepository.deleteById(idAsiento);
     }
@@ -14066,12 +16825,12 @@ public class ReservaService {
 
 package cl.ticketcine.reserva.service;
 
-import cl.ticketcine.reserva.dto.salaRequest;
-import cl.ticketcine.reserva.dto.salaResponse;
-import cl.ticketcine.reserva.exception.salaNotFoundException;
+import cl.ticketcine.reserva.dto.SalaRequest;
+import cl.ticketcine.reserva.dto.SalaResponse;
+import cl.ticketcine.reserva.exception.SalaNotFoundException;
 import cl.ticketcine.reserva.mapper.SalaMapper;
 import cl.ticketcine.reserva.model.Sala;
-import cl.ticketcine.reserva.repository.salaRepository;
+import cl.ticketcine.reserva.repository.SalaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14082,21 +16841,21 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SalaService {
 
-    private final salaRepository salaRepository;
+    private final SalaRepository salaRepository;
     private final SalaMapper salaMapper;
 
-    public List<salaResponse> findAll() {
+    public List<SalaResponse> findAll() {
         return salaMapper.toResponseList(salaRepository.findAll());
     }
 
-    public salaResponse findById(String idSala) {
+    public SalaResponse findById(String idSala) {
         String idNotNull = Objects.requireNonNull(idSala, "El id de la sala es obligatorio");
         Sala sala = salaRepository.findByIdSala(idNotNull)
-                .orElseThrow(() -> new salaNotFoundException(idNotNull));
+                .orElseThrow(() -> new SalaNotFoundException(idNotNull));
         return salaMapper.toResponse(sala);
     }
 
-    public salaResponse create(salaRequest request) {
+    public SalaResponse create(SalaRequest request) {
         Objects.requireNonNull(request, "La solicitud de sala es obligatoria");
         if (salaRepository.existsByIdSala(request.getIdSala())) {
             throw new IllegalArgumentException("La sala con ID " + request.getIdSala() + " ya existe");
@@ -14107,12 +16866,12 @@ public class SalaService {
         return salaMapper.toResponse(saved);
     }
 
-    public salaResponse update(String idSala, salaRequest request) {
+    public SalaResponse update(String idSala, SalaRequest request) {
         String idNotNull = Objects.requireNonNull(idSala, "El id de la sala es obligatorio");
         Objects.requireNonNull(request, "La solicitud de sala es obligatoria");
 
         Sala sala = salaRepository.findByIdSala(idNotNull)
-                .orElseThrow(() -> new salaNotFoundException(idNotNull));
+                .orElseThrow(() -> new SalaNotFoundException(idNotNull));
 
         salaMapper.updateEntity(request, sala);
         Sala updated = salaRepository.save(sala);
@@ -14122,7 +16881,7 @@ public class SalaService {
     public void deleteById(String idSala) {
         String idNotNull = Objects.requireNonNull(idSala, "El id de la sala es obligatorio");
         if (!salaRepository.existsByIdSala(idNotNull)) {
-            throw new salaNotFoundException(idNotNull);
+            throw new SalaNotFoundException(idNotNull);
         }
         salaRepository.deleteById(idNotNull);
     }
@@ -14135,29 +16894,26 @@ public class SalaService {
 
 package cl.ticketcine.reserva.service;
 
-/**
- * Servicio encargado de aplicar las reglas de negocio de recursos físicos:
- * - Gestiona operaciones CRUD sobre recursos físicos del inventario.
- * - Valida que el SKU sea único (clave de negocio del dominio de recursos).
- * - Valida que si el tipo de recurso es 'Libro', el ISBN debe existir en la proyección local.
- * - Permite filtrar recursos por disponibilidad y tipo.
- * - Lanza excepciones personalizadas del módulo common para casos de error específicos.
- * - Utiliza un mapper para convertir entre entidades y DTOs, manteniendo el código limpio y separado.
- */
+import cl.ticketcine.reserva.dto.UsuarioProyeccionResponse;
+import cl.ticketcine.reserva.mapper.UsuarioProyeccionMapper;
+import cl.ticketcine.reserva.model.UsuarioProyeccion;
+import cl.ticketcine.reserva.repository.UsuarioProyeccionRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-//
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UsuarioProyeccionService {
 
     private final UsuarioProyeccionRepository usuarioProyeccionRepository;
-    private final RecursoFisicoRepository recursoFisicoRepository;
-    private final CatalogoClient catalogoClient;
     private final UsuarioProyeccionMapper usuarioProyeccionMapper;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UsuarioProyeccionResponse> findAll() {
-        return usuarioProyeccionMapper.toResponseList(usuarioroyeccionRepository.findAll());
+        return usuarioProyeccionMapper.toResponseList(usuarioProyeccionRepository.findAll());
     }
 
     @Transactional
@@ -14170,18 +16926,15 @@ public class UsuarioProyeccionService {
 
     @Transactional
     public void deleteByEmail(String email) {
-        UsuarioProyeccion usuarioProyeccion = findByemail(email);
-        List<String> tablasAsociadas = new ArrayList<>();
-        if (!usuarioProyeccionRepository.existsByUsuarioEmail(usuarioProyeccion.getEmail())) tablasAsociadas.add("Usuario");
-        if (!tablasAsociadas.isEmpty()) throw new ReferentialIntegrityException("Usuario Proyección", email, String.join(", ", tablasAsociadas));
+        UsuarioProyeccion usuarioProyeccion = findByEmail(email);
         usuarioProyeccionRepository.delete(usuarioProyeccion);
     }
 
+    @Transactional(readOnly = true)
     public UsuarioProyeccion findByEmail(String email) {
         return usuarioProyeccionRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario Proyeccion", "EMAIL", email));
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró ningún usuario con email: " + email));
     }
-
 }
 
 
@@ -14274,6 +17027,346 @@ eureka:
     instance-id: "${spring.application.name}:${random.value}"
     lease-renewal-interval-in-seconds: 15
     lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\target\generated-sources\annotations\cl\ticketcine\reserva\mapper\MantenimientoMapperImpl.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.mapper;
+
+import cl.ticketcine.reserva.dto.MantenimientoRequest;
+import cl.ticketcine.reserva.dto.MantenimientoResponse;
+import cl.ticketcine.reserva.model.Mantenimiento;
+import cl.ticketcine.reserva.model.Sala;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2026-05-29T12:03:32-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
+)
+@Component
+public class MantenimientoMapperImpl implements MantenimientoMapper {
+
+    @Override
+    public Mantenimiento toEntity(MantenimientoRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        Mantenimiento.MantenimientoBuilder mantenimiento = Mantenimiento.builder();
+
+        mantenimiento.tecnicoNombre( request.getTecnicoNombre() );
+        mantenimiento.ultimaFecha( request.getUltimaFecha() );
+
+        return mantenimiento.build();
+    }
+
+    @Override
+    public MantenimientoResponse toResponse(Mantenimiento mantenimiento) {
+        if ( mantenimiento == null ) {
+            return null;
+        }
+
+        MantenimientoResponse mantenimientoResponse = new MantenimientoResponse();
+
+        mantenimientoResponse.setIdSala( mantenimientoSalaIdSala( mantenimiento ) );
+        mantenimientoResponse.setTecnicoNombre( mantenimiento.getTecnicoNombre() );
+        mantenimientoResponse.setUltimaFecha( mantenimiento.getUltimaFecha() );
+
+        return mantenimientoResponse;
+    }
+
+    @Override
+    public List<MantenimientoResponse> toResponseList(List<Mantenimiento> mantenimientos) {
+        if ( mantenimientos == null ) {
+            return null;
+        }
+
+        List<MantenimientoResponse> list = new ArrayList<MantenimientoResponse>( mantenimientos.size() );
+        for ( Mantenimiento mantenimiento : mantenimientos ) {
+            list.add( toResponse( mantenimiento ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public void updateEntity(MantenimientoRequest request, Mantenimiento mantenimiento) {
+        if ( request == null ) {
+            return;
+        }
+
+        mantenimiento.setTecnicoNombre( request.getTecnicoNombre() );
+        mantenimiento.setUltimaFecha( request.getUltimaFecha() );
+    }
+
+    private String mantenimientoSalaIdSala(Mantenimiento mantenimiento) {
+        if ( mantenimiento == null ) {
+            return null;
+        }
+        Sala sala = mantenimiento.getSala();
+        if ( sala == null ) {
+            return null;
+        }
+        String idSala = sala.getIdSala();
+        if ( idSala == null ) {
+            return null;
+        }
+        return idSala;
+    }
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\target\generated-sources\annotations\cl\ticketcine\reserva\mapper\ReservaMapperImpl.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.mapper;
+
+import cl.ticketcine.reserva.dto.ReservaRequest;
+import cl.ticketcine.reserva.dto.ReservaResponse;
+import cl.ticketcine.reserva.model.Asiento;
+import cl.ticketcine.reserva.model.Sala;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2026-05-29T12:03:32-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
+)
+@Component
+public class ReservaMapperImpl implements ReservaMapper {
+
+    @Override
+    public Asiento toEntity(ReservaRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        Asiento.AsientoBuilder asiento = Asiento.builder();
+
+        asiento.fila( request.getFila() );
+        asiento.numero( request.getNumero() );
+
+        return asiento.build();
+    }
+
+    @Override
+    public ReservaResponse toResponse(Asiento asiento) {
+        if ( asiento == null ) {
+            return null;
+        }
+
+        ReservaResponse reservaResponse = new ReservaResponse();
+
+        reservaResponse.setIdSala( asientoSalaIdSala( asiento ) );
+        reservaResponse.setFila( asiento.getFila() );
+        reservaResponse.setIdAsiento( asiento.getIdAsiento() );
+        reservaResponse.setNumero( asiento.getNumero() );
+
+        return reservaResponse;
+    }
+
+    @Override
+    public Asiento toModel(ReservaRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        Asiento.AsientoBuilder asiento = Asiento.builder();
+
+        asiento.fila( request.getFila() );
+        asiento.numero( request.getNumero() );
+
+        return asiento.build();
+    }
+
+    @Override
+    public List<ReservaResponse> toResponseList(List<Asiento> asientos) {
+        if ( asientos == null ) {
+            return null;
+        }
+
+        List<ReservaResponse> list = new ArrayList<ReservaResponse>( asientos.size() );
+        for ( Asiento asiento : asientos ) {
+            list.add( toResponse( asiento ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public void updateEntity(ReservaRequest request, Asiento asiento) {
+        if ( request == null ) {
+            return;
+        }
+
+        asiento.setFila( request.getFila() );
+        asiento.setNumero( request.getNumero() );
+    }
+
+    private String asientoSalaIdSala(Asiento asiento) {
+        if ( asiento == null ) {
+            return null;
+        }
+        Sala sala = asiento.getSala();
+        if ( sala == null ) {
+            return null;
+        }
+        String idSala = sala.getIdSala();
+        if ( idSala == null ) {
+            return null;
+        }
+        return idSala;
+    }
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\target\generated-sources\annotations\cl\ticketcine\reserva\mapper\SalaMapperImpl.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.mapper;
+
+import cl.ticketcine.reserva.dto.SalaRequest;
+import cl.ticketcine.reserva.dto.SalaResponse;
+import cl.ticketcine.reserva.model.Sala;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2026-05-29T12:03:32-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
+)
+@Component
+public class SalaMapperImpl implements SalaMapper {
+
+    @Override
+    public Sala toEntity(SalaRequest request) {
+        if ( request == null ) {
+            return null;
+        }
+
+        Sala.SalaBuilder sala = Sala.builder();
+
+        sala.capacidad( request.getCapacidad() );
+        sala.formato( request.getFormato() );
+        sala.idSala( request.getIdSala() );
+
+        return sala.build();
+    }
+
+    @Override
+    public SalaResponse toResponse(Sala sala) {
+        if ( sala == null ) {
+            return null;
+        }
+
+        SalaResponse salaResponse = new SalaResponse();
+
+        salaResponse.setCapacidad( sala.getCapacidad() );
+        salaResponse.setFormato( sala.getFormato() );
+        salaResponse.setIdSala( sala.getIdSala() );
+
+        return salaResponse;
+    }
+
+    @Override
+    public List<SalaResponse> toResponseList(List<Sala> salas) {
+        if ( salas == null ) {
+            return null;
+        }
+
+        List<SalaResponse> list = new ArrayList<SalaResponse>( salas.size() );
+        for ( Sala sala : salas ) {
+            list.add( toResponse( sala ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public void updateEntity(SalaRequest request, Sala sala) {
+        if ( request == null ) {
+            return;
+        }
+
+        sala.setCapacidad( request.getCapacidad() );
+        sala.setFormato( request.getFormato() );
+        sala.setIdSala( request.getIdSala() );
+    }
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\target\generated-sources\annotations\cl\ticketcine\reserva\mapper\UsuarioProyeccionMapperImpl.java */
+/* ============================================================ */
+
+package cl.ticketcine.reserva.mapper;
+
+import cl.ticketcine.reserva.dto.UsuarioProyeccionResponse;
+import cl.ticketcine.reserva.model.UsuarioProyeccion;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
+
+@Generated(
+    value = "org.mapstruct.ap.MappingProcessor",
+    date = "2026-05-29T12:03:32-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
+)
+@Component
+public class UsuarioProyeccionMapperImpl implements UsuarioProyeccionMapper {
+
+    @Override
+    public UsuarioProyeccionResponse toResponse(UsuarioProyeccion usuarioProyeccion) {
+        if ( usuarioProyeccion == null ) {
+            return null;
+        }
+
+        UsuarioProyeccionResponse usuarioProyeccionResponse = new UsuarioProyeccionResponse();
+
+        usuarioProyeccionResponse.setEmail( usuarioProyeccion.getEmail() );
+        usuarioProyeccionResponse.setNombre( usuarioProyeccion.getNombre() );
+
+        return usuarioProyeccionResponse;
+    }
+
+    @Override
+    public List<UsuarioProyeccionResponse> toResponseList(List<UsuarioProyeccion> usuarioroyecciones) {
+        if ( usuarioroyecciones == null ) {
+            return null;
+        }
+
+        List<UsuarioProyeccionResponse> list = new ArrayList<UsuarioProyeccionResponse>( usuarioroyecciones.size() );
+        for ( UsuarioProyeccion usuarioProyeccion : usuarioroyecciones ) {
+            list.add( toResponse( usuarioProyeccion ) );
+        }
+
+        return list;
+    }
+}
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-reserva\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-reserva
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
 
 
 /* ============================================================ */
@@ -14474,6 +17567,423 @@ eureka:
 wrapperVersion=3.3.4
 distributionType=only-script
 distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-salas\bin\pom.xml */
+/* ============================================================ */
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Modelo base de Maven -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        *******************************************
+        CGV INICIO: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
+    <parent>
+        <groupId>cl.ticketcine</groupId>
+        <artifactId>ticketcine</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de este modulo -->
+    <groupId>cl.ticketcine</groupId>
+    <artifactId>cl-ticketcine-salas</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <!-- Nombre y descripcion del modulo -->
+    <name>Modulo de Salas</name>
+    <description>Servicio de Salas.</description>
+
+    <!--
+        *******************************************
+        CGV FIN: PERSONALIZAR PARA CADA PROYECTO
+        *******************************************
+    -->
+
+    <!-- Forma de empaquetado es .jar -->
+    <packaging>jar</packaging>
+
+    <!-- Dependencias necesarias para este microservicio -->
+    <dependencies>
+
+        <!-- Libreria comun compartida -->
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+        </dependency>
+
+        <!-- Spring Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Actuator: endpoints de monitoreo y salud -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Spring Web: Controladores REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring JPA: acceso a base de datos con Hibernate -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- PostgreSQL JDBC: driver JDBC para PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- H2 Database: base de datos en memoria para pruebas y desarrollo local -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com-h2database.version}</version>
+        </dependency>
+
+        <!-- Validacion con anotaciones como @Valid, @NotNull, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Lombok para reducir boilerplate con anotaciones como @Getter, @Builder -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MapStruct: generador de codigo para mapeo entre entidades y DTOs -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <!-- Procesador de anotaciones de MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Dependencias de testing con JUnit, MockMvc, etc. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Cliente Eureka: registro y descubrimiento de este microservicio -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!-- OpenFeign: cliente HTTP declarativo para comunicacion entre microservicios -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!-- Spring Boot DevTools: recarga automatica en desarrollo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Empaquetado ejecutable con Spring Boot -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>cl.ticketcine.salas.TicketcineSalasApplication</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de compilacion para procesadores de anotaciones (MapStruct + Lombok) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-salas\bin\.mvn\wrapper\maven-wrapper.properties */
+/* ============================================================ */
+
+wrapperVersion=3.3.4
+distributionType=only-script
+distributionUrl=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.15/apache-maven-3.9.15-bin.zip
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-salas\bin\src\main\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9005
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-salas
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/salas_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: salas-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "cl.ticketcine.common.event"
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-salas\bin\src\test\resources\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9005
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-salas
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/salas_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: salas-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "cl.ticketcine.common.event"
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-salas\bin\target\classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9005
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-salas
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/salas_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: salas-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "cl.ticketcine.common.event"
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-salas\bin\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-salas
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-salas\bin\target\test-classes\application.yml */
+/* ============================================================ */
+
+server:
+  port: 9005
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ms-salas
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/salas_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      fail-fast: false
+      auto-create: false
+    listener:
+      auto-startup: false
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: salas-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "cl.ticketcine.common.event"
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.application.name}:${random.value}"
+    lease-renewal-interval-in-seconds: 15
+    lease-expiration-duration-in-seconds: 60
 
 
 /* ============================================================ */
@@ -15351,8 +18861,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:32-0400",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-05-29T12:03:33-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class SalaMapperImpl implements SalaMapper {
@@ -15365,9 +18875,9 @@ public class SalaMapperImpl implements SalaMapper {
 
         Sala.SalaBuilder sala = Sala.builder();
 
-        sala.idSala( request.getIdSala() );
-        sala.formato( request.getFormato() );
         sala.capacidad( request.getCapacidad() );
+        sala.formato( request.getFormato() );
+        sala.idSala( request.getIdSala() );
 
         return sala.build();
     }
@@ -15380,9 +18890,9 @@ public class SalaMapperImpl implements SalaMapper {
 
         SalaResponse salaResponse = new SalaResponse();
 
-        salaResponse.setIdSala( sala.getIdSala() );
-        salaResponse.setFormato( sala.getFormato() );
         salaResponse.setCapacidad( sala.getCapacidad() );
+        salaResponse.setFormato( sala.getFormato() );
+        salaResponse.setIdSala( sala.getIdSala() );
 
         salaResponse.setCantidadAsientos( sala.getAsientos() == null ? 0L : sala.getAsientos().size() );
         salaResponse.setCantidadMantenimientos( sala.getMantenimientos() == null ? 0L : sala.getMantenimientos().size() );
@@ -17087,8 +20597,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:15-0400",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-05-29T12:03:35-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class MembresiaMapperImpl implements MembresiaMapper {
@@ -17101,9 +20611,9 @@ public class MembresiaMapperImpl implements MembresiaMapper {
 
         Membresia.MembresiaBuilder membresia = Membresia.builder();
 
+        membresia.fechaVencimiento( request.getFechaVencimiento() );
         membresia.nivel( request.getNivel() );
         membresia.puntosAcumulados( request.getPuntosAcumulados() );
-        membresia.fechaVencimiento( request.getFechaVencimiento() );
 
         return membresia.build();
     }
@@ -17117,10 +20627,10 @@ public class MembresiaMapperImpl implements MembresiaMapper {
         MembresiaResponse.MembresiaResponseBuilder membresiaResponse = MembresiaResponse.builder();
 
         membresiaResponse.usuarioEmail( membresiaUsuarioEmail( membresia ) );
+        membresiaResponse.fechaVencimiento( membresia.getFechaVencimiento() );
         membresiaResponse.idMembresia( membresia.getIdMembresia() );
         membresiaResponse.nivel( membresia.getNivel() );
         membresiaResponse.puntosAcumulados( membresia.getPuntosAcumulados() );
-        membresiaResponse.fechaVencimiento( membresia.getFechaVencimiento() );
 
         return membresiaResponse.build();
     }
@@ -17145,9 +20655,9 @@ public class MembresiaMapperImpl implements MembresiaMapper {
             return;
         }
 
+        membresia.setFechaVencimiento( request.getFechaVencimiento() );
         membresia.setNivel( request.getNivel() );
         membresia.setPuntosAcumulados( request.getPuntosAcumulados() );
-        membresia.setFechaVencimiento( request.getFechaVencimiento() );
     }
 
     private String membresiaUsuarioEmail(Membresia membresia) {
@@ -17184,8 +20694,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:15-0400",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-05-29T12:03:35-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class PerfilMapperImpl implements PerfilMapper {
@@ -17198,9 +20708,9 @@ public class PerfilMapperImpl implements PerfilMapper {
 
         Perfil.PerfilBuilder perfil = Perfil.builder();
 
-        perfil.preferenciaIdioma( request.getPreferenciaIdioma() );
-        perfil.esEstudiante( request.getEsEstudiante() );
         perfil.biografia( request.getBiografia() );
+        perfil.esEstudiante( request.getEsEstudiante() );
+        perfil.preferenciaIdioma( request.getPreferenciaIdioma() );
 
         return perfil.build();
     }
@@ -17214,10 +20724,10 @@ public class PerfilMapperImpl implements PerfilMapper {
         PerfilResponse.PerfilResponseBuilder perfilResponse = PerfilResponse.builder();
 
         perfilResponse.usuarioEmail( perfilUsuarioEmail( perfil ) );
+        perfilResponse.biografia( perfil.getBiografia() );
+        perfilResponse.esEstudiante( perfil.getEsEstudiante() );
         perfilResponse.idPerfil( perfil.getIdPerfil() );
         perfilResponse.preferenciaIdioma( perfil.getPreferenciaIdioma() );
-        perfilResponse.esEstudiante( perfil.getEsEstudiante() );
-        perfilResponse.biografia( perfil.getBiografia() );
 
         return perfilResponse.build();
     }
@@ -17242,9 +20752,9 @@ public class PerfilMapperImpl implements PerfilMapper {
             return;
         }
 
-        perfil.setPreferenciaIdioma( request.getPreferenciaIdioma() );
-        perfil.setEsEstudiante( request.getEsEstudiante() );
         perfil.setBiografia( request.getBiografia() );
+        perfil.setEsEstudiante( request.getEsEstudiante() );
+        perfil.setPreferenciaIdioma( request.getPreferenciaIdioma() );
     }
 
     private String perfilUsuarioEmail(Perfil perfil) {
@@ -17280,8 +20790,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:15-0400",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
+    date = "2026-05-29T12:03:35-0400",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class UsuarioMapperImpl implements UsuarioMapper {
@@ -17296,8 +20806,8 @@ public class UsuarioMapperImpl implements UsuarioMapper {
 
         usuario.email( request.getEmail() );
         usuario.nombre( request.getNombre() );
-        usuario.telefono( request.getTelefono() );
         usuario.paisCodigo( request.getPaisCodigo() );
+        usuario.telefono( request.getTelefono() );
 
         usuario.fechaRegistro( java.time.LocalDate.now() );
 
@@ -17313,10 +20823,10 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         UsuarioResponse.UsuarioResponseBuilder usuarioResponse = UsuarioResponse.builder();
 
         usuarioResponse.email( usuario.getEmail() );
-        usuarioResponse.nombre( usuario.getNombre() );
-        usuarioResponse.telefono( usuario.getTelefono() );
-        usuarioResponse.paisCodigo( usuario.getPaisCodigo() );
         usuarioResponse.fechaRegistro( usuario.getFechaRegistro() );
+        usuarioResponse.nombre( usuario.getNombre() );
+        usuarioResponse.paisCodigo( usuario.getPaisCodigo() );
+        usuarioResponse.telefono( usuario.getTelefono() );
 
         return usuarioResponse.build();
     }
@@ -17343,8 +20853,8 @@ public class UsuarioMapperImpl implements UsuarioMapper {
 
         usuario.setEmail( request.getEmail() );
         usuario.setNombre( request.getNombre() );
-        usuario.setTelefono( request.getTelefono() );
         usuario.setPaisCodigo( request.getPaisCodigo() );
+        usuario.setTelefono( request.getTelefono() );
     }
 }
 
@@ -18633,7 +22143,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-05-28T12:15:14-0400",
+    date = "2026-05-29T12:03:37-0400",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.0.v20260407-0427, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -18775,6 +22285,15 @@ public class ValidacionMapperImpl implements ValidacionMapper {
         return idPunto;
     }
 }
+
+
+/* ============================================================ */
+/* ARCHIVO: .\ms-validacion\target\maven-archiver\pom.properties */
+/* ============================================================ */
+
+artifactId=cl-ticketcine-validacion
+groupId=cl.ticketcine
+version=0.0.1-SNAPSHOT
 
 
 /* ============================================================ */

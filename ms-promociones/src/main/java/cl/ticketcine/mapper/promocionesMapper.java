@@ -19,7 +19,7 @@ import org.mapstruct.MappingTarget;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface promocionesMapper {
+public interface PromocionesMapper {
 
     Campania toCampaniaEntity(CampaniaRequest request);
 

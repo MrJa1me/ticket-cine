@@ -1,5 +1,4 @@
 {
-  "version": "0.2.0",
   "configurations": [
     {
       "type": "java",
@@ -109,7 +108,8 @@
       "mainClass": "cl.ticketcine.promociones.TicketcinePromocionesApplication",
       "projectName": "cl-ticketcine-promociones",
       "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "vmArgs": "-Dcom.sun.management.jmxremote=false",
+      "shortenCommandLine": "jarmanifest"
     }
   ],
   "compounds": [

@@ -1,10 +1,15 @@
 package cl.ticketcine.reserva.event;
 
 import org.springframework.stereotype.Component;
+import org.springframework.kafka.annotation.KafkaListener;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import cl.ticketcine.common.event.UsuarioCreatedEvent;
+import cl.ticketcine.common.event.UsuarioUpdatedEvent;
+import cl.ticketcine.common.event.UsuarioDeletedEvent;
+import cl.ticketcine.reserva.service.UsuarioProyeccionService;
 
 @Slf4j
 @Component

@@ -1,33 +1,25 @@
 package cl.ticketcine.reserva.service;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.stereotype.Service;
+import cl.ticketcine.reserva.dto.UsuarioProyeccionResponse;
+import cl.ticketcine.reserva.mapper.UsuarioProyeccionMapper;
+import cl.ticketcine.reserva.model.UsuarioProyeccion;
+import cl.ticketcine.reserva.repository.UsuarioProyeccionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Servicio encargado de aplicar las reglas de negocio de recursos físicos:
- * - Gestiona operaciones CRUD sobre recursos físicos del inventario.
- * - Valida que el SKU sea único (clave de negocio del dominio de recursos).
- * - Valida que si el tipo de recurso es 'Libro', el ISBN debe existir en la proyección local.
- * - Permite filtrar recursos por disponibilidad y tipo.
- * - Lanza excepciones personalizadas del módulo common para casos de error específicos.
- * - Utiliza un mapper para convertir entre entidades y DTOs, manteniendo el código limpio y separado.
- */
+import java.util.List;
 
-//
 @Service
 @RequiredArgsConstructor
 public class UsuarioProyeccionService {
 
     private final UsuarioProyeccionRepository usuarioProyeccionRepository;
-    private final RecursoFisicoRepository recursoFisicoRepository;
-    private final CatalogoClient catalogoClient;
     private final UsuarioProyeccionMapper usuarioProyeccionMapper;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UsuarioProyeccionResponse> findAll() {
-        return usuarioProyeccionMapper.toResponseList(usuarioroyeccionRepository.findAll());
+        return usuarioProyeccionMapper.toResponseList(usuarioProyeccionRepository.findAll());
     }
 
     @Transactional
@@ -40,16 +32,13 @@ public class UsuarioProyeccionService {
 
     @Transactional
     public void deleteByEmail(String email) {
-        UsuarioProyeccion usuarioProyeccion = findByemail(email);
-        List<String> tablasAsociadas = new ArrayList<>();
-        if (!usuarioProyeccionRepository.existsByUsuarioEmail(usuarioProyeccion.getEmail())) tablasAsociadas.add("Usuario");
-        if (!tablasAsociadas.isEmpty()) throw new ReferentialIntegrityException("Usuario Proyección", email, String.join(", ", tablasAsociadas));
+        UsuarioProyeccion usuarioProyeccion = findByEmail(email);
         usuarioProyeccionRepository.delete(usuarioProyeccion);
     }
 
+    @Transactional(readOnly = true)
     public UsuarioProyeccion findByEmail(String email) {
         return usuarioProyeccionRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario Proyeccion", "EMAIL", email));
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró ningún usuario con email: " + email));
     }
-
 }

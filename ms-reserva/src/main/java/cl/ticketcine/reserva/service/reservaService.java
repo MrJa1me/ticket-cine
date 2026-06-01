@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import cl.ticketcine.reserva.dto.ReservaRequest;
 import cl.ticketcine.reserva.dto.ReservaResponse;
-import cl.ticketcine.reserva.exception.asientoNotFoundException;
-import cl.ticketcine.reserva.exception.salaNotFoundException;
+import cl.ticketcine.reserva.exception.AsientoNotFoundException;
+import cl.ticketcine.reserva.exception.SalaNotFoundException;
 import cl.ticketcine.reserva.mapper.ReservaMapper;
 import cl.ticketcine.reserva.model.Asiento;
 import cl.ticketcine.reserva.model.Sala;
@@ -33,14 +33,14 @@ public class ReservaService {
 
     public ReservaResponse findById(Integer idAsiento) {
         Asiento asiento = reservaRepository.findByIdAsiento(idAsiento)
-                .orElseThrow(() -> new asientoNotFoundException(idAsiento));
+                .orElseThrow(() -> new AsientoNotFoundException(idAsiento));
         return reservaMapper.toResponse(asiento);
     }
 
     public List<ReservaResponse> findBySalaId(String idSala) {
         List<Asiento> asientos = reservaRepository.findBySalaIdSala(idSala);
         if (asientos.isEmpty()) {
-            throw new salaNotFoundException(idSala);
+            throw new SalaNotFoundException(idSala);
         }
         return reservaMapper.toResponseList(asientos);
     }
@@ -48,7 +48,7 @@ public class ReservaService {
     public ReservaResponse create(ReservaRequest request) {
 
         if (reservaRepository.existsByIdAsiento(request.getIdAsiento())) {
-            throw new asientoNotFoundException(
+            throw new AsientoNotFoundException(
                     "El asiento con ID " + request.getIdAsiento() + " ya existe");
         }
 
@@ -73,7 +73,7 @@ public class ReservaService {
     public ReservaResponse update(Integer idAsiento, ReservaRequest request) {
 
         Asiento existente = reservaRepository.findByIdAsiento(idAsiento)
-                .orElseThrow(() -> new asientoNotFoundException(idAsiento));
+                .orElseThrow(() -> new AsientoNotFoundException(idAsiento));
 
         existente.setFila(request.getFila());
         existente.setNumero(request.getNumero());
@@ -85,7 +85,7 @@ public class ReservaService {
     public void deleteById(Integer idAsiento) {
 
         reservaRepository.findByIdAsiento(idAsiento)
-                .orElseThrow(() -> new asientoNotFoundException(idAsiento));
+                .orElseThrow(() -> new AsientoNotFoundException(idAsiento));
 
         reservaRepository.deleteById(idAsiento);
     }

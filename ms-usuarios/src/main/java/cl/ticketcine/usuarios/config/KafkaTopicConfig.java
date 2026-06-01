@@ -16,7 +16,7 @@ public class KafkaTopicConfig {
         log.debug("********************");
         log.debug("********************");
         log.debug("********************");
-        log.debug("Publicado topic Kafka → topic: {}", "autenticacion.usuario.created");
+        log.debug("Publicado topic Kafka → topic: {}", "autenticacions.usuario.created");
         log.debug("********************");
         log.debug("********************");
         log.debug("********************");

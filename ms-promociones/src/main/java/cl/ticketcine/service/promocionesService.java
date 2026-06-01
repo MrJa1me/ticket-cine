@@ -13,7 +13,7 @@ import cl.ticketcine.exception.CampaniaNotFoundException;
 import cl.ticketcine.exception.CuponNotFoundException;
 import cl.ticketcine.exception.DuplicateResourceException;
 import cl.ticketcine.exception.UsuariosProyeccionNotFoundException;
-import cl.ticketcine.mapper.promocionesMapper;
+import cl.ticketcine.mapper.PromocionesMapper;
 import cl.ticketcine.model.AplicacionPromo;
 import cl.ticketcine.model.Campania;
 import cl.ticketcine.model.Cupon;
@@ -37,7 +37,7 @@ public class promocionesService {
     private final CuponRepository cuponRepository;
     private final AplicacionPromoRepository aplicacionPromoRepository;
     private final UsuariosProyeccionRepository usuariosProyeccionRepository;
-    private final promocionesMapper promocionesMapper;
+    private final PromocionesMapper promocionesMapper;
 
     public List<CampaniaResponse> findAllCampanias() {
         return promocionesMapper.toCampaniaResponseList(campaniaRepository.findAll());
