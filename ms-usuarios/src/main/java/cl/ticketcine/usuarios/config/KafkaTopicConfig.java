@@ -16,7 +16,7 @@ public class KafkaTopicConfig {
         log.debug("********************");
         log.debug("********************");
         log.debug("********************");
-        log.debug("Publicado topic Kafka → topic: {}", "autenticacions.usuario.created");
+        log.debug("Publicado topic Kafka → topic: {}", "usuarios.usuario.created");
         log.debug("********************");
         log.debug("********************");
         log.debug("********************");
@@ -28,8 +28,8 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic topicAuthUsuarioUpdated() {
-        log.debug("Creando topico Kafka: autenticacion.usuario.updated");
-        return TopicBuilder.name("usuarios.autenticacion.updated")
+        log.debug("Creando topico Kafka: usuarios.usuario.updated");
+        return TopicBuilder.name("usuarios.usuario.updated")
                 .partitions(1)
                 .replicas(1)
                 .build();
@@ -37,8 +37,8 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic topicAuthUsuarioDeleted() {
-        log.debug("Creando topico Kafka: autenticacion.usuario.deleted");
-        return TopicBuilder.name("usuarios.autenticacion.deleted")
+        log.debug("Creando topico Kafka: usuarios.usuario.deleted");
+        return TopicBuilder.name("usuarios.usuario.deleted")
                 .partitions(1)
                 .replicas(1)
                 .build();
