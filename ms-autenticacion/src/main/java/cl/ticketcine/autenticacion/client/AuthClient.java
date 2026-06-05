@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * Permite a ms-autenticacion consultar datos de usuarios desde ms-usuarios
  * sin necesidad de compartir base de datos (autonomia de datos).
  */
-@FeignClient(name = "ms-autenticacion", url = "http://localhost:9001/api/v1/autenticacion")
+@FeignClient(name = "ms-autenticacion")
 public interface AuthClient {
 
     /**

@@ -16,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class UsuarioEventConsumer {
 
-    @KafkaListener(topics = "usuarios.usuario.created", groupId = "validacion-group")
+    @KafkaListener(
+        topics = "usuarios.usuario.created",
+        groupId = "validacion-group"
+    )
     @Transactional
     public void handleUsuarioCreated(UsuarioCreatedEvent event) {
         log.info("Evento recibido en ms-validacion: Usuario creado - email: {}", event.getEmail());
@@ -25,14 +28,20 @@ public class UsuarioEventConsumer {
         // para futuras funcionalidades.
     }
 
-    @KafkaListener(topics = "usuarios.usuario.updated", groupId = "validacion-group")
+    @KafkaListener(
+        topics = "usuarios.usuario.updated",
+        groupId = "validacion-group"
+    )
     @Transactional
     public void handleUsuarioUpdated(UsuarioUpdatedEvent event) {
         log.info("Evento recibido en ms-validacion: Usuario actualizado - email: {}", event.getEmail());
         // Actualizar proyecciones si es necesario
     }
 
-    @KafkaListener(topics = "usuarios.usuario.deleted", groupId = "validacion-group")
+    @KafkaListener(
+        topics = "usuarios.usuario.deleted",
+        groupId = "validacion-group"
+    )
     @Transactional
     public void handleUsuarioDeleted(UsuarioDeletedEvent event) {
         log.info("Evento recibido en ms-validacion: Usuario eliminado - email: {}", event.getEmail());
