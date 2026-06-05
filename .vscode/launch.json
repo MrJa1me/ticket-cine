@@ -1,5 +1,6 @@
 {
   "configurations": [
+
     {
       "type": "java",
       "name": "Debug Eureka",
@@ -8,7 +9,7 @@
       "mainClass": "cl.ticketcine.eureka.TicketcineEurekaApplication",
       "projectName": "cl-ticketcine-eureka",
       "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false" //permite limpieza de puertos al detener la aplicación
+      "vmArgs": "-Dcom.sun.management.jmxremote=false"
     },
     {
       "type": "java",
@@ -105,7 +106,7 @@
       "name": "Debug ms-promociones",
       "request": "launch",
       "cwd": "${workspaceFolder}/ms-promociones",
-      "mainClass": "cl.ticketcine.promociones.TicketcinePromocionesApplication",
+      "mainClass": "cl.ticketcine.TicketcinePromocionesApplication",
       "projectName": "cl-ticketcine-promociones",
       "envFile": "${workspaceFolder}/.env",
       "vmArgs": "-Dcom.sun.management.jmxremote=false",

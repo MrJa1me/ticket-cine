@@ -8,7 +8,7 @@ echo 🐧 Iniciando microservicios de Nico...
 echo ==========================================
 echo.
 
-set BASE=C:\Trabajo-Duoc\ticket-cine
+set BASE=C:/ticket-cine
 
 REM --- 1. Eureka (debe iniciar primero) ---
 echo [1/11] Iniciando Eureka Server (puerto 8761)...
