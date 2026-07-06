@@ -1,15 +1,16 @@
 package cl.ticketcine.usuarios.repository;
 
-import cl.ticketcine.usuarios.model.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
+import cl.ticketcine.usuarios.model.Usuario;
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, String> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+    
+    // Buscar un usuario por su correo electrónico (útil para login o validaciones)
+    Optional<Usuario> findByCorreo(String correo);
 
-    Optional<Usuario> findByEmail(String email);
-
-    boolean existsByEmail(String email);
+    // Verificar si un correo ya existe en la base de datos antes de registrar uno nuevo
+    boolean existsByCorreo(String correo);
 }

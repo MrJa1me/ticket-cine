@@ -2,7 +2,7 @@ package cl.ticketcine.usuarios.mapper;
 
 import cl.ticketcine.usuarios.dto.UsuarioRequest;
 import cl.ticketcine.usuarios.dto.UsuarioResponse;
-import cl.ticketcine.usuarios.model.entity.Usuario;
+import cl.ticketcine.usuarios.model.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -12,17 +12,19 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "perfil", ignore = true)
-    @Mapping(target = "membresia", ignore = true)
-    @Mapping(target = "fechaRegistro", expression = "java(java.time.LocalDate.now())")
+    @Mapping(target = "credenciales", ignore = true)
+    @Mapping(target = "activo", defaultValue = "true")
     Usuario toEntity(UsuarioRequest request);
 
+    @Mapping(target = "idUsuario", source = "id")
     UsuarioResponse toResponse(Usuario usuario);
 
     List<UsuarioResponse> toResponseList(List<Usuario> usuarios);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "perfil", ignore = true)
-    @Mapping(target = "membresia", ignore = true)
-    @Mapping(target = "fechaRegistro", ignore = true)
+    @Mapping(target = "credenciales", ignore = true)
     void updateEntity(UsuarioRequest request, @MappingTarget Usuario usuario);
 }

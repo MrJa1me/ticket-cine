@@ -16,7 +16,7 @@
     <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
     <parent>
         <groupId>cl.ticketcine</groupId>
-        <artifactId>ticketcine</artifactId>
+        <artifactId>TicketCine</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -26,7 +26,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <!-- Nombre y descripcion del modulo Eureka Server -->
-    <name>Ticketcine - Eureka Module</name>
+    <name>TicketCine - Eureka Module</name>
     <description>Netflix Eureka: Dynamic microservice discovery, registration, and lookup.</description>
 
     <!--
@@ -45,6 +45,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+
+        <!-- Actuator for health checks -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <!-- Testing con JUnit, MockMvc, etc. -->
@@ -80,7 +86,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>cl.ticketcine.eureka.TicketcineEurekaApplication</mainClass>
+                    <mainClass>cl.ticketcine.eureka.TicketCineEurekaApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>

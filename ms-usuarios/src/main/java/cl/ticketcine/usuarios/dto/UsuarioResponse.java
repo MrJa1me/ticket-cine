@@ -1,21 +1,25 @@
 package cl.ticketcine.usuarios.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-import java.time.LocalDate;
-
+/**
+ * DTO de respuesta para Usuario con soporte HATEOAS.
+ *
+ * Al extender RepresentationModel, Jackson serializa el campo "_links"
+ * cuando el controlador agrega links con .add(Link...).
+ * La contraseña nunca se expone aquí.
+ */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class UsuarioResponse {
+@EqualsAndHashCode(callSuper = false)
+public class UsuarioResponse extends RepresentationModel<UsuarioResponse> {
 
-    private String email;
+    private Integer idUsuario;
     private String nombre;
-    private String telefono;
-    private String paisCodigo;
-    private LocalDate fechaRegistro;
+    private String apellido;
+    private String correo;
+    private String rol;
+    private Boolean activo;
 }

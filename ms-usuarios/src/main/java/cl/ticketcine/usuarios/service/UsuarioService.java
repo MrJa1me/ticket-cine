@@ -1,115 +1,141 @@
 package cl.ticketcine.usuarios.service;
 
 import java.util.List;
-import java.util.Objects;
 
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import cl.ticketcine.common.event.UsuarioCreatedEvent;
-import cl.ticketcine.common.event.UsuarioDeletedEvent;
-import cl.ticketcine.common.event.UsuarioUpdatedEvent;
+import cl.ticketcine.common.exception.*;
+import cl.ticketcine.usuarios.dto.PerfilRequest;
+import cl.ticketcine.usuarios.dto.PerfilResponse;
 import cl.ticketcine.usuarios.dto.UsuarioRequest;
 import cl.ticketcine.usuarios.dto.UsuarioResponse;
-import cl.ticketcine.usuarios.event.UsuarioEventProducer;
-import cl.ticketcine.usuarios.exception.EmailDuplicadoException;
-import cl.ticketcine.usuarios.exception.UsuarioNotFoundException;
+import cl.ticketcine.usuarios.mapper.PerfilMapper;
 import cl.ticketcine.usuarios.mapper.UsuarioMapper;
-import cl.ticketcine.usuarios.model.entity.Usuario;
+import cl.ticketcine.usuarios.model.CredencialesUsuario;
+import cl.ticketcine.usuarios.model.Perfil;
+import cl.ticketcine.usuarios.model.Usuario;
+import cl.ticketcine.usuarios.repository.PerfilRepository;
 import cl.ticketcine.usuarios.repository.UsuarioRepository;
-
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Servicio encargado de la lógica de negocio relacionada con usuarios.
- * Gestiona operaciones CRUD, validaciones de negocio y reglas de integridad.
+ * Servicio encargado de aplicar las reglas de negocio de usuarios:
+ * - Gestiona operaciones CRUD, validaciones de negocio y reglas de integridad.
+ * - Valida que el correo electrónico sea único.
+ * - Lanza excepciones personalizadas para casos de error específicos.
  */
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings("null")
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PerfilRepository perfilRepository;
     private final UsuarioMapper usuarioMapper;
-    private final UsuarioEventProducer usuarioEventProducer;
+    private final PerfilMapper perfilMapper;
 
     public List<UsuarioResponse> findAll() {
         return usuarioMapper.toResponseList(usuarioRepository.findAll());
     }
 
-    public UsuarioResponse findByEmail(String email) {
-        return usuarioMapper.toResponse(getUsuarioByEmail(email));
+    public UsuarioResponse findById(Integer id) {
+        return usuarioMapper.toResponse(getUsuarioById(id));
     }
 
-    public boolean existsByEmail(String email) {
-        return usuarioRepository.existsByEmail(email);
+    public UsuarioResponse findByCorreo(String correo) {
+        return usuarioMapper.toResponse(getUsuarioByCorreo(correo));
     }
 
     @Transactional
     public UsuarioResponse create(UsuarioRequest request) {
-        Objects.requireNonNull(request, "La solicitud de usuario es obligatoria");
-        validateEmailUnico(request.getEmail());
+        validateCorreoUnico(request.getCorreo());
+
         Usuario usuario = usuarioMapper.toEntity(request);
-        usuarioRepository.save(usuario);
-        UsuarioCreatedEvent event = UsuarioCreatedEvent.builder()
-                .email(usuario.getEmail())
-                .nombre(usuario.getNombre())
+        if (usuario.getActivo() == null) {
+            usuario.setActivo(true);
+        }
+
+        CredencialesUsuario credenciales = CredencialesUsuario.builder()
+                .usuario(usuario)
+                .bloqueado(false)
+                .intentosFallidos(0)
                 .build();
-        usuarioEventProducer.sendCreated(event);
-        return usuarioMapper.toResponse(usuario);
+        usuario.setCredenciales(credenciales);
 
-    }
-    @Transactional
-    public void save(String email, String nombre) {
-        Usuario usuario = new Usuario();
-        usuario.setEmail(email);
-        usuario.setNombre(nombre);
         usuarioRepository.save(usuario);
+        return usuarioMapper.toResponse(usuario);
     }
 
     @Transactional
-    public UsuarioResponse update(String email, UsuarioRequest request) {
-        Objects.requireNonNull(request, "La solicitud de usuario es obligatoria");
-        String emailToUpdate = Objects.requireNonNull(email, "El email del usuario es obligatorio");
-        if (!emailToUpdate.equals(request.getEmail())) {
-            throw new IllegalArgumentException("El email de la ruta y el body deben coincidir");
+    public UsuarioResponse update(Integer id, UsuarioRequest request) {
+        Usuario usuario = getUsuarioById(id);
+        
+        // Solo validamos el correo si el usuario lo está cambiando
+        if (!usuario.getCorreo().equalsIgnoreCase(request.getCorreo())) {
+            validateCorreoUnico(request.getCorreo());
         }
-        if (!checkMismoEmail(emailToUpdate, request.getEmail())) {
-            validateEmailUnico(request.getEmail());
-        }
-        Usuario usuario = getUsuarioByEmail(emailToUpdate);
+
         usuarioMapper.updateEntity(request, usuario);
+        if (usuario.getActivo() == null) {
+            usuario.setActivo(true);
+        }
         usuarioRepository.save(usuario);
-        UsuarioUpdatedEvent event = UsuarioUpdatedEvent.builder()
-                .email(usuario.getEmail())
-                .nombre(usuario.getNombre())
-                .build();
-        usuarioEventProducer.sendUpdated(event);
         return usuarioMapper.toResponse(usuario);
     }
 
     @Transactional
-    public void deleteByEmail(String email) {
-        Usuario usuario = getUsuarioByEmail(email);
+    public void deleteById(Integer id) {
+        Usuario usuario = getUsuarioById(id);
         usuarioRepository.delete(usuario);
-        UsuarioDeletedEvent event = new UsuarioDeletedEvent(usuario.getEmail());
-        usuarioEventProducer.sendDeleted(event);
     }
 
-    private void validateEmailUnico(String email) {
-        if (usuarioRepository.existsByEmail(email)) {
-            throw new EmailDuplicadoException(email);
+        @Transactional
+    public UsuarioResponse activar(Integer id) {
+        Usuario usuario = getUsuarioById(id);
+        usuario.setActivo(true);
+        return usuarioMapper.toResponse(usuarioRepository.save(usuario));
+    }
+
+    @Transactional
+    public UsuarioResponse desactivar(Integer id) {
+        Usuario usuario = getUsuarioById(id);
+        usuario.setActivo(false);
+        return usuarioMapper.toResponse(usuarioRepository.save(usuario));
+    }
+
+    // ==========================================
+    // MÉTODOS PARA GESTIONAR SUB-RECURSOS
+    // ==========================================
+
+    @Transactional
+    public PerfilResponse addPerfilAUsuario(Integer idUsuario, PerfilRequest request) {
+        Usuario usuario = getUsuarioById(idUsuario);
+
+        if (perfilRepository.findByUsuario_Id(idUsuario).isPresent()) {
+            throw new DuplicateResourceException("Un Perfil", "Usuario", idUsuario.toString(), usuario.getCorreo());
         }
+
+        Perfil perfil = perfilMapper.toEntity(request);
+        perfil.setUsuario(usuario);
+        usuario.setPerfil(perfil);
+
+        perfilRepository.save(perfil);
+        return perfilMapper.toResponse(perfil);
     }
 
-    @NonNull
-    private Usuario getUsuarioByEmail(String email) {
-        return usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsuarioNotFoundException(email));
+    private void validateCorreoUnico(String correo) {
+        usuarioRepository.findByCorreo(correo).ifPresent(u -> {
+            throw new DuplicateResourceException("Un Usuario", "Correo", correo, u.getCorreo());
+        });
     }
 
-    private boolean checkMismoEmail(String emailRuta, String emailBody) {
-        return emailRuta.equalsIgnoreCase(emailBody);
+    private Usuario getUsuarioById(Integer id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuarios", "ID", id.toString()));
+    }
+
+    private Usuario getUsuarioByCorreo(String correo) {
+        return usuarioRepository.findByCorreo(correo)
+                .orElseThrow(() -> new EntityNotFoundException("Usuarios", "Correo", correo));
     }
 }

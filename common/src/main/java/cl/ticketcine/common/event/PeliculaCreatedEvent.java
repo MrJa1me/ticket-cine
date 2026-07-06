@@ -6,17 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class PeliculaCreatedEvent implements PeliculaEvent {
-
-    private String slug;
-    private String titulo;
-    private Integer idCat;
-    private Integer duracionMin;
-    private Integer estrenoAnio;
-
+    private Integer idPelicula;
+    private String nombrePelicula;
+    private String categoria;
+    private LocalDate fecha;
+    private String estado;
 }
+
+//Lleva los datos esenciales para que los demás microservicios (como Boletos o Precios) puedan crear sus proyecciones.

@@ -1,116 +1,132 @@
 {
+  // Configuramos estos puertos en el rango de los 10 mil para crear canales de comunicación exclusivos
+  // y aislados dedicados al monitoreo y la depuración (debug) de cada microservicio en tiempo real. 
+  // Como las aplicaciones web ya consumen puertos estándar inferiores (como el 8761 para Eureka o 
+  // el 9000 para el Gateway), asignarle a cada una un puerto técnico en los 10 mil evita por completo 
+  // los conflictos de puertos (el error de puerto ya ocupado); esto garantiza que las herramientas 
+  // de desarrollo puedan conectarse a la memoria de Java para analizar errores en vivo sin interrumpir, 
+  // saturar ni colapsar el tráfico de red principal del sistema.
+  
+  "version": "0.2.0",
   "configurations": [
-
     {
       "type": "java",
       "name": "Debug Eureka",
       "request": "launch",
       "cwd": "${workspaceFolder}/eureka",
-      "mainClass": "cl.ticketcine.eureka.TicketcineEurekaApplication",
+      "mainClass": "cl.ticketcine.eureka.TicketCineEurekaApplication",
       "projectName": "cl-ticketcine-eureka",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10761 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
     },
     {
       "type": "java",
-      "name": "Debug ms-autenticacion",
+      "name": "Debug API Gateway",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ms-autenticacion",
-      "mainClass": "cl.ticketcine.autenticacion.TicketcineAutenticacionApplication",
-      "projectName": "cl-ticketcine-autenticacion",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "cwd": "${workspaceFolder}/api-gateway",
+      "mainClass": "cl.ticketcine.gateway.TicketCineGatewayApplication",
+      "projectName": "cl-ticketcine-gateway",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10900 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     },
     {
       "type": "java",
-      "name": "Debug ms-usuarios",
+      "name": "Debug ms-artistas",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ms-usuarios",
-      "mainClass": "cl.ticketcine.usuarios.TicketcineUsuariosApplication",
-      "projectName": "cl-ticketcine-usuarios",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "cwd": "${workspaceFolder}/ms-artistas",
+      "mainClass": "cl.ticketcine.artistas.TicketCineArtistasApplication",
+      "projectName": "cl-ticketcine-artistas",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10901 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     },
     {
       "type": "java",
-      "name": "Debug ms-busqueda",
+      "name": "Debug ms-boletos",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ms-busqueda",
-      "mainClass": "cl.ticketcine.busqueda.TicketcineBusquedaApplication",
-      "projectName": "cl-ticketcine-busqueda",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "cwd": "${workspaceFolder}/ms-boletos",
+      "mainClass": "cl.ticketcine.boletos.TicketCineBoletosApplication",
+      "projectName": "cl-ticketcine-boletos",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10902 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     },
     {
       "type": "java",
-      "name": "Debug ms-horarios",
+      "name": "Debug ms-catalogo",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ms-horarios",
-      "mainClass": "cl.ticketcine.horarios.TicketcineHorariosApplication",
-      "projectName": "cl-ticketcine-horarios",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "cwd": "${workspaceFolder}/ms-catalogo",
+      "mainClass": "cl.ticketcine.catalogo.TicketCineCatalogoApplication",
+      "projectName": "cl-ticketcine-catalogo",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10903 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     },
     {
       "type": "java",
-      "name": "Debug ms-salas",
+      "name": "Debug ms-compras",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ms-salas",
-      "mainClass": "cl.ticketcine.salas.TicketcineSalasApplication",
-      "projectName": "cl-ticketcine-salas",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
-    },
-    {
-      "type": "java",
-      "name": "Debug ms-reserva",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/ms-reserva",
-      "mainClass": "cl.ticketcine.reserva.TicketcineReservaApplication",
-      "projectName": "cl-ticketcine-reserva",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
-    },
-    {
-      "type": "java",
-      "name": "Debug ms-pagos",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/ms-pagos",
-      "mainClass": "cl.ticketcine.pagos.TicketcinePagosApplication",
-      "projectName": "cl-ticketcine-pagos",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "cwd": "${workspaceFolder}/ms-compras",
+      "mainClass": "cl.ticketcine.compras.TicketCineComprasApplication",
+      "projectName": "cl-ticketcine-compras",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10904 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     },
     {
       "type": "java",
       "name": "Debug ms-notificaciones",
       "request": "launch",
       "cwd": "${workspaceFolder}/ms-notificaciones",
-      "mainClass": "cl.ticketcine.notificaciones.TicketcineNotificacionesApplication",
+      "mainClass": "cl.ticketcine.notificaciones.TicketCineNotificacionesApplication",
       "projectName": "cl-ticketcine-notificaciones",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10905 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     },
     {
       "type": "java",
-      "name": "Debug ms-validacion",
+      "name": "Debug ms-pagos",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ms-validacion",
-      "mainClass": "cl.ticketcine.validacion.TicketcineValidacionApplication",
-      "projectName": "cl-ticketcine-validacion",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false"
+      "cwd": "${workspaceFolder}/ms-pagos",
+      "mainClass": "cl.ticketcine.pagos.TicketCinePagosApplication",
+      "projectName": "cl-ticketcine-pagos",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10906 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
+    },  
+    {
+      "type": "java",
+      "name": "Debug ms-precios",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-precios",
+      "mainClass": "cl.ticketcine.precios.TicketCinePreciosApplication",
+      "projectName": "cl-ticketcine-precios",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10907 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     },
     {
       "type": "java",
-      "name": "Debug ms-promociones",
+      "name": "Debug ms-recintos",
       "request": "launch",
-      "cwd": "${workspaceFolder}/ms-promociones",
-      "mainClass": "cl.ticketcine.TicketcinePromocionesApplication",
-      "projectName": "cl-ticketcine-promociones",
-      "envFile": "${workspaceFolder}/.env",
-      "vmArgs": "-Dcom.sun.management.jmxremote=false",
-      "shortenCommandLine": "jarmanifest"
+      "cwd": "${workspaceFolder}/ms-recintos",
+      "mainClass": "cl.ticketcine.recintos.TicketCineRecintosApplication",
+      "projectName": "cl-ticketcine-recintos",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10908 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-reportes",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-reportes",
+      "mainClass": "cl.ticketcine.reportes.TicketCineReportesApplication",
+      "projectName": "cl-ticketcine-reportes",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10909 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
+    },
+    {
+      "type": "java",
+      "name": "Debug ms-usuarios",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ms-usuarios",
+      "mainClass": "cl.ticketcine.usuarios.TicketCineUsuariosApplication",
+      "projectName": "cl-ticketcine-usuarios",
+      "vmArgs": "-Dcom.sun.management.jmxremote.port=10910 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false",
+      "preLaunchTask": "Wait for Eureka"
     }
   ],
   "compounds": [
@@ -118,17 +134,19 @@
       "name": "Debug All Services",
       "configurations": [
         "Debug Eureka",
-        "Debug ms-autenticacion",
-        "Debug ms-usuarios",
-        "Debug ms-busqueda",
-        "Debug ms-horarios",
-        "Debug ms-salas",
-        "Debug ms-reserva",
-        "Debug ms-pagos",
+        "Debug API Gateway",
+        "Debug ms-artistas",
+        "Debug ms-boletos",
+        "Debug ms-catalogo",
+        "Debug ms-compras",
         "Debug ms-notificaciones",
-        "Debug ms-validacion",
-        "Debug ms-promociones"
-      ]
+        "Debug ms-pagos",
+        "Debug ms-precios",
+        "Debug ms-recintos",
+        "Debug ms-reportes",
+        "Debug ms-usuarios"
+      ],
+      "stopAll": true
     }
   ]
 }

@@ -1,19 +1,19 @@
 package cl.ticketcine.usuarios.dto;
 
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class PerfilResponse {
-
     private Integer idPerfil;
-    private String usuarioEmail;
-    private String preferenciaIdioma;
-    private Boolean esEstudiante;
-    private String biografia;
+    private String usuarioCorreo;
+    private String telefono;
+    private String direccion;
+    private LocalDate fechaRegistro;
 }

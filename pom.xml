@@ -1,4 +1,4 @@
-﻿<project xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -14,26 +14,21 @@
     <!--
     Modulos hijos del proyecto.
     Cada uno es un subproyecto independiente (microservicio o libreria comun).
-    -->
+    --> 
     <modules>
-            <module>common</module>           <!-- Libreria comun compartida por todos los microservicios -->
-            <module>eureka</module>           <!-- Servidor Eureka -->
-            <module>ms-autenticacion</module> <!-- Microservicio autenticacion -->
-            <module>ms-usuarios</module>      <!-- Microservicio usuarios -->
-            <module>ms-busqueda</module>      <!-- Microservicio busqueda -->
-            <module>ms-horarios</module>      <!-- Microservicio horarios -->
-            <module>ms-salas</module>         <!-- Microservicio salas -->
-            <module>ms-reserva</module>       <!-- Microservicio reserva -->
-            <module>ms-pagos</module>         <!-- Microservicio pagos -->
-            <module>ms-notificaciones</module><!-- Microservicio notificaciones -->
-            <module>ms-validacion</module>    <!-- Microservicio validacion -->
-            <module>ms-promociones</module>   <!-- Microservicio promociones -->
-            <!-- CGV: Agrega aqui mas modulos segun sea necesario -->
-        </modules>
+        <module>common</module>             <!-- Libreria comun compartida por todos los microservicios -->
+        <module>eureka</module>             <!-- Servidor Eureka -->
+        <module>ms-boletos</module>         <!-- Microservicio boletos -->
+        <module>ms-catalogo</module>        <!-- Microservicio catalogo (peliculas y funciones) -->
+        <module>ms-compras</module>         <!-- Microservicio compras -->
+        <module>ms-pagos</module>           <!-- Microservicio pagos -->
+        <module>ms-usuarios</module>        <!-- Microservicio usuarios -->
+        <module>api-gateway</module>        <!-- API Gateway (puerto 9000) - entrada unica -->
+    </modules>
 
     <!-- Coordenadas GAV (GroupId, ArtifactId, Version) de mi proyecto padre -->
     <groupId>cl.ticketcine</groupId>
-    <artifactId>ticketcine</artifactId>
+    <artifactId>TicketCine</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Proyecto Padre</name>
@@ -53,7 +48,7 @@
         <java.version>21</java.version>                                            <!-- Version de Java a utilizar -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.5.14</spring-boot.version>                        <!-- Version de Spring Boot base para microservicios -->
+        <spring-boot.version>3.5.15</spring-boot.version>                        <!-- Version de Spring Boot base para microservicios -->
         <spring-cloud.version>2025.0.0</spring-cloud.version>                                 <!-- Version de Spring Cloud -->
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.44</lombok.version>
@@ -67,13 +62,30 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-clean-plugin.version>3.3.1</maven-clean-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <cl-ticketcine-common.version>0.0.1-SNAPSHOT</cl-ticketcine-common.version>
         <spring-kafka.version>3.3.5</spring-kafka.version>
         <spring-boot-actuator.version>3.5.14</spring-boot-actuator.version>
+        <jjwt.version>0.12.6</jjwt.version>
+        <springdoc-openapi.version>2.8.17</springdoc-openapi.version>
+        <spring-boot-hateoas.version>3.5.14</spring-boot-hateoas.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+        
+            <!-- Springdoc OpenAPI: generacion automatica de documentacion Swagger UI -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-hateoas</artifactId>
+                <version>${spring-boot-hateoas.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -158,6 +170,34 @@
                 <version>${spring-boot.version}</version>
             </dependency>
 
+           <!-- Spring Security: autenticación y autorización -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- JJWT API: interfaz principal para trabajar con JSON Web Tokens -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- JJWT Impl: implementación de la API de JJWT -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- JJWT Jackson: soporte para serialización y deserialización de JWT usando Jackson -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -225,6 +265,12 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+            </plugin>  
 
         </plugins>
 
@@ -241,3 +287,9 @@
     </build>
 
 </project>
+
+
+
+
+
+

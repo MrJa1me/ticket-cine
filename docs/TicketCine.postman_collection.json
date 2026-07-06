@@ -1,0 +1,945 @@
+{
+  "info": {
+    "_postman_id": "ticketcine-gateway-2026",
+    "name": "TicketCine API",
+    "description": "Colección Postman para **TicketCine** vía API Gateway (`{{gateway_url}}`).\n\n**Arranque:** ejecutar `run-dockers.bat` (gateway :9000, Eureka :8761).\n\n**Credenciales seed** (password `TicketCine@2026`):\n- Administrador: `ana@administrador.cl` o `admin@ticketcine.cl`\n- Organizador: `beatriz@organizador.cl`\n- Cliente: `carlos@cliente.cl`\n\n**Flujo sugerido:** Login → Películas/Boletos → Flujo de compra → Pagos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Autenticación",
+      "item": [
+        {
+          "name": "Login - Administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/auth/login",
+            "description": "Guarda el JWT en la variable de colección `jwt_token`.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"ana@administrador.cl\",\n  \"password\": \"TicketCine@2026\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('jwt_token', json.token);",
+                  "  pm.collectionVariables.set('usuario_correo', json.correo);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Organizador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"beatriz@organizador.cl\",\n  \"password\": \"TicketCine@2026\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('jwt_token', json.token);",
+                  "  pm.collectionVariables.set('usuario_correo', json.correo);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login - Cliente (Carlos)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/auth/login",
+            "description": "Usar antes del flujo de carrito/compra.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"carlos@cliente.cl\",\n  \"password\": \"TicketCine@2026\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('jwt_token', json.token);",
+                  "  pm.collectionVariables.set('usuario_correo', json.correo);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Register - Nuevo cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/auth/register",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Test\",\n  \"apellido\": \"Postman\",\n  \"correo\": \"test.postman@cliente.cl\",\n  \"password\": \"TicketCine@2026\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Credenciales inválidas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"noexiste@cliente.cl\",\n  \"password\": \"wrong\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/auth/logout"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Películas",
+      "item": [
+        {
+          "name": "Listar películas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/Peliculas"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Obtener película por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/Peliculas/id/{{pelicula_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Existe película por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/Peliculas/existe/idPelicula/{{pelicula_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear película",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/Peliculas",
+            "description": "Requiere rol Organizador o Administrador.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombrePelicula\": \"Postman Test Película\",\n  \"categoria\": \"Estreno\",\n  \"fecha\": \"2026-10-15\",\n  \"estado\": \"Disponible\",\n  \"idioma\": \"Español\",\n  \"duracionMinutos\": 120,\n  \"clasificacion\": \"PG-13\",\n  \"sinopsis\": \"Película creada desde Postman\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "if (pm.response.code === 201) pm.collectionVariables.set('pelicula_id', pm.response.json().idPelicula);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Actualizar película",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/Peliculas/id/{{pelicula_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombrePelicula\": \"Postman Test Película - Editada\",\n  \"categoria\": \"Estreno\",\n  \"fecha\": \"2026-10-20\",\n  \"estado\": \"Preventa\",\n  \"idioma\": \"Español\",\n  \"duracionMinutos\": 125,\n  \"clasificacion\": \"PG-13\",\n  \"sinopsis\": \"Actualización desde Postman\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar película",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/Peliculas/id/{{pelicula_id}}",
+            "description": "Solo sobre la película creada en POST (no eliminar seed con boletos)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Boletos",
+      "item": [
+        {
+          "name": "Listar boletos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/boletos"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener boleto por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/boletos/id/{{boleto_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar precio del boleto",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/boletos/precio/id/{{boleto_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar proyección películas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/proyPeliculas"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear boleto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/boletos",
+            "description": "Requiere Organizador o Administrador.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPelicula\": 1,\n  \"idZona\": 2,\n  \"codigo\": \"TKT-PM-001\",\n  \"tipo\": \"Digital\",\n  \"estado\": \"Disponible\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('boleto_id', pm.response.json().idBoleto);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Actualizar boleto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/boletos/id/{{boleto_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPelicula\": 1,\n  \"idZona\": 2,\n  \"codigo\": \"TKT-PM-001\",\n  \"tipo\": \"Digital\",\n  \"estado\": \"Reservado\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar boleto",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/boletos/id/{{boleto_id}}"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Usuarios",
+      "item": [
+        {
+          "name": "Listar usuarios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios",
+            "description": "Administrador u Organizador."
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener usuario por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios/id/{{usuario_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener usuario por correo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios/correo/carlos@cliente.cl"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear usuario (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo\",\n  \"apellido\": \"Organizador\",\n  \"correo\": \"nuevo.organizador@ticketcine.cl\",\n  \"password\": \"TicketCine@2026\",\n  \"rol\": \"Organizador\",\n  \"activo\": true\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Desactivar usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios/id/{{usuario_id}}/desactivar"
+          },
+          "response": []
+        },
+        {
+          "name": "Activar usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios/id/{{usuario_id}}/activar"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear perfil de usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios/perfiles/idUsuario/{{usuario_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telefono\": \"+56912345678\",\n  \"direccion\": \"Santiago, Chile\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios/id/{{usuario_id}}",
+            "description": "Solo el usuario creado en POST, no seed."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Flujo de compra",
+      "item": [
+        {
+          "name": "Obtener carrito",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/carritos/id/{{carrito_id}}",
+            "description": "Ejecutar Login Cliente primero. Seed: carrito id 4 (vacío)."
+          },
+          "response": []
+        },
+        {
+          "name": "Agregar boleto al carrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/carritos/boletos/id/{{carrito_id}}",
+            "description": "Boleto 3 = Oppenheimer, estado Reservado en seed.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idBoleto\": 3,\n  \"cantidad\": 1\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Vaciar carrito",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/carritos/vaciar/id/{{carrito_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear compra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/compras",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idUsuario\": 8,\n  \"metodoPago\": \"WEBPAY\",\n  \"detalles\": [\n    {\n      \"idBoleto\": 3,\n      \"cantidad\": 1\n    }\n  ]\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('compra_id', pm.response.json().idCompra);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar compras",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/compras",
+            "description": "Organizador o Administrador."
+          },
+          "response": []
+        },
+        {
+          "name": "Confirmar compra",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/compras/confirmar/id/{{compra_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pagos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/pagos"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener pago por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/pagos/id/{{pago_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear pago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/pagos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCompra\": 3,\n  \"monto\": 45000,\n  \"metodo\": \"WEBPAY\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) pm.collectionVariables.set('pago_id', pm.response.json().idPago);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Aprobar pago",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/pagos/aprobar/id/{{pago_id}}"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar pago",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/pagos/id/{{pago_id}}",
+            "description": "Solo Administrador."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - Seguridad",
+      "item": [
+        {
+          "name": "Películas sin token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{gateway_url}}/api/v1/Peliculas"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Crear película como Cliente (403)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/Peliculas",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombrePelicula\": \"No permitida\",\n  \"categoria\": \"Estreno\",\n  \"fecha\": \"2026-01-01\",\n  \"estado\": \"Disponible\",\n  \"duracionMinutos\": 90\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({",
+                  "  url: pm.collectionVariables.get('gateway_url') + '/api/v1/auth/login',",
+                  "  method: 'POST',",
+                  "  header: {'Content-Type': 'application/json'},",
+                  "  body: {mode: 'raw', raw: JSON.stringify({correo: 'carlos@cliente.cl', password: 'TicketCine@2026'})}",
+                  "}, (err, res) => { pm.collectionVariables.set('jwt_token', res.json().token); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar usuarios como Cliente (403)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": "{{gateway_url}}/api/v1/usuarios"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({",
+                  "  url: pm.collectionVariables.get('gateway_url') + '/api/v1/auth/login',",
+                  "  method: 'POST',",
+                  "  header: {'Content-Type': 'application/json'},",
+                  "  body: {mode: 'raw', raw: JSON.stringify({correo: 'carlos@cliente.cl', password: 'TicketCine@2026'})}",
+                  "}, (err, res) => { pm.collectionVariables.set('jwt_token', res.json().token); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "gateway_url",
+      "value": "http://localhost:9000"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    },
+    {
+      "key": "usuario_correo",
+      "value": ""
+    },
+    {
+      "key": "pelicula_id",
+      "value": "1"
+    },
+    {
+      "key": "boleto_id",
+      "value": "3"
+    },
+    {
+      "key": "usuario_id",
+      "value": "8"
+    },
+    {
+      "key": "carrito_id",
+      "value": "4"
+    },
+    {
+      "key": "compra_id",
+      "value": "3"
+    },
+    {
+      "key": "pago_id",
+      "value": "3"
+    }
+  ]
+}

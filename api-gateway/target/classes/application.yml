@@ -1,0 +1,298 @@
+# ============================================================
+# API GATEWAY - Configuración principal (Global)
+# ============================================================
+# Este archivo configura el API Gateway como punto de entrada único
+# para todos los microservicios del proyecto TicketCine.
+# Puerto: 9000
+# Todas las peticiones llegan aquí y son enrutadas al microservicio
+# correspondiente según el path de la URL.
+# ============================================================
+
+spring:
+  application:
+    name: api-gateway  # Nombre con el que se registra en Eureka Server
+  profiles:
+    active: dev
+
+  # ============================================================
+  # Configuración de rutas del Gateway
+  # ============================================================
+  # Cada ruta define:
+  # - id: identificador único de la ruta (para logs y depuración)
+  # - uri: destino usando protocolo lb:// (load balanced) que resuelve
+  #         el nombre del servicio en Eureka y balancea entre instancias
+  # - predicates: condiciones para que la ruta coincida (basadas en el path)
+  #
+  # BALANCEO DE CARGA:
+  # El prefijo "lb://" activa Spring Cloud LoadBalancer, que usa Eureka
+  # para descubrir todas las instancias registradas de un servicio y
+  # distribuye las peticiones entre ellas usando round-robin.
+  # Ejemplo: si ms-catalogo tiene 2 instancias (puertos 9003 y 9013),
+  # el gateway alternará las peticiones entre ambas automáticamente.
+  #
+  # TRANSPARENCIA:
+  # Los paths NO se modifican al enrutar. Una petición a
+  # localhost:9000/api/v1/Peliculas llega al microservicio como /api/v1/Peliculas.
+  # ============================================================
+  cloud:
+    gateway:
+      routes:
+
+        # ----------------------------------------------------------
+        # RUTA 1: Autenticación (ms-usuarios — puerto 9010)
+        # ----------------------------------------------------------
+        # Login, registro y logout. Públicos (sin JWT en el MS destino).
+        # Flujo típico: el cliente obtiene el token aquí y lo usa en el resto.
+        # Ejemplo: POST http://localhost:9000/api/v1/auth/login
+        - id: ms-usuarios-auth
+          uri: lb://ms-usuarios
+          predicates:
+            - Path=/api/v1/auth/**
+
+        # ----------------------------------------------------------
+        # RUTA 2: Gestión de usuarios y perfiles (ms-usuarios)
+        # ----------------------------------------------------------
+        # CRUD de usuarios, activar/desactivar, perfiles.
+        # Roles: GET Organizador/Admin; POST/PUT/DELETE solo Administrador.
+        # Ejemplo: GET http://localhost:9000/api/v1/usuarios/id/7
+        - id: ms-usuarios
+          uri: lb://ms-usuarios
+          predicates:
+            - Path=/api/v1/usuarios/**
+
+        # ----------------------------------------------------------
+        # RUTA 3: Catálogo de Películas y funciones de cine (ms-catalogo — puerto 9003)
+        # ----------------------------------------------------------
+        # Fuente de verdad de películas/funciones de cine.
+        # Ejemplo: GET http://localhost:9000/api/v1/Peliculas
+        - id: ms-catalogo
+          uri: lb://ms-catalogo
+          predicates:
+            - Path=/api/v1/Peliculas/**
+
+        # ----------------------------------------------------------
+        # RUTA 4: Inventario de boletos (ms-boletos — puerto 9002)
+        # ----------------------------------------------------------
+        # Tickets, zonas, precio por boleto (Feign desde ms-compras).
+        # Ejemplo: GET http://localhost:9000/api/v1/boletos/id/1
+        - id: ms-boletos
+          uri: lb://ms-boletos
+          predicates:
+            - Path=/api/v1/boletos/**
+
+        # ----------------------------------------------------------
+        # RUTA 5: Proyección local de Películas en boletos (ms-boletos)
+        # ----------------------------------------------------------
+        # Tabla proy_Peliculas (sincronizada por Kafka desde catálogo).
+        # Ruta separada para claridad.
+        # Ejemplo: GET http://localhost:9000/api/v1/proyPeliculas
+        - id: ms-boletos-proyeccion
+          uri: lb://ms-boletos
+          predicates:
+            - Path=/api/v1/proyPeliculas/**
+
+        # ----------------------------------------------------------
+        # RUTA 6: Compras (ms-compras — puerto 9004)
+        # ----------------------------------------------------------
+        # Órdenes de compra y confirmación tras pago (Feign con pagos).
+        # Ejemplo: POST http://localhost:9000/api/v1/compras
+        - id: ms-compras
+          uri: lb://ms-compras
+          predicates:
+            - Path=/api/v1/compras/**
+
+        # ----------------------------------------------------------
+        # RUTA 7: Carritos (ms-compras)
+        # ----------------------------------------------------------
+        # Mismo MS que compras; path distinto para el flujo previo a la orden.
+        # Ejemplo: POST http://localhost:9000/api/v1/carritos/boletos/id/1
+        - id: ms-compras-carritos
+          uri: lb://ms-compras
+          predicates:
+            - Path=/api/v1/carritos/**
+
+        # ----------------------------------------------------------
+        # RUTA 8: Pagos (ms-pagos — puerto 9006)
+        # ----------------------------------------------------------
+        # Cobros, aprobación y reembolsos. Publica eventos Kafka a compras/reportes.
+        # Ejemplo: PUT http://localhost:9000/api/v1/pagos/aprobar/id/1
+        - id: ms-pagos
+          uri: lb://ms-pagos
+          predicates:
+            - Path=/api/v1/pagos/**
+
+        # ----------------------------------------------------------
+        # NOTA: Swagger UI (/swagger-ui.html) y OpenAPI (/v3/api-docs)
+        # NO se enrutan por el gateway (WebFlux vs servlet). Sigue usando el
+        # puerto directo de cada MS, p. ej. :9003/swagger-ui.html para Peliculas.
+        # ----------------------------------------------------------
+
+      # ============================================================
+      # Configuración global de filtros por defecto
+      # ============================================================
+      default-filters:
+        # DedupeResponseHeader: elimina headers duplicados que pueden
+        # aparecer cuando tanto el gateway como el microservicio agregan
+        # los mismos headers (CORS, seguridad, etc.). RETAIN_UNIQUE
+        # conserva el primer valor y descarta duplicados posteriores.
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+
+      # ============================================================
+      # Configuración CORS global
+      # ============================================================
+      # Permite que aplicaciones frontend (React, Angular, etc.) en
+      # otros dominios/puertos puedan consumir la API a través del gateway.
+      # Se configura aquí de forma centralizada en lugar de en cada microservicio.
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:3000"     # Frontend React/Next.js (desarrollo)
+              - "http://localhost:4200"     # Frontend Angular (desarrollo)
+              - "http://localhost:5173"     # Frontend Vite (desarrollo)
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowed-headers:
+              - "*"
+            allow-credentials: true
+            max-age: 3600  # Cache de preflight CORS por 1 hora (en segundos)
+
+# ============================================================
+# Configuración del servidor
+# ============================================================
+server:
+  port: 9000  # Puerto del API Gateway (punto de entrada único)
+  error:
+    include-stacktrace: never  # No exponer stack traces en respuestas de error
+
+# ============================================================
+# Configuración de Eureka Client
+# ============================================================
+# El gateway se registra en Eureka para:
+# 1. Ser visible en el dashboard de Eureka (http://localhost:8761)
+# 2. Descubrir dinámicamente las instancias de los microservicios destino
+# 3. Habilitar el balanceo de carga con lb:// en las rutas
+eureka:
+  client:
+    register-with-eureka: true     # El gateway se registra como servicio
+    fetch-registry: true           # Descarga el registro de servicios disponibles
+    service-url:
+      defaultZone: http://localhost:8761/eureka  # URL del servidor Eureka
+  instance:
+    prefer-ip-address: true        # Usa IP en lugar de hostname para comunicación
+    hostname: localhost            # Evita hostnames Windows (*.mshome.net) ilegibles para lb://
+    instance-id: "${spring.application.name}:${random.value}"  # ID único por instancia
+    lease-renewal-interval-in-seconds: 15   # Cada 15s envía heartbeat a Eureka
+    lease-expiration-duration-in-seconds: 60 # Eureka elimina la instancia si no recibe heartbeat en 60s
+
+# ============================================================
+# Configuración de Actuator
+# ============================================================
+# Actuator expone endpoints de monitoreo y administración.
+# El endpoint /actuator/gateway/routes es especialmente útil para
+# verificar que todas las rutas del gateway están correctamente configuradas.
+management:
+  info:
+    env:
+      enabled: true
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+    gateway:
+      enabled: true  # Habilita el endpoint /actuator/gateway/routes
+
+# ============================================================
+# Información de la aplicación (visible en /actuator/info)
+# ============================================================
+info:
+  app:
+    name: ${spring.application.name}
+    version: "0.0.1-SNAPSHOT"
+    description: "API Gateway - Punto de entrada único para los microservicios de TicketCine"
+
+# ============================================================
+# Configuración de logging
+# ============================================================
+logging:
+  level:
+    root: INFO
+    cl.ticketcine.gateway: INFO
+    org.springframework.cloud.gateway: INFO
+
+# ============================================================
+# PERFIL: Desarrollo (dev)
+# ============================================================
+# Configuración optimizada para desarrollo local:
+# - Logging más detallado para depuración del gateway
+# - Más endpoints de Actuator expuestos
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  level:
+    root: INFO
+    cl.ticketcine.gateway: DEBUG
+    # Descomentar las siguientes líneas para depuración detallada del gateway:
+    # org.springframework.cloud.gateway: DEBUG
+    # reactor.netty.http.client: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics,env,loggers
+  endpoint:
+    health:
+      show-details: always
+
+# ============================================================
+# PERFIL: Producción (prod)
+# ============================================================
+# Configuración restrictiva para producción:
+# - Logging mínimo (solo WARN/ERROR)
+# - Endpoints de Actuator restringidos (solo health e info)
+# - URL de Eureka configurable via variable de entorno
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+logging:
+  level:
+    root: INFO
+    cl.ticketcine.gateway: INFO
+    org.springframework.cloud.gateway: WARN
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://eureka-server:8761/eureka}
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+  endpoints:
+    web:
+      exposure:
+        include: health,info

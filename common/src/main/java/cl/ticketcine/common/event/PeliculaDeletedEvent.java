@@ -12,9 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class PeliculaDeletedEvent implements PeliculaEvent {
-
-    private String slug;
-
+    private Integer idPelicula;
 }
 
-// son la transferencia de datos (los eventos)
+//Solo necesita el ID para avisar a los demás que eliminen o inactiven todo lo relacionado a este Pelicula.

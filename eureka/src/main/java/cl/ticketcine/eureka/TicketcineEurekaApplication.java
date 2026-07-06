@@ -7,10 +7,10 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 @SpringBootApplication(exclude = {ValidationAutoConfiguration.class})
 @EnableEurekaServer
-public class TicketcineEurekaApplication {
+public class TicketCineEurekaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TicketcineEurekaApplication.class, args);
+		SpringApplication.run(TicketCineEurekaApplication.class, args);
 	}
 
 }

@@ -16,7 +16,7 @@
     <!-- Herencia del proyecto padre que centraliza configuracion, BOM y versiones -->
     <parent>
         <groupId>cl.ticketcine</groupId>
-        <artifactId>ticketcine</artifactId>
+        <artifactId>TicketCine</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -41,14 +41,27 @@
 
     <!-- Dependencias necesarias para este microservicio -->
     <dependencies>
+    
+        
+        <!-- Springdoc OpenAPI: generacion automatica de documentacion Swagger UI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+        
         <!-- Libreria comun compartida -->
-                <dependency>
-                    <groupId>cl.ticketcine</groupId>
-                    <artifactId>cl-ticketcine-common</artifactId>
-                </dependency>
+        <dependency>
+            <groupId>cl.ticketcine</groupId>
+            <artifactId>cl-ticketcine-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
-        <!-- Spring Kafka -->
+         <!-- Spring Kafka -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
@@ -153,7 +166,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>cl.ticketcine.usuarios.TicketcineUsuariosApplication</mainClass>
+                    <mainClass>cl.ticketcine.usuarios.TicketCineUsuariosApplication</mainClass>
                 </configuration>
             </plugin>
 
@@ -180,11 +193,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering> </resource>
-        </resources>
     </build>
 
 </project>

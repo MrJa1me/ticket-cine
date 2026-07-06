@@ -7,12 +7,13 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Manejador global de excepciones para toda la API REST.
@@ -25,17 +26,79 @@ import lombok.extern.slf4j.Slf4j;
  * Orden de prioridad de los handlers: Spring usa el más específico primero.
  */
 @RestControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler {
+
+    // ─── 401 UNAUTHORIZED ─────────────────────────────────────────────────────
+
+    /**
+     * Captura intentos de login con credenciales incorrectas.
+     */
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiError> handleInvalidCredentials(
+            InvalidCredentialsException ex,
+            HttpServletRequest request) {
+
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    /**
+     * Captura errores de autenticación (token ausente, inválido o expirado).
+     * Devuelve 401 UNAUTHORIZED con un mensaje claro para el cliente.
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthentication(
+            AuthenticationException ex,
+            HttpServletRequest request) {
+
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .message("No autenticado. Debe proporcionar un token JWT válido en el header Authorization.")
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    // ─── 403 FORBIDDEN ────────────────────────────────────────────────────────
+
+    /**
+     * Captura errores de autorización (usuario autenticado pero sin permisos).
+     * Devuelve 403 FORBIDDEN indicando que el rol no tiene acceso al recurso.
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDenied(
+            AccessDeniedException ex,
+            HttpServletRequest request) {
+
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .message("Acceso denegado. Su rol no tiene permisos para acceder a este recurso.")
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }   
 
     // ─── 404 NOT FOUND ────────────────────────────────────────────────────────
 
     /**
-     * Captura búsquedas de entidades inexistentes (por ID o email).
+     * Captura búsquedas de entidades inexistentes (por ID o ISBN).
      * Devuelve 404 NOT FOUND con el mensaje de la excepción de dominio.
      */
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiError> handleEntityNotFound(
+    public ResponseEntity<ApiError> handleLibroNotFound(
             EntityNotFoundException ex,
             HttpServletRequest request) {
 
@@ -89,8 +152,8 @@ public class GlobalExceptionHandler {
      * Captura requests hacia endpoints inexistentes.
      *
      * Ejemplo:
-     * GET /api/v1/usuario  (incorrecto)
-     * GET /api/v1/usuarios (correcto)
+     * GET /api/v1/libro  (incorrecto)
+     * GET /api/v1/libros (correcto)
      *
      * En Spring Boot moderno pueden ocurrir dos escenarios:
      *
@@ -141,6 +204,21 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
+
+        @ExceptionHandler(ReferentialIntegrityException.class)
+    public ResponseEntity<ApiError> handleReferentialIntegrity(
+            ReferentialIntegrityException ex,
+            HttpServletRequest request) {
+        ApiError error = ApiError.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
 
     // ─── 400 BAD REQUEST (Validación de campos) ───────────────────────────────
 
@@ -194,9 +272,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleGenericException(
             Exception ex,
             HttpServletRequest request) {
-
-        // Log detallado del error para debugging
-        log.error("Error no esperado capturado por GlobalExceptionHandler: {}", ex.getMessage(), ex);
 
         // Manejo manual de endpoint inexistente (fallback seguro)
         if (ex instanceof org.springframework.web.servlet.NoHandlerFoundException ||

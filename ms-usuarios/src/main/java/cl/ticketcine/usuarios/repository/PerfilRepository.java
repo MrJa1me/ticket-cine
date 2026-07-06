@@ -1,6 +1,6 @@
 package cl.ticketcine.usuarios.repository;
 
-import cl.ticketcine.usuarios.model.entity.Perfil;
+import cl.ticketcine.usuarios.model.Perfil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface PerfilRepository extends JpaRepository<Perfil, Integer> {
 
-    Optional<Perfil> findByUsuarioEmail(String usuarioEmail);
+    Optional<Perfil> findByUsuario_Id(Integer idUsuario);
 
-    boolean existsByUsuarioEmail(String usuarioEmail);
+    Optional<Perfil> findByUsuario_Correo(String correo);
 }

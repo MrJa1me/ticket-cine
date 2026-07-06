@@ -1,10 +1,52 @@
-version: '3.8'
+# ============================================================
+# Docker Compose - TicketCine (completo)
+# ============================================================
+# Infraestructura + Eureka + API Gateway + 5 microservicios.
+#
+# Orden de arranque (healthchecks):
+#   1. postgres, kafka
+#   2. eureka-server, kafka-ui
+#   3. api-gateway  (espera eureka)
+#   4. microservicios (esperan eureka + postgres + kafka + gateway)
+#
+# Punto de entrada API:  http://localhost:9000
+# Eureka dashboard:      http://localhost:8761
+# Kafka UI:              http://localhost:8080
+# PostgreSQL (host):     localhost:5433
+#
+# Antes del primer build:
+#   mvn clean package -DskipTests
+# ============================================================
+
+x-ms-common-env: &ms-common-env
+  SPRING_PROFILES_ACTIVE: dev
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_DATASOURCE_PASSWORD: "123"
+  # 5 MS x pool 10 (default) agotan max_connections=100 de PostgreSQL
+  SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: "3"
+  SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE: "1"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+  # En Docker los MS se descubren por nombre de servicio (Feign / lb://)
+  EUREKA_INSTANCE_PREFER_IP_ADDRESS: "false"
+
+x-ms-common-depends: &ms-common-depends
+  eureka-server:
+    condition: service_healthy
+  postgres:
+    condition: service_healthy
+  kafka:
+    condition: service_healthy
+  api-gateway:
+    condition: service_healthy
 
 services:
 
+  # -- Infraestructura: Base de Datos --------------------------
   postgres:
     image: postgres
-    container_name: postgres_rdbms
+    container_name: postgres-rdbms
+    command: ["postgres", "-c", "max_connections=200"]
     ports:
       - "5433:5432"
     environment:
@@ -13,10 +55,16 @@ services:
       POSTGRES_DB: main_postgres_db
     volumes:
       - ./init-multi-db:/docker-entrypoint-initdb.d
-      # ↑ PostgreSQL ejecuta automáticamente en orden alfabético
-      #   todos los .sql que encuentre en esa carpeta al primer arranque.
-      #   Por eso los scripts están numerados 00, 01, 02...
+    networks:
+      - ticketcine-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
 
+  # -- Infraestructura: Kafka --
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka_broker
@@ -34,14 +82,155 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
       CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    networks:
+      - ticketcine-network
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+      start_period: 30s
 
+  # -- Infraestructura: Kafka UI -------------------------------
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka_ui
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka_broker:29092
+    networks:
+      - ticketcine-network
+
+  # -- Descubrimiento: Eureka Server ---------------------------
+  eureka-server:
+    build: ./eureka
+    image: ticketcine-eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    networks:
+      - ticketcine-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 40s
+
+  # -- Enrutamiento: API Gateway (puerto único :9000) --
+  api-gateway:
+    build: ./api-gateway
+    image: ticketcine-api-gateway
+    container_name: api-gateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+    networks:
+      - ticketcine-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9000/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 40s
+
+  # -- ticketcine-ms-boletos (:9002) --
+  ms-boletos:
+    build: ./ms-boletos
+    image: ticketcine-ms-boletos
+    container_name: ticketcine-ms-boletos
+    ports:
+      - "9002:9002"
+    depends_on: *ms-common-depends
+    environment:
+      <<: *ms-common-env
+      SERVER_PORT: 9002
+      EUREKA_INSTANCE_HOSTNAME: ms-boletos
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/boletos
+    networks:
+      - ticketcine-network
+
+  # -- ticketcine-ms-catalogo / Peliculas (:9003) --
+  ms-catalogo:
+    build: ./ms-catalogo
+    image: ticketcine-ms-catalogo
+    container_name: ticketcine-ms-catalogo
+    ports:
+      - "9003:9003"
+    depends_on: *ms-common-depends
+    environment:
+      <<: *ms-common-env
+      SERVER_PORT: 9003
+      EUREKA_INSTANCE_HOSTNAME: ms-catalogo
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/catalogo
+    networks:
+      - ticketcine-network
+
+  # -- ticketcine-ms-compras (:9004) --
+  ms-compras:
+    build: ./ms-compras
+    image: ticketcine-ms-compras
+    container_name: ticketcine-ms-compras
+    ports:
+      - "9004:9004"
+    depends_on: *ms-common-depends
+    environment:
+      <<: *ms-common-env
+      SERVER_PORT: 9004
+      EUREKA_INSTANCE_HOSTNAME: ms-compras
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/compras
+    networks:
+      - ticketcine-network
+
+  # -- ticketcine-ms-pagos (:9006) --
+  ms-pagos:
+    build: ./ms-pagos
+    image: ticketcine-ms-pagos
+    container_name: ticketcine-ms-pagos
+    ports:
+      - "9006:9006"
+    depends_on: *ms-common-depends
+    environment:
+      <<: *ms-common-env
+      SERVER_PORT: 9006
+      EUREKA_INSTANCE_HOSTNAME: ms-pagos
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/pagos
+    networks:
+      - ticketcine-network
+
+  # -- ticketcine-ms-usuarios / auth JWT (:9010) --
+  ms-usuarios:
+    build: ./ms-usuarios
+    image: ticketcine-ms-usuarios
+    container_name: ticketcine-ms-usuarios
+    ports:
+      - "9010:9010"
+    depends_on: *ms-common-depends
+    environment:
+      <<: *ms-common-env
+      SERVER_PORT: 9010
+      EUREKA_INSTANCE_HOSTNAME: ms-usuarios
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/usuarios
+    networks:
+      - ticketcine-network
+
+# ============================================================
+# Red compartida con nombre fijo (independiente del nombre
+# de la carpeta del proyecto)
+# ============================================================
+networks:
+  ticketcine-network:
+    name: ticketcine-network

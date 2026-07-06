@@ -1,0 +1,70 @@
+package cl.ticketcine.boletos.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import cl.ticketcine.common.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * FASE 1 — Resource server (ms-boletos).
+ *
+ * Equivalente al ms-recursos de biblioteca: protege boletos y proyecciones locales.
+ */
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    // No se define PasswordEncoder aquí porque ms-boletos no procesa credenciales de usuario;
+    // este MS solo valida JWT y aplica autorización por roles.
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .authorizeHttpRequests(auth -> auth
+                
+                // PERMITIR RUTAS PÚBLICAS DE SWAGGER / SPRINGDOC
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/v3/api-docs.yaml",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/swagger-resources/**",
+                    "/webjars/**",
+                    "/favicon.ico"
+                ).permitAll()
+
+                // Actuator siempre público
+                .requestMatchers("/actuator/**").permitAll()
+
+                .requestMatchers(HttpMethod.GET, "/api/v1/boletos/**")
+                    .hasAnyRole("Cliente", "Organizador", "Administrador")
+                .requestMatchers(HttpMethod.GET, "/api/v1/proyPeliculas/**")
+                    .hasAnyRole("Cliente", "Organizador", "Administrador")
+
+                .requestMatchers(HttpMethod.POST, "/api/v1/boletos/**")
+                    .hasAnyRole("Organizador", "Administrador")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/boletos/**")
+                    .hasAnyRole("Organizador", "Administrador")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/boletos/**")
+                    .hasAnyRole("Organizador", "Administrador")
+
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+}

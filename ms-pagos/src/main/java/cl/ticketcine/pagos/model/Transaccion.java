@@ -2,56 +2,45 @@ package cl.ticketcine.pagos.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.Objects;
 
 @Entity
 @Table(name = "transacciones")
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Transaccion {
 
+public class Transaccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tx", nullable = false)
-    private Long idTx;
-
-    @Column(name = "reserva_id")
-    private UUID reservaId;
+    @Column(name = "id_transaccion", nullable = false)
+    private Integer idTransaccion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "metodo_id")
-    private MetodoPago metodoPago;
+    @JoinColumn(name = "id_pago")
+    private Pago pago;
 
-    @Column(name = "monto", precision = 10, scale = 2)
-    private BigDecimal monto;
+    @Column(name = "codigo", length = 50)
+    private String codigo;
 
-    @CreatedDate
-    @Column(name = "fecha_tx", nullable = false, updatable = false)
-    private LocalDateTime fechaTx;
+    @Column(name = "banco", length = 50)
+    private String banco;
 
-    @OneToMany(mappedBy = "transaccion", cascade = CascadeType.ALL)
-    private List<Reembolso> reembolsos;
+    @Column(name = "estado", length = 20)
+    private String estado;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Transaccion that = (Transaccion) o;
-        return Objects.equals(idTx, that.idTx);
+        return idTransaccion != null && idTransaccion.equals(that.idTransaccion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTx);
+        return getClass().hashCode();
     }
+
 }

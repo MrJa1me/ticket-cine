@@ -1,11 +1,14 @@
-docker exec -i postgres-db psql -U postgres -d postgres < 01-init.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 02-create_usuarios.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 03-create_autenticacion.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 04-create_busqueda.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 05-create_horarios.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 06-create_salas.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 07-create_reserva.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 08-create_pagos.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 09-create_notificaciones.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 10-create_validacion.sql
-docker exec -i postgres-db psql -U postgres -d postgres < 11-create_promociones.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/00-create_dbs.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/01-artistas.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/02-boletos.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/03-catalogo.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/04-compras.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/05-notificaciones.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/06-pagos.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/07-precios.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/08-recintos.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/09-reportes.sql
+docker exec postgres-rdbms psql -U postgres -d main_postgres_db -f /docker-entrypoint-initdb.d/10-usuarios.sql
+    
+
+    
