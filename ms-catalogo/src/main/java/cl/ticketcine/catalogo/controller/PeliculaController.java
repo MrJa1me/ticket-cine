@@ -36,14 +36,14 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/Peliculas")
-@Tag(name = "Peliculas", description = "API para la gesti\u00f3n del cat\u00e1logo de Pel\u00edculas")
+@Tag(name = "Peliculas", description = "API para la gestion del catalogo de Peliculas")
 @RequiredArgsConstructor
 public class PeliculaController {
 
     private final PeliculaService service;
 
     /**
-     * Agrega links de navegaci\u00f3n HATEOAS al Pel\u00edcula del cat\u00e1logo:
+     * Agrega links de navegacion HATEOAS al Pelicula del catalogo:
      * operaciones CRUD.
      */
     private PeliculaResponseDTO addLinks(PeliculaResponseDTO pelicula) {
@@ -52,23 +52,23 @@ public class PeliculaController {
         pelicula.add(linkTo(methodOn(PeliculaController.class).obtener(id)).withSelfRel());
 
         pelicula.add(linkTo(methodOn(PeliculaController.class).actualizar(id, null))
-                .withRel("update").withTitle("PUT - Actualizar Pel\u00edcula"));
+                .withRel("update").withTitle("PUT - Actualizar Pelicula"));
 
         pelicula.add(linkTo(methodOn(PeliculaController.class).eliminar(id))
-                .withRel("delete").withTitle("DELETE - Eliminar Pel\u00edcula"));
+                .withRel("delete").withTitle("DELETE - Eliminar Pelicula"));
 
         pelicula.add(linkTo(methodOn(PeliculaController.class).listar())
-                .withRel("all").withTitle("GET - Listado de Pel\u00edculas"));
+                .withRel("all").withTitle("GET - Listado de Peliculas"));
 
         return pelicula;
     }
 
-    @Operation(summary = "Obtener todos los Pel\u00edculas", description = "Retorna la lista completa de Pel\u00edculas del cat\u00e1logo")
+    @Operation(summary = "Obtener todos los Peliculas", description = "Retorna la lista completa de Peliculas del catalogo")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Lista obtenida exitosamente",
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = PeliculaResponseDTO.class)))),
         @ApiResponse(responseCode = "401", description = "No autenticado", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Sin permisos para consultar Pel\u00edculas", content = @Content)
+        @ApiResponse(responseCode = "403", description = "Sin permisos para consultar Peliculas", content = @Content)
     })
     @GetMapping
     public ResponseEntity<CollectionModel<PeliculaResponseDTO>> listar() {
@@ -83,87 +83,87 @@ public class PeliculaController {
         return ResponseEntity.ok(collection);
     }
 
-    @Operation(summary = "Obtener Pel\u00edcula por ID", description = "Retorna un Pel\u00edcula seg\u00fan su identificador \u00fanico")
+    @Operation(summary = "Obtener Pelicula por ID", description = "Retorna un Pelicula seg\u00fan su identificador \u00fanico")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Pel\u00edcula encontrada",
+        @ApiResponse(responseCode = "200", description = "Pelicula encontrada",
             content = @Content(schema = @Schema(implementation = PeliculaResponseDTO.class))),
-        @ApiResponse(responseCode = "404", description = "Pel\u00edcula no encontrada", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Pelicula no encontrada", content = @Content),
         @ApiResponse(responseCode = "401", description = "No autenticado", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Sin permisos para consultar Pel\u00edculas", content = @Content)
+        @ApiResponse(responseCode = "403", description = "Sin permisos para consultar Peliculas", content = @Content)
     })
     @GetMapping("/id/{id}")
     public ResponseEntity<PeliculaResponseDTO> obtener(
-            @Parameter(description = "ID del Pel\u00edcula", required = true, example = "1")
+            @Parameter(description = "ID del Pelicula", required = true, example = "1")
             @PathVariable @NonNull Integer id) {
         return ResponseEntity.ok(addLinks(service.buscarPorId(id)));
     }
 
-    @Operation(summary = "Crear un nuevo Pel\u00edcula", description = "Registra un nuevo Pel\u00edcula en el cat\u00e1logo")
+    @Operation(summary = "Crear un nuevo Pelicula", description = "Registra un nuevo Pelicula en el catalogo")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Pel\u00edcula creado exitosamente",
+        @ApiResponse(responseCode = "201", description = "Pelicula creado exitosamente",
             content = @Content(schema = @Schema(implementation = PeliculaResponseDTO.class))),
-        @ApiResponse(responseCode = "400", description = "Datos de entrada inv\u00e1lidos", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada invalidos", content = @Content),
         @ApiResponse(responseCode = "401", description = "No autenticado", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Sin permisos para crear Pel\u00edculas", content = @Content)
+        @ApiResponse(responseCode = "403", description = "Sin permisos para crear Peliculas", content = @Content)
     })
     @PostMapping
     public ResponseEntity<PeliculaResponseDTO> crear(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                description = "Datos del Pel\u00edcula a crear", required = true,
+                description = "Datos del Pelicula a crear", required = true,
                 content = @Content(schema = @Schema(implementation = PeliculaRequestDTO.class)))
             @Valid @RequestBody PeliculaRequestDTO request) {
         PeliculaResponseDTO creado = service.crear(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
-    @Operation(summary = "Actualizar un Pel\u00edcula", description = "Actualiza los datos de un Pel\u00edcula existente")
+    @Operation(summary = "Actualizar un Pelicula", description = "Actualiza los datos de un Pelicula existente")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Pel\u00edcula actualizado exitosamente",
+        @ApiResponse(responseCode = "200", description = "Pelicula actualizado exitosamente",
             content = @Content(schema = @Schema(implementation = PeliculaResponseDTO.class))),
-        @ApiResponse(responseCode = "400", description = "Datos de entrada inv\u00e1lidos", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Pel\u00edcula no encontrado", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada invalidos", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Pelicula no encontrado", content = @Content),
         @ApiResponse(responseCode = "401", description = "No autenticado", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Sin permisos para actualizar Pel\u00edculas", content = @Content)
+        @ApiResponse(responseCode = "403", description = "Sin permisos para actualizar Peliculas", content = @Content)
     })
     @PutMapping("/id/{id}")
     public ResponseEntity<PeliculaResponseDTO> actualizar(
-            @Parameter(description = "ID del Pel\u00edcula a actualizar", required = true, example = "1")
+            @Parameter(description = "ID del Pelicula a actualizar", required = true, example = "1")
             @PathVariable @NonNull Integer id,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                description = "Nuevos datos del Pel\u00edcula", required = true,
+                description = "Nuevos datos del Pelicula", required = true,
                 content = @Content(schema = @Schema(implementation = PeliculaRequestDTO.class)))
             @Valid @RequestBody PeliculaRequestDTO request) {
         return ResponseEntity.ok(addLinks(service.actualizar(id, request)));
     }
 
-    @Operation(summary = "Eliminar un Pel\u00edcula", description = "Elimina un Pel\u00edcula del cat\u00e1logo por su ID")
+    @Operation(summary = "Eliminar un Pelicula", description = "Elimina un Pelicula del catalogo por su ID")
     @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Pel\u00edcula eliminado exitosamente", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Pel\u00edcula no encontrado", content = @Content),
+        @ApiResponse(responseCode = "204", description = "Pelicula eliminado exitosamente", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Pelicula no encontrado", content = @Content),
         @ApiResponse(responseCode = "401", description = "No autenticado", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Sin permisos para eliminar Pel\u00edculas", content = @Content)
+        @ApiResponse(responseCode = "403", description = "Sin permisos para eliminar Peliculas", content = @Content)
     })
     @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> eliminar(
-            @Parameter(description = "ID del Pel\u00edcula a eliminar", required = true, example = "1")
+            @Parameter(description = "ID del Pelicula a eliminar", required = true, example = "1")
             @PathVariable @NonNull Integer id) {
         service.eliminar(id);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(
-        summary = "Verificar existencia por ID de Pel\u00edcula",
-        description = "Comprueba si ya existe un Pel\u00edcula registrado con el ID indicado"
+        summary = "Verificar existencia por ID de Pelicula",
+        description = "Comprueba si ya existe un Pelicula registrado con el ID indicado"
     )
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Verificaci\u00f3n realizada exitosamente",
+        @ApiResponse(responseCode = "200", description = "Verificacion realizada exitosamente",
             content = @Content(schema = @Schema(implementation = Boolean.class))),
         @ApiResponse(responseCode = "401", description = "No autenticado", content = @Content),
-        @ApiResponse(responseCode = "403", description = "Sin permisos para consultar Pel\u00edculas", content = @Content)
+        @ApiResponse(responseCode = "403", description = "Sin permisos para consultar Peliculas", content = @Content)
     })
     @GetMapping("/existe/idPelicula/{idPelicula}")
     public ResponseEntity<Boolean> existePorId(
-            @Parameter(description = "ID del Pel\u00edcula a verificar", required = true, example = "1")
+            @Parameter(description = "ID del Pelicula a verificar", required = true, example = "1")
             @PathVariable Integer idPelicula) {
         // Endpoint utilitario (devuelve Boolean): no aplica HATEOAS
         return ResponseEntity.ok(service.existePorId(idPelicula));
